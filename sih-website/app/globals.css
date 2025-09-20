@@ -1,0 +1,76 @@
+/* Smooth fade transition for slideshow */
+.slideshow-fade {
+  transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  opacity: 1;
+}
+.slideshow-fade.hide {
+  opacity: 0;
+  pointer-events: none;
+  position: absolute;
+  width: 100%;
+}
+/* Fade-in animation for MonasterySlideshow */
+.fade-in-section {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1), transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.fade-in-section.is-visible {
+  opacity: 1;
+  transform: none;
+}
+html {
+  scroll-behavior: smooth;
+}
+@import "tailwindcss";
+
+/* Font utility classes */
+.font-poppins {
+  font-family: 'Poppins', Arial, Helvetica, sans-serif;
+  font-weight: 800;
+}
+.font-lora {
+  font-family: 'Lora', serif;
+  font-style: italic;
+}
+.font-cinzel {
+  font-family: 'Cinzel', serif;
+  font-weight: 900;
+}
+.font-merriweather {
+  font-family: 'Merriweather', serif;
+}
+/* Show custom cursor only when a fine pointer exists (desktops/laptops) */
+
+@media (pointer: fine) {
+  html, body, a, button {
+    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"><circle cx="12" cy="12" r="6" fill="%230a6a6a" stroke="%23fff" stroke-width="2"/></svg>') 12 12, pointer;
+  }
+}
+
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+:root {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+  cursor: pointer;
+}
