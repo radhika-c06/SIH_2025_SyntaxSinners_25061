@@ -28,7 +28,7 @@ export default function RumtekMonastery() {
       setActiveIndex((prev) => (prev + 1) % images.length);
     }, 5000);
     return () => clearInterval(interval);
-  }, []);
+  }, [images.length]);
 
   const goToSlide = (index: number) => {
     setActiveIndex(index);
