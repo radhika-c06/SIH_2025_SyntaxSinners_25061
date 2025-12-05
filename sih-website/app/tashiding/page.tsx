@@ -7,7 +7,7 @@ import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
 
 export default function TashidingMonastery() {
-  const [activeIndex, setActiveIndex] = useState(0);
+  const [activeIndex, setActiveIndex] = useState(1);
   const [scrollPosition, setScrollPosition] = useState(0);
   const [activeSidebarItem, setActiveSidebarItem] = useState('overview');
 
@@ -20,9 +20,9 @@ export default function TashidingMonastery() {
   ];
 
   const images = [
-    { src: '/tashiding/tashiding 1.avif', alt: 'Tashiding 1' },
-    { src: '/tashiding/tashiding 2.jpg', alt: 'Tashiding 2' },
-    { src: '/tashiding/tashiding 3.jpg', alt: 'Tashiding 3' },
+    { src: '/tashiding/tash-3.png', alt: 'Tashiding 1' },
+    { src: '/tashiding/tash-8.png', alt: 'Tashiding 2' },
+    { src: '/tashiding/tash-6.png', alt: 'Tashiding 3' },
   ];
 
   useEffect(() => {
@@ -84,10 +84,10 @@ export default function TashidingMonastery() {
           {/* Left - Monastery Name */}
           <Reveal delay={0.4}>
             <div className="flex-1">
-              <h1 className="text-6xl md:text-7xl font-bold text-amber-100 drop-shadow-lg leading-tight" style={{ fontFamily: 'serif', fontWeight: '900', letterSpacing: '3px' }}>
+              <h1 className="text-6xl md:text-7xl font-bold text-amber-100 drop-shadow-lg leading-tight font-cinzel-decorative" style={{ fontWeight: '900', letterSpacing: '3px' }}>
                 TASHIDING
               </h1>
-              <h2 className="text-5xl md:text-6xl font-bold text-amber-100 drop-shadow-lg" style={{ fontFamily: 'serif', fontWeight: '900', letterSpacing: '3px' }}>
+              <h2 className="text-5xl md:text-6xl font-bold text-amber-100 drop-shadow-lg font-cinzel-decorative" style={{ fontWeight: '900', letterSpacing: '3px' }}>
                 MONASTERY
               </h2>
             </div>
@@ -124,8 +124,7 @@ export default function TashidingMonastery() {
           {['Overview', 'Digital Archive', 'Audio Tour', 'Virtual Tour', 'Cultural Calendar'].map((btn, i) => (
             <button
               key={i}
-              className="px-8 py-3 bg-amber-200 text-amber-900 rounded-full font-semibold hover:bg-amber-100 transition"
-              style={{ fontFamily: 'serif' }}
+              className="px-8 py-3 bg-amber-200 text-amber-900 rounded-full font-semibold font-poppins hover:bg-amber-100 transition"
             >
               {btn}
             </button>
@@ -134,13 +133,14 @@ export default function TashidingMonastery() {
       </section>
 
       {/* Overview Section */}
-      <section className="relative w-full min-h-screen bg-gradient-to-b from-red-900 via-red-800 to-amber-900 py-16">
+      <section className="relative w-full py-20" style={{ backgroundColor: '#410704' }}>
+
         <div className="flex">
           {/* Sidebar */}
-          <aside className="absolute left-0 top-8 z-40 rounded-r-3xl shadow-2xl p-4 w-64 h-auto max-h-[60vh] overflow-y-auto" style={{ backgroundColor: '#E0C76C' }}>
+          <aside className="absolute left-0 top-10 z-40 rounded-r-3xl shadow-2xl p-4 w-64 max-h-[60vh] overflow-y-auto" style={{ backgroundColor: '#E0C76C' }}>
             <div className="text-amber-900 mb-4">
               <h3 className="text-base font-bold mb-3 flex items-center justify-between">
-                Tashiding Monastery Geyzing
+                Tashiding Monastery
                 <span className="text-xs">›</span>
               </h3>
             </div>
@@ -161,22 +161,96 @@ export default function TashidingMonastery() {
             </nav>
           </aside>
 
-          {/* Content */}
-          <div className="max-w-6xl mx-auto px-8 pl-80">
-            <Reveal delay={0.2}>
-              <h2 className="text-5xl font-bold text-amber-100 mb-8">Overview</h2>
-            </Reveal>
-          <Reveal delay={0.4}>
-            <p className="text-lg text-amber-50 leading-relaxed mb-6">
-              Tashiding Monastery, one of the most sacred and oldest monasteries in Sikkim, stands as a testament to the region's rich Buddhist heritage. Built in 1717 CE, this magnificent structure is perched on a scenic hilltop overlooking the Teesta and Rangit rivers, commanding breathtaking views of the Himalayan landscape.
-            </p>
-          </Reveal>
-          <Reveal delay={0.6}>
-            <p className="text-lg text-amber-50 leading-relaxed">
-              The monastery is renowned for its spiritual significance and serves as an important pilgrimage destination for Buddhists from across the region. Its distinctive architecture, adorned with intricate carvings and traditional designs, reflects the rich cultural heritage of Sikkim and the profound spiritual traditions of Tibetan Buddhism.
-            </p>
-          </Reveal>
-        </div>
+          {/* Main Content */}
+          <div className="w-full max-w-7xl xl:max-w-[95rem] mx-auto px-6 lg:px-14 lg:pl-80">
+            <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,2.1fr)_minmax(0,0.9fr)] gap-10 xl:gap-12 items-start">
+              {/* LEFT: TEXT */}
+              <div>
+                <Reveal>
+                  <h2 className="text-4xl md:text-5xl font-bold text-amber-100 mb-10 leading-tight">
+                    Tashiding Monastery: Where the Himalayas Embrace Pure Devotion
+                  </h2>
+                </Reveal>
+
+                {[
+                  'Perched on a serene ridge overlooking the confluence of the Rathong and Rangeet rivers, Tashiding Monastery is one of the most sacred and spiritually revered sites in Sikkim. Established in the 17th century by Ngadak Sempa Chempo, a follower of Guru Padmasambhava, it stands as a beacon of divine blessing in the Himalayan landscape. As morning light touches the distant snow peaks, the monastery reveals its peaceful radiance, carrying a sense of purity cherished for centuries.',
+                  'Its architecture is simple but deeply symbolic. The whitewashed structures, tapering chortens, and traditional Tibetan motifs speak of ancient craftsmanship. The famed Thong-Wa-Rang-Dol chorten, believed to cleanse all sins with a single glance, embodies the spiritual heart of Tashiding. Inside the monastery, sacred texts, delicate murals, and statues of revered deities preserve the lineage of early Sikkimese Buddhism.',
+                  'The environment surrounding Tashiding elevates its sanctity. Wrapped in silence and framed by dense forest, the monastery feels like a living sanctuary of peace. Instead of the rhythm of ritual instruments, it is the gentle sound of mountain breeze, rustling leaves, and distant river flow that shapes the atmosphere. This natural quietness invites deep reflection and a sense of inner stillness.',
+                  'The path leading up to Tashiding enhances its sacred charm. Colorful prayer flags sway along the trail, and the fragrance of pine drifts through the cool air. As the ascent unfolds, each step feels like a journey toward spiritual clarity. By the time the monastery appears, visitors are already immersed in a profound calmness.',
+                  'Tashiding Monastery stands not only as a historic seat of faith but also as a timeless symbol of purity, devotion, and spiritual renewal. Blending natural beauty with deep religious significance, it continues to inspire all who seek peace and connection amid the Himalayan heights.',
+                ].map((text, i) => (
+                  <Reveal key={i} delay={0.2 * (i + 1)}>
+                    <p className="text-lg text-amber-50 leading-relaxed mb-6">
+                      {text}
+                    </p>
+                  </Reveal>
+                ))}
+              </div>
+
+              {/* RIGHT: INFO BOXES */}
+              <aside className="space-y-8">
+                {/* Location card */}
+                <div className="ml-auto w-[340px] max-w-full rounded-3xl bg-[#1a1209] border border-amber-500/40 p-5 shadow-xl">
+                  <h3 className="text-lg font-semibold text-amber-100 mb-2 flex items-center gap-2">
+                    
+                    Location Map
+                  </h3>
+
+                  <p className="text-xs text-amber-300 mb-3">27.535069, 88.212178</p>
+
+                  <div className="overflow-hidden rounded-2xl mb-4">
+                    <iframe
+                      title="Tashiding map"
+                      src="https://www.google.com/maps?q=Tashiding+Monastery&output=embed"
+                      className="w-full h-56"
+                    />
+                  </div>
+
+                  <div className="flex gap-2">
+                    <a
+                      href="https://www.google.com/maps/dir/?api=1&destination=Tashiding+Monastery"
+                      className="flex-1 px-4 py-2 rounded-full bg-amber-400 text-amber-950 font-semibold flex items-center justify-center"
+
+                    >
+                      Get Directions
+                    </a>
+                    <a
+                      href="https://www.google.com/maps/search/?api=1&query=Tashiding+Monastery"
+                      className="flex-1 px-3 py-2 rounded-full border border-amber-500 text-amber-100 text-center font-semibold text-xs"
+                    >
+                      View on Google Maps
+                    </a>
+                  </div>
+                </div>
+
+                {/* Visit info card */}
+                <div className="ml-auto w-[340px] max-w-full rounded-3xl bg-[#1a1209] border border-amber-500/40 p-5 shadow-xl">
+                  <h3 className="text-lg font-semibold text-amber-100 mb-3">
+                    Visit Information
+                  </h3>
+
+                  <div className="space-y-3 text-xs text-amber-50">
+                    <div>
+                      <p className="font-semibold text-amber-100">Visiting Hours</p>
+                      <p>9:00 AM – 6:00 PM, daily.</p>
+                    </div>
+
+                    <div className="border-t border-amber-500/30 pt-2">
+                      <p className="font-semibold text-amber-100">Entry Fee</p>
+                      <p>Free for all visitors.</p>
+                    </div>
+
+                    <div className="border-t border-amber-500/30 pt-2">
+                      <p className="font-semibold text-amber-100">Best Visit Times</p>
+                      <p>
+                        During major Buddhist festivals like Losar (February/March) and Saga Dawa (May/June) for vibrant cultural experiences. March to May and September to November offer pleasant weather (15-25°C) ideal for exploring. Early morning visits are recommended for a peaceful experience and to witness monks' rituals.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </aside>
+            </div>
+          </div>
         </div>
       </section>
 

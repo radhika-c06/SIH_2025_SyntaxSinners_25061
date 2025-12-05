@@ -334,8 +334,12 @@ export default function RumtekMonastery() {
         <div className="max-w-7xl mx-auto px-10 flex justify-between items-center">
           <Reveal delay={0.4}>
             <div className="flex-1">
-              <h1 className="text-6xl font-bold text-amber-100 tracking-wide leading-tight">RUMTEK</h1>
-              <h2 className="text-5xl font-bold text-amber-100 tracking-wide">MONASTERY</h2>
+              <h1 className="text-6xl font-bold text-amber-100 tracking-wide leading-tight">
+                RUMTEK
+              </h1>
+              <h2 className="text-5xl font-bold text-amber-100 tracking-wide">
+                MONASTERY
+              </h2>
             </div>
           </Reveal>
 
