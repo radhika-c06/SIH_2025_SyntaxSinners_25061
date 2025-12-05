@@ -10,6 +10,8 @@ export default function TashidingMonastery() {
   const [activeIndex, setActiveIndex] = useState(1);
   const [scrollPosition, setScrollPosition] = useState(0);
   const [activeSidebarItem, setActiveSidebarItem] = useState('overview');
+  const [openDialog, setOpenDialog] = useState(false);
+  const [activeItem, setActiveItem] = useState<any | null>(null);
 
   const sidebarItems = [
     { id: 'overview', label: 'Overview' },
@@ -17,6 +19,105 @@ export default function TashidingMonastery() {
     { id: 'audio-tour', label: 'Audio Tour' },
     { id: 'virtual-tour', label: 'Virtual Tour' },
     { id: 'cultural-calendar', label: 'Cultural Calendar' },
+  ];
+
+  const tashidingArchiveItems = [
+    {
+      id: 't1',
+      title: 'The Sacred Thong-Wa-Rang-Dol Chorten',
+      monastery: 'Tashiding',
+      type: 'chorten',
+      year: '17th c.',
+      img: '/tashiding/sacred thong.jpg',
+      tags: ['Color-corrected', 'AI-enhanced'],
+      ocrText: 'ཡི་དམ་གཙོ་བོ་...',
+      location: 'Tashiding',
+      description:
+        'The revered Thong-Wa-Rang-Dol chorten stands as the spiritual heart of Tashiding Monastery, believed to cleanse all sins with a single glance. Its architectural design reflects the perfect integration of Buddhist symbolism and Himalayan craftsmanship.',
+    },
+    {
+      id: 't2',
+      title: 'Intricate Murals of Deities',
+      monastery: 'Tashiding',
+      type: 'mural',
+      year: '17th c.',
+      img: '/tashiding/intricate murals of dieties  takshiding monastery generate image of this.jpg',
+      tags: ['AI-OCR processed', 'High-res'],
+      ocrText: '༄༅། །དེ་བཞིན་གཤེགས་པ་...',
+      location: 'Tashiding',
+      description: 'Delicate murals depicting various deities, mandalas, and mythic scenes that preserve the lineage of early Sikkimese Buddhism.',
+    },
+    {
+      id: 't3',
+      title: 'Prayer Flags and Mountain Views',
+      monastery: 'Tashiding',
+      type: 'photograph',
+      year: '2024 CE',
+      img: '/tashiding/prayer flags and mountain views of tashiding monastery.jpg',
+      tags: ['Contemporary', 'Landscape'],
+      ocrText: 'མ་ཎི་པདྨེ་ཧཱུྃ...',
+      location: 'Tashiding',
+      description:
+        'Colorful prayer flags swaying along the sacred trails leading to Tashiding, with sweeping views of Sikkim\'s rolling hills and the confluence of rivers.',
+    },
+    {
+      id: 't4',
+      title: 'Sacred Texts and Reliquaries',
+      monastery: 'Tashiding',
+      type: 'artifact',
+      year: '17th-19th c.',
+      img: '/tashiding/sacred text and reliquaries tashiding monastery.jpg',
+      tags: ['AI-enhanced', 'Digitized'],
+      ocrText: 'གཙོ་བོའི་སྙིགས་མ་...',
+      location: 'Tashiding',
+      description:
+        'Ancient Buddhist texts, sacred manuscripts, and reliquaries that contain precious relics of enlightened masters, representing centuries of spiritual heritage.',
+    },
+  ];
+
+  const tashidingTimeline = [
+    {
+      title: 'Founding of Tashiding',
+      year: '1717 CE',
+      description:
+        'Tashiding Monastery was established by Ngadak Sempa Chempo, a devoted follower of Guru Padmasambhava, on a sacred ridge overlooking the confluence of rivers in West Sikkim.',
+    },
+    {
+      title: 'Construction of the Thong-Wa-Rang-Dol Chorten',
+      year: '18th c.',
+      description:
+        'The iconic Thong-Wa-Rang-Dol chorten was constructed, becoming the spiritual heart of Tashiding and a symbol of Buddhist faith believed to cleanse all sins with a single glance.',
+    },
+    {
+      title: 'Artistic Development',
+      year: '18th-19th c.',
+      description:
+        'The monastery\'s interior walls were adorned with intricate murals depicting deities, mandalas, and mythic scenes, reflecting the flourishing of Sikkimese Buddhist art.',
+    },
+    {
+      title: 'Sacred Pilgrimage Site',
+      year: '19th-20th c.',
+      description:
+        'Tashiding became one of Sikkim\'s most revered pilgrimage destinations, attracting devotees from across the Himalayan region for spiritual retreat and celebration of Buddhist festivals.',
+    },
+    {
+      title: 'Preservation Initiatives',
+      year: 'c. 2000 CE',
+      description:
+        'Conservation programmes began focusing on the preservation of murals, architectural elements, and sacred relics to maintain Tashiding\'s spiritual and cultural integrity.',
+    },
+    {
+      title: 'Recognition as Heritage Site',
+      year: '2010-2024 CE',
+      description:
+        'Tashiding gained formal recognition as a sacred Sikkimese Buddhist heritage site, with documentation and digital archival projects beginning.',
+    },
+    {
+      title: 'Digital Archival Capture',
+      year: '2024 CE',
+      description:
+        'Tashiding Monastery\'s history, architecture, and visual heritage are documented by Inheritage Foundation for long-term digital preservation and global accessibility.',
+    },
   ];
 
   const images = [
@@ -43,6 +144,61 @@ export default function TashidingMonastery() {
   const goToSlide = (index: number) => {
     setActiveIndex(index);
   };
+
+  // ArchiveCard component – transparent glass box with smooth hover
+  const ArchiveCard = ({ item, onOpen }: { item: any; onOpen: (it: any) => void }) => {
+    return (
+      <div className="group relative cursor-pointer" onClick={() => onOpen(item)}>
+        <div
+          className="
+            overflow-hidden shadow-lg rounded-2xl border-0
+            transition-all duration-300 ease-out
+            group-hover:shadow-2xl group-hover:scale-[1.08] group-hover:-translate-y-1
+          "
+          style={{
+            borderRadius: '1rem',
+            background: 'rgba(255, 255, 255, 0.04)',
+            backdropFilter: 'blur(12px)',
+            border: '1px solid rgba(212, 175, 55, 0.35)',
+            maxWidth: '360px',
+          }}
+        >
+          <div
+            className="aspect-[4/3] w-full overflow-hidden transition-transform duration-300 ease-out group-hover:scale-110"
+            style={{ background: '#2F3A3D' }}
+          >
+            <img src={item.img} alt={item.title} className="h-full w-full object-cover" />
+          </div>
+
+          <div className="p-4">
+            <h3 className="text-sm font-semibold text-amber-100 line-clamp-2">{item.title}</h3>
+            <div className="mt-1 text-xs text-amber-200">
+              {item.monastery} • {item.location}
+            </div>
+            {item.description && (
+              <div className="mt-2 text-xs text-amber-100 leading-relaxed whitespace-pre-line">
+                {item.description}
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  type TimelineEvent = (typeof tashidingTimeline)[number];
+
+  const TimelineCard = ({ event }: { event: TimelineEvent }) => (
+    <div className="rounded-3xl bg-[#4B130E] border border-amber-600/40 px-5 py-4 shadow">
+      <h3 className="text-sm md:text-base font-semibold text-amber-50 mb-2">{event.title}</h3>
+      <p className="text-xs md:text-sm text-amber-100/85 mb-3 leading-snug line-clamp-3">
+        {event.description}
+      </p>
+      <div className="inline-flex items-center gap-2 text-[11px] md:text-xs font-semibold text-amber-950 bg-amber-400 px-3 py-1 rounded-full">
+        <span>{event.year}</span>
+      </div>
+    </div>
+  );
 
   return (
     <main className="overflow-hidden">
@@ -101,8 +257,8 @@ export default function TashidingMonastery() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                 </svg>
                 <div>
-                  <div className="text-xl font-semibold tracking-wide" style={{ fontFamily: 'serif' }}>Tashiding, West Sikkim</div>
-                  <div className="text-lg" style={{ fontFamily: 'serif' }}>Geyzing (737112), Sikkim, India</div>
+                  <div className="text-xl font-bold tracking-wide uppercase" style={{ fontFamily: 'Cormorant SC' }}>Tashiding, West Sikkim</div>
+                  <div className="text-lg uppercase" style={{ fontFamily: 'Cormorant SC' }}>Geyzing (737112), Sikkim, India</div>
                 </div>
               </div>
 
@@ -111,8 +267,8 @@ export default function TashidingMonastery() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
                 <div>
-                  <div className="text-xl font-semibold tracking-wide" style={{ fontFamily: 'serif' }}>Built in</div>
-                  <div className="text-lg" style={{ fontFamily: 'serif' }}>1717 CE</div>
+                  <div className="text-xl font-bold tracking-wide uppercase" style={{ fontFamily: 'Cormorant SC' }}>Built in</div>
+                  <div className="text-lg uppercase" style={{ fontFamily: 'Cormorant SC' }}>1717 CE</div>
                 </div>
               </div>
             </div>
@@ -124,7 +280,8 @@ export default function TashidingMonastery() {
           {['Overview', 'Digital Archive', 'Audio Tour', 'Virtual Tour', 'Cultural Calendar'].map((btn, i) => (
             <button
               key={i}
-              className="px-8 py-3 bg-amber-200 text-amber-900 rounded-full font-semibold font-poppins hover:bg-amber-100 transition"
+              className="px-8 py-3 bg-amber-200 text-amber-900 rounded-full font-bold uppercase hover:bg-amber-100 transition"
+              style={{ fontFamily: 'Cinzel' }}
             >
               {btn}
             </button>
@@ -134,57 +291,32 @@ export default function TashidingMonastery() {
 
       {/* Overview Section */}
       <section className="relative w-full py-20" style={{ backgroundColor: '#410704' }}>
-
-        <div className="flex">
-          {/* Sidebar */}
-          <aside className="absolute left-0 top-10 z-40 rounded-r-3xl shadow-2xl p-4 w-64 max-h-[60vh] overflow-y-auto" style={{ backgroundColor: '#E0C76C' }}>
-            <div className="text-amber-900 mb-4">
-              <h3 className="text-base font-bold mb-3 flex items-center justify-between">
-                Tashiding Monastery
-                <span className="text-xs">›</span>
-              </h3>
-            </div>
-            <nav className="space-y-1">
-              {sidebarItems.map((item) => (
-                <button
-                  key={item.id}
-                  onClick={() => setActiveSidebarItem(item.id)}
-                  className={`w-full text-left px-3 py-2 rounded-lg transition-all text-sm font-semibold ${
-                    activeSidebarItem === item.id
-                      ? 'bg-white/40 text-amber-900'
-                      : 'hover:bg-white/20 text-amber-900'
-                  }`}
-                >
-                  {item.label}
-                </button>
-              ))}
-            </nav>
-          </aside>
-
-          {/* Main Content */}
-          <div className="w-full max-w-7xl xl:max-w-[95rem] mx-auto px-6 lg:px-14 lg:pl-80">
-            <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,2.1fr)_minmax(0,0.9fr)] gap-10 xl:gap-12 items-start">
+        <div className="w-full max-w-7xl xl:max-w-[95rem] mx-auto px-6 lg:px-14">
+          <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,2.1fr)_minmax(0,0.9fr)] gap-10 xl:gap-12 items-start">
               {/* LEFT: TEXT */}
               <div>
                 <Reveal>
-                  <h2 className="text-4xl md:text-5xl font-bold text-amber-100 mb-10 leading-tight">
+                  <h2 className="text-4xl md:text-5xl font-bold text-amber-100 mb-10 leading-tight uppercase" style={{ fontFamily: 'Cinzel' }}>
                     Tashiding Monastery: Where the Himalayas Embrace Pure Devotion
                   </h2>
                 </Reveal>
 
-                {[
-                  'Perched on a serene ridge overlooking the confluence of the Rathong and Rangeet rivers, Tashiding Monastery is one of the most sacred and spiritually revered sites in Sikkim. Established in the 17th century by Ngadak Sempa Chempo, a follower of Guru Padmasambhava, it stands as a beacon of divine blessing in the Himalayan landscape. As morning light touches the distant snow peaks, the monastery reveals its peaceful radiance, carrying a sense of purity cherished for centuries.',
-                  'Its architecture is simple but deeply symbolic. The whitewashed structures, tapering chortens, and traditional Tibetan motifs speak of ancient craftsmanship. The famed Thong-Wa-Rang-Dol chorten, believed to cleanse all sins with a single glance, embodies the spiritual heart of Tashiding. Inside the monastery, sacred texts, delicate murals, and statues of revered deities preserve the lineage of early Sikkimese Buddhism.',
-                  'The environment surrounding Tashiding elevates its sanctity. Wrapped in silence and framed by dense forest, the monastery feels like a living sanctuary of peace. Instead of the rhythm of ritual instruments, it is the gentle sound of mountain breeze, rustling leaves, and distant river flow that shapes the atmosphere. This natural quietness invites deep reflection and a sense of inner stillness.',
-                  'The path leading up to Tashiding enhances its sacred charm. Colorful prayer flags sway along the trail, and the fragrance of pine drifts through the cool air. As the ascent unfolds, each step feels like a journey toward spiritual clarity. By the time the monastery appears, visitors are already immersed in a profound calmness.',
-                  'Tashiding Monastery stands not only as a historic seat of faith but also as a timeless symbol of purity, devotion, and spiritual renewal. Blending natural beauty with deep religious significance, it continues to inspire all who seek peace and connection amid the Himalayan heights.',
-                ].map((text, i) => (
-                  <Reveal key={i} delay={0.2 * (i + 1)}>
-                    <p className="text-lg text-amber-50 leading-relaxed mb-6">
-                      {text}
-                    </p>
-                  </Reveal>
-                ))}
+                {/* Transparent Aesthetic Box */}
+                <div className="rounded-3xl p-8 md:p-10 backdrop-blur-sm bg-amber-100/5 border border-amber-200/20 shadow-2xl">
+                  {[
+                    'Perched on a serene ridge overlooking the confluence of the Rathong and Rangeet rivers, Tashiding Monastery is one of the most sacred and spiritually revered sites in Sikkim. Established in the 17th century by Ngadak Sempa Chempo, a follower of Guru Padmasambhava, it stands as a beacon of divine blessing in the Himalayan landscape. As morning light touches the distant snow peaks, the monastery reveals its peaceful radiance, carrying a sense of purity cherished for centuries.',
+                    'Its architecture is simple but deeply symbolic. The whitewashed structures, tapering chortens, and traditional Tibetan motifs speak of ancient craftsmanship. The famed Thong-Wa-Rang-Dol chorten, believed to cleanse all sins with a single glance, embodies the spiritual heart of Tashiding. Inside the monastery, sacred texts, delicate murals, and statues of revered deities preserve the lineage of early Sikkimese Buddhism.',
+                    'The environment surrounding Tashiding elevates its sanctity. Wrapped in silence and framed by dense forest, the monastery feels like a living sanctuary of peace. Instead of the rhythm of ritual instruments, it is the gentle sound of mountain breeze, rustling leaves, and distant river flow that shapes the atmosphere. This natural quietness invites deep reflection and a sense of inner stillness.',
+                    'The path leading up to Tashiding enhances its sacred charm. Colorful prayer flags sway along the trail, and the fragrance of pine drifts through the cool air. As the ascent unfolds, each step feels like a journey toward spiritual clarity. By the time the monastery appears, visitors are already immersed in a profound calmness.',
+                    'Tashiding Monastery stands not only as a historic seat of faith but also as a timeless symbol of purity, devotion, and spiritual renewal. Blending natural beauty with deep religious significance, it continues to inspire all who seek peace and connection amid the Himalayan heights.',
+                  ].map((text, i) => (
+                    <Reveal key={i} delay={0.2 * (i + 1)}>
+                      <p className="text-base text-amber-50 leading-relaxed mb-6">
+                        {text}
+                      </p>
+                    </Reveal>
+                  ))}
+                </div>
               </div>
 
               {/* RIGHT: INFO BOXES */}
@@ -251,10 +383,182 @@ export default function TashidingMonastery() {
               </aside>
             </div>
           </div>
+      </section>
+
+      {/* DIGITAL ARCHIVE SECTION */}
+      <section
+        id="digital-archive"
+        className="w-screen min-h-[80vh] py-0"
+        style={{ backgroundColor: '#410704' }}
+      >
+        {/* FULL WIDTH TOP BAR WITH VIDEO BACKGROUND */}
+        <div className="relative w-screen h-56 md:h-72 lg:h-80 overflow-hidden flex items-center">
+          {/* Background video */}
+          <video
+            src="/archive.mp4"
+            autoPlay
+            muted
+            loop
+            playsInline
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+
+          {/* Gradient overlay for contrast */}
+          <div
+            className="absolute inset-0"
+            style={{
+              background:
+                'linear-gradient(90deg, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.45) 35%, rgba(0,0,0,0.1) 100%)',
+            }}
+          />
+
+          {/* DIGITAL ARCHIVE text + icon */}
+          <div className="relative z-10 w-full flex items-center justify-center">
+            <div className="flex flex-col items-center gap-3">
+              <div className="flex items-center justify-center w-12 h-12 rounded-full border border-amber-100">
+                <span className="text-amber-100 text-2xl">⏱</span>
+              </div>
+
+              <h3 className="text-amber-100 text-4xl md:text-5xl font-bold uppercase" style={{ fontFamily: 'Cinzel Decorative', letterSpacing: '0.08em' }}>
+                DIGITAL ARCHIVE
+              </h3>
+            </div>
+          </div>
+        </div>
+
+        {/* FULL WIDTH CONTENT AREA */}
+        <div
+          className="w-screen min-h-[70vh] py-12 px-6 md:px-12 relative"
+          style={{
+            backgroundColor: '#a66437',
+          }}
+        >
+          <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12">
+            {/* LEFT SIDE — Archive Cards */}
+            <div className="flex flex-col gap-6">
+              {tashidingArchiveItems.map((it) => (
+                <ArchiveCard
+                  key={it.id}
+                  item={it}
+                  onOpen={(i) => {
+                    setActiveItem(i);
+                    setOpenDialog(true);
+                  }}
+                />
+              ))}
+            </div>
+
+            {/* RIGHT SIDE — Info Section */}
+            <div className="flex flex-col gap-8">
+              <div className="w-full">
+                <h2 className="text-amber-100 text-xl font-bold uppercase mb-4 flex items-center gap-2" style={{ fontFamily: 'Cinzel' }}>
+                  <span className="text-amber-400 text-2xl">⏱</span>
+                  RESEARCH &amp; DOCUMENTATION
+                </h2>
+
+                <div className="flex flex-wrap gap-4 justify-between">
+                  {/* 1 */}
+                  <div className="flex-1 min-w-[220px] max-w-[260px] rounded-3xl bg-[#7b4a26] border border-amber-600/30 px-5 py-4">
+                    <p className="text-sm font-semibold text-amber-100 leading-tight">
+                      Archaeological Survey Date
+                    </p>
+                    <p className="text-sm text-amber-50 mt-1 leading-snug">17th century establishment</p>
+                  </div>
+
+                  {/* 2 */}
+                  <div className="flex-1 min-w-[220px] max-w-[260px] rounded-3xl bg-[#7b4a26] border border-amber-600/30 px-5 py-4">
+                    <p className="text-sm font-semibold text-amber-100 leading-tight">
+                      Archaeological Survey By
+                    </p>
+                    <p className="text-sm text-amber-50 mt-1 leading-snug">
+                      Sikkim State Archaeology Department, Inheritage Foundation
+                    </p>
+                  </div>
+
+                  {/* 3 */}
+                  <div className="flex-1 min-w-[220px] max-w-[260px] rounded-3xl bg-[#7b4a26] border border-amber-600/30 px-5 py-4">
+                    <p className="text-sm font-semibold text-amber-100 leading-tight">
+                      Preservation Status
+                    </p>
+                    <p className="text-sm text-amber-50 mt-1 leading-snug">
+                      Excellent, well-maintained with ongoing conservation efforts
+                    </p>
+                  </div>
+
+                  {/* 4 */}
+                  <div className="flex-1 min-w-[220px] max-w-[260px] rounded-3xl bg-[#7b4a26] border border-amber-600/30 px-5 py-4">
+                    <p className="text-sm font-semibold text-amber-100 leading-tight">
+                      Heritage Status
+                    </p>
+                    <p className="text-sm text-amber-50 mt-1 leading-snug">
+                      Sacred Sikkimese Buddhist Heritage Site
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="w-full space-y-5 mt-6">
+                <h2 className="text-amber-100 text-xl font-bold uppercase mb-2 flex items-center gap-2" style={{ fontFamily: 'Cinzel' }}>
+                  <span className="text-amber-400 text-2xl">📜</span>
+                  CHRONOLOGY OF TASHIDING
+                </h2>
+
+                {tashidingTimeline.map((ev) => (
+                  <TimelineCard key={ev.title} event={ev} />
+                ))}
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* Monastery slideshow and Explore section removed */}
+      {/* Detail Modal – OCR + Image (matches Rumtek behavior) */}
+      {openDialog && activeItem && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4"
+          style={{ background: 'rgba(0, 0, 0, 0.8)' }}
+          onClick={() => setOpenDialog(false)}
+        >
+          <div
+            className="max-w-3xl w-full overflow-hidden rounded-3xl"
+            style={{
+              background: '#1a1209',
+              border: '1px solid rgba(212, 175, 55, 0.3)',
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="grid md:grid-cols-2">
+              {/* Image */}
+              <div className="relative" style={{ background: '#2F3A3D' }}>
+                <img src={activeItem.img} alt={activeItem.title} className="h-full w-full object-cover" />
+              </div>
+
+              {/* Content */}
+              <div className="p-6 md:p-8">
+                <h2 className="text-2xl font-semibold text-amber-100">{activeItem.title}</h2>
+
+                {/* OCR / Details */}
+                <div className="mt-5">
+                  <h3 className="font-medium mb-2 text-amber-100">OCR Snippet</h3>
+                  <div
+                    className="rounded-xl p-4 text-sm text-amber-50"
+                    style={{
+                      background: 'rgba(248, 244, 234, 0.1)',
+                      border: '1px solid rgba(212, 175, 55, 0.2)',
+                    }}
+                  >
+                    {activeItem.ocrText}
+                  </div>
+                </div>
+
+                <button onClick={() => setOpenDialog(false)} className="mt-6 text-amber-200 hover:text-amber-100">
+                  Close
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       <Footer />
     </main>
