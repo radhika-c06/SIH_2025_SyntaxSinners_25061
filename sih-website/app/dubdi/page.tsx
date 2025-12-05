@@ -134,7 +134,7 @@ export default function DubdiMonastery() {
       </section>
 
       {/* Overview Section */}
-      <section className="relative w-full min-h-screen bg-gradient-to-b from-red-900 via-red-800 to-amber-900 py-16">
+      <section className="relative w-full min-h-screen py-16" style={{ backgroundColor: '#410704' }}>
         <div className="flex">
           {/* Sidebar */}
           <aside
