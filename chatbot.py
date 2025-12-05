@@ -17,7 +17,7 @@ class SikkimMonasteryChatbot:
         # ============== MONASTERY PAGE LINKS ==============
         # Map monastery names to their pages on your website
         self.monastery_pages = {
-            "rumtek": "https://yourwebsite.com/monastery/rumtek",
+            "rumtek": "https://yourwebsite.com/monstery/rumtek",
             "dubdi": "https://yourwebsite.com/monastery/dubdi",
             "pemayangtse": "https://yourwebsite.com/monastery/pemayangtse",
             "tashiding": "https://yourwebsite.com/monastery/tashiding",
