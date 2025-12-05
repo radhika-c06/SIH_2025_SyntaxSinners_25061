@@ -560,6 +560,139 @@ export default function TashidingMonastery() {
         </div>
       )}
 
+      {/* CULTURAL CALENDAR SECTION */}
+      <section className="relative w-full py-20" style={{ backgroundColor: '#410704' }}>
+        <div className="max-w-7xl mx-auto px-6 lg:px-14">
+          <Reveal>
+              <h2 className="font-cinzel-decorative font-medium text-6xl md:text-7xl text-amber-100 mb-16 text-center">
+              Cultural Calendar
+            </h2>
+          </Reveal>
+
+          <div className="relative" style={{ paddingTop: '150px', paddingBottom: '0px' }}>
+            <div className="absolute left-0 right-0 h-1 transform -translate-y-1/2"
+              style={{
+                top: 'calc(50% - 89px)',
+                backgroundImage: 'repeating-linear-gradient(to right, #d97706 0px, #d97706 15px, transparent 15px, transparent 35px)',
+                zIndex: 0,
+              }}
+            />
+
+            <div className="grid grid-cols-4 gap-0 relative" style={{ minHeight: '360px' }}>
+              <div className="relative">
+                <Reveal delay={0.1}>
+                  <div className="absolute left-1/2 transform -translate-x-1/2 rounded-2xl bg-gradient-to-br from-yellow-300 to-yellow-200 border-4 border-yellow-400 p-4 w-44 shadow-lg"
+                    style={{ top: 'calc(50% - 160px)', zIndex:2 }}>
+                    <p className="text-xs font-semibold text-amber-900 mb-1">February – March</p>
+                    <p className="text-xs text-amber-900 mb-2">1st Tibetan Month — 14th–15th day</p>
+                    <h3 className="text-lg font-bold text-amber-900">Bhumchu Festival</h3>
+                  </div>
+                  <div className="absolute left-1/2 transform -translate-x-1/2"
+                    style={{ top: 'calc(50% - 64px)', width: '4px', height: '64px', backgroundColor: '#fcd34d' }} />
+                  <div className="absolute left-1/2 transform -translate-x-1/2 rounded-full shadow-md"
+                    style={{ top: '50%', width: '32px', height: '32px', backgroundColor: '#fef08a', border: '4px solid #f59e0b', transformOrigin: 'center', zIndex: -1 }} />
+                </Reveal>
+              </div>
+
+              <div className="relative">
+                <Reveal delay={0.2}>
+                  <div className="absolute left-1/2 transform -translate-x-1/2 rounded-full shadow-md"
+                    style={{ top: '50%', width: '32px', height: '32px', backgroundColor: '#f59e0b', border: '4px solid #b45309', zIndex: -1 }} />
+                  <div className="absolute left-1/2 transform -translate-x-1/2"
+                    style={{ top: '50%', width: '4px', height: '80px', backgroundColor: '#eab308', zIndex:-2 }} />
+                  <div className="absolute left-1/2 transform -translate-x-1/2 rounded-2xl bg-gradient-to-br from-yellow-500 to-yellow-400 border-4 border-yellow-600 p-4 w-44 shadow-lg"
+                    style={{ top: 'calc(50% + 72px)' }}>
+                    <p className="text-xs font-semibold text-white mb-1">May – June</p>
+                    <p className="text-xs text-white mb-2">4th Tibetan Month — Full-moon day</p>
+                    <h3 className="text-lg font-bold text-white">Saga Dawa</h3>
+                  </div>
+                </Reveal>
+              </div>
+
+              <div className="relative">
+                <Reveal delay={0.3}>
+                  <div className="absolute left-1/2 transform -translate-x-1/2 rounded-2xl bg-gradient-to-br from-orange-500 to-orange-400 border-4 border-orange-600 p-4 w-44 shadow-lg"
+                    style={{ top: 'calc(50% - 160px)', zIndex:2 }}>
+                    <p className="text-xs font-semibold text-white mb-1">October – November</p>
+                    <p className="text-xs text-white mb-2">9th Tibetan Month — 22nd day</p>
+                    <h3 className="text-lg font-bold text-white">Lhabab Düchen</h3>
+                  </div>
+                  <div className="absolute left-1/2 transform -translate-x-1/2"
+                    style={{ top: 'calc(50% - 64px)', width: '4px', height: '64px', backgroundColor: '#fb923c' }} />
+                  <div className="absolute left-1/2 transform -translate-x-1/2 rounded-full shadow-md"
+                    style={{ top: '50%', width: '32px', height: '32px', backgroundColor: '#fb923c', border: '4px solid #ea580c', zIndex: -1 }} />
+                </Reveal>
+              </div>
+
+              <div className="relative">
+                <Reveal delay={0.4}>
+                  <div className="absolute left-1/2 transform -translate-x-1/2 rounded-full shadow-md"
+                    style={{ top: '50%', width: '32px', height: '32px', backgroundColor: '#f59e0b', border: '4px solid #b45309', zIndex: -1 }} />
+                  <div className="absolute left-1/2 transform -translate-x-1/2"
+                    style={{ top: '50%', width: '4px', height: '80px', backgroundColor: '#eab308', zIndex:-2 }} />
+                  <div className="absolute left-1/2 transform -translate-x-1/2 rounded-2xl bg-gradient-to-br from-yellow-600 to-yellow-500 border-4 border-yellow-700 p-4 w-44 shadow-lg"
+                    style={{ top: 'calc(50% + 72px)' }}>
+                    <p className="text-xs font-semibold text-white mb-1">February (varies yearly)</p>
+                    <p className="text-xs text-white mb-2">1st Tibetan Month — 1st–3rd day</p>
+                    <h3 className="text-lg font-bold text-white">Losar (Tibetan New Year)</h3>
+                  </div>
+                </Reveal>
+              </div>
+            </div>
+          </div>
+
+          <Reveal delay={0.6}>
+            <div className="mt-32 space-y-8">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <Reveal delay={0.7}>
+                  <div className="rounded-2xl bg-white/5 backdrop-blur-sm border border-yellow-500/20 p-6 hover:border-yellow-400/40 transition-colors">
+                    <h3 className="font-cinzel uppercase text-xl font-bold text-yellow-300 mb-3">Bhumchu Festival</h3>
+                    <p className="text-sm text-amber-50 leading-relaxed">
+                      Most important Tashiding festival. The sacred vase containing holy water is opened; monks check the water level to forecast prosperity; pilgrims receive blessed water; major gathering in Sikkim.
+                    </p>
+                  </div>
+                </Reveal>
+
+                <Reveal delay={0.75}>
+                  <div className="rounded-2xl bg-white/5 backdrop-blur-sm border border-yellow-500/20 p-6 hover:border-yellow-400/40 transition-colors">
+                    <h3 className="font-cinzel uppercase text-xl font-bold text-yellow-300 mb-3">Saga Dawa</h3>
+                    <p className="text-sm text-amber-50 leading-relaxed">
+                      Celebrates Buddha's birth, enlightenment, and parinirvana. Monks perform prayers, devotees light butter lamps, circumambulate, meditate, and engage in charity. Considered one of the holiest days.
+                    </p>
+                  </div>
+                </Reveal>
+
+                <Reveal delay={0.8}>
+                  <div className="rounded-2xl bg-white/5 backdrop-blur-sm border border-orange-500/20 p-6 hover:border-orange-400/40 transition-colors">
+                    <h3 className="font-cinzel uppercase text-xl font-bold text-orange-300 mb-3">Lhabab Düchen</h3>
+                    <p className="text-sm text-amber-50 leading-relaxed">
+                      Marks Buddha's descent from the heavenly realm back to earth. Monasteries perform special pujas; day of immense spiritual merit.
+                    </p>
+                  </div>
+                </Reveal>
+
+                <Reveal delay={0.85}>
+                  <div className="rounded-2xl bg-white/5 backdrop-blur-sm border border-orange-600/20 p-6 hover:border-orange-500/40 transition-colors">
+                    <h3 className="font-cinzel uppercase text-xl font-bold text-orange-300 mb-3">Losar (Tibetan New Year)</h3>
+                    <p className="text-sm text-amber-50 leading-relaxed">
+                      Tibetan New Year celebrations. Prayers, offerings, purification rituals, and community gatherings. Symbolizes new beginnings and spiritual renewal.
+                    </p>
+                  </div>
+                </Reveal>
+              </div>
+
+              <Reveal delay={0.95}>
+                <div className="rounded-3xl bg-gradient-to-r from-orange-900/20 to-amber-900/20 backdrop-blur-md border border-amber-500/20 p-8">
+                  <p className="text-base text-amber-50 leading-relaxed font-light">
+                    Through these festivals, Tashiding defines the cultural and spiritual calendar of Sikkim. Each celebration is not just an event but a communal experience that reinforces identity, continuity, and the living heritage of the region.
+                  </p>
+                </div>
+              </Reveal>
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
       <Footer />
     </main>
   );
