@@ -251,7 +251,8 @@ export default function RumtekMonastery() {
                   <div className="flex gap-2">
                     <a
                       href="https://www.google.com/maps/dir/?api=1&destination=Rumtek+Dharma+Chakra+Centre"
-                      className="flex-1 px-3 py-2 rounded-full bg-amber-400 text-amber-950 text-center font-semibold text-xs"
+                      className="flex-1 px-4 py-2 rounded-full bg-amber-400 text-amber-950 font-semibold flex items-center justify-center"
+
                     >
                       Get Directions
                     </a>
@@ -294,6 +295,50 @@ export default function RumtekMonastery() {
           </div>
         </div>
       </section>
+      
+
+      {/* DIGITAL ARCHIVE SECTION */}
+<section
+  id="digital-archive"
+  className="w-screen min-h-[80vh] py-0"
+  style={{ backgroundColor: '#410704' }}
+>
+
+  {/* FULL WIDTH TOP BAR WITH CENTERED ICON + TEXT */}
+  <div
+    className="w-screen flex items-center justify-center py-4"
+    style={{
+      backgroundColor: '#5b0505',
+      borderBottom: '1px solid #300000'
+    }}
+  >
+    <div className="flex items-center gap-3 justify-center">
+      {/* ICON */}
+      <div className="flex items-center justify-center w-10 h-10 rounded-full border border-amber-100">
+        <span className="text-amber-100 text-xl">⏱</span>
+      </div>
+
+      {/* TITLE */}
+      <h3 className="text-amber-100 text-2xl font-semibold tracking-[0.25em] uppercase">
+        DIGITAL ARCHIVE
+      </h3>
+    </div>
+  </div>
+
+  {/* FULL WIDTH CONTENT AREA */}
+  <div
+    className="w-screen min-h-[70vh]"
+    style={{
+      backgroundColor: '#a66437'
+    }}
+  >
+    {/* Your archive content goes here */}
+  </div>
+
+</section>
+
+
+
 
       <Footer />
     </main>
