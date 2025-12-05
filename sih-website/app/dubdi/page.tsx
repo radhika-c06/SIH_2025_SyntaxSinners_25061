@@ -20,9 +20,9 @@ export default function DubdiMonastery() {
   ];
 
   const images = [
-    { src: '/dubdi/dubdi 1.avif', alt: 'Dubdi 1' },
-    { src: '/dubdi/dubdi 2.jpg', alt: 'Dubdi 2' },
-    { src: '/dubdi/dubdi 3.jpg', alt: 'Dubdi 3' },
+    { src: '/dubdi/dubdim.jpg', alt: 'Dubdi 1' },
+    { src: '/dubdi/dubdim1.jpg', alt: 'Dubdi 2' },
+    { src: '/dubdi/dubdim2.jpg', alt: 'Dubdi 3' },
   ];
 
   useEffect(() => {
