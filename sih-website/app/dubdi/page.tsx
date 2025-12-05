@@ -84,10 +84,10 @@ export default function DubdiMonastery() {
           {/* Left - Monastery Name */}
           <Reveal delay={0.4}>
             <div className="flex-1">
-              <h1 className="text-6xl md:text-7xl font-bold text-amber-100 drop-shadow-lg leading-tight" style={{ fontFamily: 'serif', fontWeight: '900', letterSpacing: '3px' }}>
+              <h1 className="text-6xl md:text-7xl font-bold text-amber-100 drop-shadow-lg leading-tight font-cinzel-decorative" style={{ fontWeight: '900', letterSpacing: '3px' }}>
                 DUBDI
               </h1>
-              <h2 className="text-5xl md:text-6xl font-bold text-amber-100 drop-shadow-lg" style={{ fontFamily: 'serif', fontWeight: '900', letterSpacing: '3px' }}>
+              <h2 className="text-5xl md:text-6xl font-bold text-amber-100 drop-shadow-lg font-cinzel-decorative" style={{ fontWeight: '900', letterSpacing: '3px' }}>
                 MONASTERY
               </h2>
             </div>
