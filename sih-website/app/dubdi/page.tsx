@@ -137,10 +137,13 @@ export default function DubdiMonastery() {
       <section className="relative w-full min-h-screen bg-gradient-to-b from-red-900 via-red-800 to-amber-900 py-16">
         <div className="flex">
           {/* Sidebar */}
-          <aside className="absolute left-0 top-8 z-40 rounded-r-3xl shadow-2xl p-4 w-64 h-auto max-h-[60vh] overflow-y-auto" style={{ backgroundColor: '#E0C76C' }}>
+          <aside
+            className="absolute left-0 top-10 z-40 rounded-r-3xl shadow-2xl p-4 w-64 max-h-[60vh] overflow-y-auto"
+            style={{ backgroundColor: '#E0C76C' }}
+          >
             <div className="text-amber-900 mb-4">
               <h3 className="text-base font-bold mb-3 flex items-center justify-between">
-                Dubdi Monastery Yuksom
+                Dubdi Monastery
                 <span className="text-xs">›</span>
               </h3>
             </div>
@@ -161,41 +164,120 @@ export default function DubdiMonastery() {
             </nav>
           </aside>
 
-          {/* Content */}
-          <div className="max-w-6xl mx-auto px-8 pl-80">
-              <Reveal delay={0.2}>
-                <h2 className="text-5xl font-bold text-amber-100 mb-8">Overview</h2>
-              </Reveal>
-              <Reveal delay={0.4}>
-                <p className="text-lg text-amber-50 leading-relaxed mb-6">
-                  Perched on a forested hill above Yuksom, Dubdi Monastery—often called the Hermit’s Cell—stands quietly as the oldest monastery in Sikkim. Built in 1701 by the Three Founding Lamas, it marks the birthplace of Sikkim’s Buddhist heritage. As the early morning mist drifts through the dense woodland, the monastery reveals its humble yet powerful presence, radiating the calm spirit of the Himalayas.
-                </p>
-              </Reveal>
-              <Reveal delay={0.5}>
-                <p className="text-lg text-amber-50 leading-relaxed mb-6">
-                  Simple yet meaningful in its architecture, Dubdi’s whitewashed walls, tapering tower-like form, and muted greens echo ancient Tibetan design. Inside, old manuscripts, statues of the Three Lamas, and sacred relics preserve stories of the kingdom’s early spiritual roots. The richly painted interiors—though modest—carry symbols of deities, protective guardians, and timeless Buddhist teachings.
-                </p>
-              </Reveal>
-              <Reveal delay={0.6}>
-                <p className="text-lg text-amber-50 leading-relaxed mb-6">
-                  The quiet surroundings of Dubdi heighten its spiritual aura. Unlike larger monasteries filled with ritual sounds, here the atmosphere is shaped by silence—the rustle of leaves, distant bird calls, and the gentle hum of mountain wind. This tranquility creates a space that is both grounding and deeply reflective, offering visitors a glimpse into monastic life as it might have existed centuries ago.
-                </p>
-              </Reveal>
-              <Reveal delay={0.7}>
-                <p className="text-lg text-amber-50 leading-relaxed mb-6">
-                  The short forest trek leading to Dubdi adds to its charm. As sunlight filters through the trees and prayer flags flutter softly, the walk becomes a serene prelude to the monastery itself. Nature and spirituality blend seamlessly here, making Dubdi not just a historic site but a retreat for peace, introspection, and quiet strength.
-                </p>
-              </Reveal>
-              <Reveal delay={0.8}>
-                <p className="text-lg text-amber-50 leading-relaxed">
-                  Dubdi Monastery endures as more than the first monastery of Sikkim—it stands as a testament to the beginnings of faith in the region, a symbol of resilience, devotion, and the gentle harmony of the Himalayan landscape.
-                </p>
-              </Reveal>
-        </div>
+          {/* Main Content */}
+          <div className="w-full max-w-7xl xl:max-w-[95rem] mx-auto px-6 lg:px-14 lg:pl-80">
+            <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,2.1fr)_minmax(0,0.9fr)] gap-10 xl:gap-12 items-start">
+              {/* LEFT: TEXT */}
+              <div>
+                <Reveal delay={0.2}>
+                  <h2 className="text-4xl md:text-5xl font-bold text-amber-100 mb-10 leading-tight text-left">
+                    Dubdi Monastery: The Hermit’s Cell of Sikkim
+                  </h2>
+                </Reveal>
+                {[
+                  'Perched on a forested hill above Yuksom, Dubdi Monastery—often called the Hermit’s Cell—stands quietly as the oldest monastery in Sikkim. Built in 1701 by the Three Founding Lamas, it marks the birthplace of Sikkim’s Buddhist heritage. As the early morning mist drifts through the dense woodland, the monastery reveals its humble yet powerful presence, radiating the calm spirit of the Himalayas.',
+                  'Simple yet meaningful in its architecture, Dubdi’s whitewashed walls, tapering tower-like form, and muted greens echo ancient Tibetan design. Inside, old manuscripts, statues of the Three Lamas, and sacred relics preserve stories of the kingdom’s early spiritual roots. The richly painted interiors—though modest—carry symbols of deities, protective guardians, and timeless Buddhist teachings.',
+                  'The quiet surroundings of Dubdi heighten its spiritual aura. Unlike larger monasteries filled with ritual sounds, here the atmosphere is shaped by silence—the rustle of leaves, distant bird calls, and the gentle hum of mountain wind. This tranquility creates a space that is both grounding and deeply reflective, offering visitors a glimpse into monastic life as it might have existed centuries ago.',
+                  'The short forest trek leading to Dubdi adds to its charm. As sunlight filters through the trees and prayer flags flutter softly, the walk becomes a serene prelude to the monastery itself. Nature and spirituality blend seamlessly here, making Dubdi not just a historic site but a retreat for peace, introspection, and quiet strength.',
+                  'Dubdi Monastery endures as more than the first monastery of Sikkim—it stands as a testament to the beginnings of faith in the region, a symbol of resilience, devotion, and the gentle harmony of the Himalayan landscape.'
+                ].map((text, i) => (
+                  <Reveal delay={0.4 + i * 0.12} key={i}>
+                    <p className="text-base text-amber-50 leading-relaxed mb-6 text-left">{text}</p>
+                  </Reveal>
+                ))}
+              </div>
+              {/* RIGHT: INFO BOXES */}
+              <aside className="space-y-8">
+                {/* Location card */}
+                <div className="ml-auto w-[340px] max-w-full rounded-3xl bg-[#1a1209] border border-amber-500/40 p-5 shadow-xl">
+                  <h3 className="text-lg font-semibold text-amber-100 mb-2 flex items-center gap-2">
+                    Location Map
+                  </h3>
+                  <p className="text-xs text-amber-300 mb-3">27.067°N, 88.467°E</p>
+                  <div className="overflow-hidden rounded-2xl mb-4">
+                    <iframe
+                      title="Dubdi map"
+                      src="https://www.google.com/maps?q=Dubdi+Monastery&output=embed"
+                      className="w-full h-56"
+                    />
+                  </div>
+                  <div className="flex gap-2">
+                    <a
+                      href="https://www.google.com/maps/dir/?api=1&destination=Dubdi+Monastery"
+                      className="flex-1 px-4 py-2 rounded-full bg-amber-400 text-amber-950 font-semibold flex items-center justify-center"
+                    >
+                      Get Directions
+                    </a>
+                    <a
+                      href="https://www.google.com/maps/search/?api=1&query=Dubdi+Monastery"
+                      className="flex-1 px-3 py-2 rounded-full border border-amber-500 text-amber-100 text-center font-semibold text-xs"
+                    >
+                      View on Google Maps
+                    </a>
+                  </div>
+                </div>
+                {/* Visit info card */}
+                <div className="ml-auto w-[340px] max-w-full rounded-3xl bg-[#1a1209] border border-amber-500/40 p-5 shadow-xl">
+                  <h3 className="text-lg font-semibold text-amber-100 mb-3">
+                    Visit Information
+                  </h3>
+                  <div className="space-y-3 text-xs text-amber-50">
+                    <div>
+                      <p className="font-semibold text-amber-100">Visiting Hours</p>
+                      <p>8:00 AM – 5:00 PM, daily.</p>
+                    </div>
+                    <div className="border-t border-amber-500/30 pt-2">
+                      <p className="font-semibold text-amber-100">Entry Fee</p>
+                      <p>Free for all visitors.</p>
+                    </div>
+                    <div className="border-t border-amber-500/30 pt-2">
+                      <p className="font-semibold text-amber-100">Best Visit Times</p>
+                      <p>
+                        March to May and September to November offer pleasant weather (15-25°C) ideal for exploring. Early morning visits are recommended for a peaceful experience and to witness morning prayers. The annual Saga Dawa festival is a highlight.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </aside>
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* Monastery slideshow and Explore section removed */}
+
+      {/* DIGITAL ARCHIVE SECTION */}
+      <section
+        id="digital-archive"
+        className="w-screen min-h-[80vh] py-0"
+        style={{ backgroundColor: '#410704' }}
+      >
+        {/* FULL WIDTH TOP BAR WITH CENTERED ICON + TEXT */}
+        <div
+          className="w-screen flex items-center justify-center py-4"
+          style={{
+            backgroundColor: '#5b0505',
+            borderBottom: '1px solid #300000'
+          }}
+        >
+          <div className="flex items-center gap-3 justify-center">
+            {/* ICON */}
+            <div className="flex items-center justify-center w-10 h-10 rounded-full border border-amber-100">
+              <span className="text-amber-100 text-xl">⏱</span>
+            </div>
+            {/* TITLE */}
+            <h3 className="text-amber-100 text-2xl font-semibold tracking-[0.25em] uppercase">
+              DIGITAL ARCHIVE
+            </h3>
+          </div>
+        </div>
+        {/* FULL WIDTH CONTENT AREA */}
+        <div
+          className="w-screen min-h-[70vh]"
+          style={{ backgroundColor: '#a66437' }}
+        >
+          {/* Your archive content goes here */}
+        </div>
+      </section>
 
       <Footer />
     </main>
