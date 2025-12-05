@@ -137,7 +137,7 @@ export default function RumtekMonastery() {
       <section className="relative w-full min-h-screen bg-gradient-to-b from-red-900 via-red-800 to-amber-900 py-16">
         <div className="flex">
           {/* Sidebar */}
-          <aside className="absolute left-0 top-8 z-40 rounded-r-3xl shadow-2xl p-4 w-64 h-auto max-h-[60vh] overflow-y-auto" style={{ backgroundColor: '#F4E4A6' }}>
+          <aside className="absolute left-0 top-8 z-40 rounded-r-3xl shadow-2xl p-4 w-64 h-auto max-h-[60vh] overflow-y-auto" style={{ backgroundColor: '#E0C76C' }}>
             <div className="text-amber-900 mb-4">
               <h3 className="text-base font-bold mb-3 flex items-center justify-between">
                 Rumtek Monastery Gangtok
