@@ -20,9 +20,9 @@ export default function DubdiMonastery() {
   ];
 
   const images = [
-    { src: '/dubdi/dubdi 1.avif', alt: 'Dubdi 1' },
-    { src: '/dubdi/dubdi 2.jpg', alt: 'Dubdi 2' },
-    { src: '/dubdi/dubdi 3.jpg', alt: 'Dubdi 3' },
+    { src: '/dubdi/dubdim1.jpg', alt: 'Dubdi 1' },
+    { src: '/dubdi/dubdim3.jpg', alt: 'Dubdi 2' },
+    { src: '/dubdi/dubdim2.jpg', alt: 'Dubdi 3' },
   ];
 
   useEffect(() => {
@@ -112,7 +112,7 @@ export default function DubdiMonastery() {
                 </svg>
                 <div>
                   <div className="text-xl font-semibold tracking-wide" style={{ fontFamily: 'serif' }}>Built in</div>
-                  <div className="text-lg" style={{ fontFamily: 'serif' }}>1966 CE</div>
+                  <div className="text-lg" style={{ fontFamily: 'serif' }}>1701</div>
                 </div>
               </div>
             </div>
@@ -163,19 +163,34 @@ export default function DubdiMonastery() {
 
           {/* Content */}
           <div className="max-w-6xl mx-auto px-8 pl-80">
-            <Reveal delay={0.2}>
-              <h2 className="text-5xl font-bold text-amber-100 mb-8">Overview</h2>
-            </Reveal>
-          <Reveal delay={0.4}>
-            <p className="text-lg text-amber-50 leading-relaxed mb-6">
-              Dubdi Monastery, one of Sikkim's earliest monastic establishments, stands as an important symbol of the region's Buddhist history. Its simple stone chapel and serene setting mark the spiritual origins of organized Buddhism in Sikkim.
-            </p>
-          </Reveal>
-          <Reveal delay={0.6}>
-            <p className="text-lg text-amber-50 leading-relaxed">
-              The monastery is renowned for its historical significance and tranquil atmosphere. Its architecture and the surrounding landscape offer visitors a contemplative experience, reflecting the quiet devotion of Sikkim's spiritual heritage.
-            </p>
-          </Reveal>
+              <Reveal delay={0.2}>
+                <h2 className="text-5xl font-bold text-amber-100 mb-8">Overview</h2>
+              </Reveal>
+              <Reveal delay={0.4}>
+                <p className="text-lg text-amber-50 leading-relaxed mb-6">
+                  Perched on a forested hill above Yuksom, Dubdi Monastery—often called the Hermit’s Cell—stands quietly as the oldest monastery in Sikkim. Built in 1701 by the Three Founding Lamas, it marks the birthplace of Sikkim’s Buddhist heritage. As the early morning mist drifts through the dense woodland, the monastery reveals its humble yet powerful presence, radiating the calm spirit of the Himalayas.
+                </p>
+              </Reveal>
+              <Reveal delay={0.5}>
+                <p className="text-lg text-amber-50 leading-relaxed mb-6">
+                  Simple yet meaningful in its architecture, Dubdi’s whitewashed walls, tapering tower-like form, and muted greens echo ancient Tibetan design. Inside, old manuscripts, statues of the Three Lamas, and sacred relics preserve stories of the kingdom’s early spiritual roots. The richly painted interiors—though modest—carry symbols of deities, protective guardians, and timeless Buddhist teachings.
+                </p>
+              </Reveal>
+              <Reveal delay={0.6}>
+                <p className="text-lg text-amber-50 leading-relaxed mb-6">
+                  The quiet surroundings of Dubdi heighten its spiritual aura. Unlike larger monasteries filled with ritual sounds, here the atmosphere is shaped by silence—the rustle of leaves, distant bird calls, and the gentle hum of mountain wind. This tranquility creates a space that is both grounding and deeply reflective, offering visitors a glimpse into monastic life as it might have existed centuries ago.
+                </p>
+              </Reveal>
+              <Reveal delay={0.7}>
+                <p className="text-lg text-amber-50 leading-relaxed mb-6">
+                  The short forest trek leading to Dubdi adds to its charm. As sunlight filters through the trees and prayer flags flutter softly, the walk becomes a serene prelude to the monastery itself. Nature and spirituality blend seamlessly here, making Dubdi not just a historic site but a retreat for peace, introspection, and quiet strength.
+                </p>
+              </Reveal>
+              <Reveal delay={0.8}>
+                <p className="text-lg text-amber-50 leading-relaxed">
+                  Dubdi Monastery endures as more than the first monastery of Sikkim—it stands as a testament to the beginnings of faith in the region, a symbol of resilience, devotion, and the gentle harmony of the Himalayan landscape.
+                </p>
+              </Reveal>
         </div>
         </div>
       </section>
