@@ -7,7 +7,6 @@ import Footer from '@/components/Footer';
 
 export default function RumtekMonastery() {
   const [activeIndex, setActiveIndex] = useState(0);
-  const [scrollPosition, setScrollPosition] = useState(0);
   const [activeSidebarItem, setActiveSidebarItem] = useState('overview');
 
   const sidebarItems = [
@@ -29,14 +28,6 @@ export default function RumtekMonastery() {
       setActiveIndex((prev) => (prev + 1) % images.length);
     }, 5000);
     return () => clearInterval(interval);
-  }, [images.length]);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrollPosition(window.scrollY);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   const goToSlide = (index: number) => {
@@ -214,19 +205,22 @@ export default function RumtekMonastery() {
                   </h2>
                 </Reveal>
 
-                {[
-                  'Perched on a ridge overlooking Gangtok, Rumtek Monastery—also known as the Dharma Chakra Centre—feels alive with the spirit of the Himalayas. As the mountain wind whipped vibrant prayer flags into motion, the monastery revealed itself as a powerful symbol of Tibetan Buddhism and cultural resilience.',
-                  'A replica of Tibet’s original Tsurphu Monastery, Rumtek stands as a living link to the Karmapa lineage. Its vivid reds, golds, and blues contrast beautifully with the muted Himalayan landscape, while intricate murals of deities, mandalas, and mythic scenes breathe life into its walls. Inside, the golden stupa—adorned with precious stones and surrounded by relics of past Karmapas—radiates a profound sense of sacredness.',
-                  'The rhythmic chanting of monks, the steady beat of drums, and the glow of butter lamps create an atmosphere that is both serene and powerful. Watching the monks at their rituals offers a glimpse into a world shaped by devotion, discipline, and centuries-old tradition.',
-                  'Beyond the temple halls, Rumtek’s tranquil gardens and sweeping views of Sikkim’s rolling hills offer moments of peaceful reflection. Here, nature and spirituality blend seamlessly, making Rumtek not just a monastery but a sanctuary of heritage, faith, and quiet strength.',
-                  'The monastery stands not just as a testament to Tibetan architecture and artistry, but as a living embodiment of faith, a beacon of hope amidst the towering peaks of the Himalayas.',
-                ].map((text, i) => (
-                  <Reveal delay={0.2 + i * 0.15} key={i}>
-                    <p className="text-base text-amber-50 leading-relaxed mb-6">
-                      {text}
-                    </p>
-                  </Reveal>
-                ))}
+                {/* Transparent Aesthetic Box */}
+                <div className="rounded-3xl p-8 md:p-10 backdrop-blur-sm bg-amber-100/5 border border-amber-200/20 shadow-2xl">
+                  {[
+                    "Perched on a ridge overlooking Gangtok, Rumtek Monastery—also known as the Dharma Chakra Centre—feels alive with the spirit of the Himalayas. As the mountain wind whipped vibrant prayer flags into motion, the monastery revealed itself as a powerful symbol of Tibetan Buddhism and cultural resilience.",
+                    "A replica of Tibet's original Tsurphu Monastery, Rumtek stands as a living link to the Karmapa lineage. Its vivid reds, golds, and blues contrast beautifully with the muted Himalayan landscape, while intricate murals of deities, mandalas, and mythic scenes breathe life into its walls. Inside, the golden stupa—adorned with precious stones and surrounded by relics of past Karmapas—radiates a profound sense of sacredness.",
+                    "The rhythmic chanting of monks, the steady beat of drums, and the glow of butter lamps create an atmosphere that is both serene and powerful. Watching the monks at their rituals offers a glimpse into a world shaped by devotion, discipline, and centuries-old tradition.",
+                    "Beyond the temple halls, Rumtek's tranquil gardens and sweeping views of Sikkim's rolling hills offer moments of peaceful reflection. Here, nature and spirituality blend seamlessly, making Rumtek not just a monastery but a sanctuary of heritage, faith, and quiet strength.",
+                    "The monastery stands not just as a testament to Tibetan architecture and artistry, but as a living embodiment of faith, a beacon of hope amidst the towering peaks of the Himalayas.",
+                  ].map((text, i) => (
+                    <Reveal delay={0.2 + i * 0.15} key={i}>
+                      <p className="text-base text-amber-50 leading-relaxed mb-6">
+                        {text}
+                      </p>
+                    </Reveal>
+                  ))}
+                </div>
               </div>
 
               {/* RIGHT: INFO BOXES */}
@@ -252,7 +246,6 @@ export default function RumtekMonastery() {
                     <a
                       href="https://www.google.com/maps/dir/?api=1&destination=Rumtek+Dharma+Chakra+Centre"
                       className="flex-1 px-4 py-2 rounded-full bg-amber-400 text-amber-950 font-semibold flex items-center justify-center"
-
                     >
                       Get Directions
                     </a>
