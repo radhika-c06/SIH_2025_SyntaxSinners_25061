@@ -5,6 +5,7 @@ import { Poppins, Lora, Cinzel, Merriweather } from "next/font/google";
 import BodhiChatbot from "../components/BodhiChatbot";
 import GlitterCursorTrail from "../components/GlitterCursorTrail";
 import Footer from "../components/Footer";
+import BackgroundAudio from "../components/BackgroundAudio";
 
 const poppins = Poppins({ subsets: ["latin"], weight: "800", variable: "--font-poppins" });
 const lora = Lora({ subsets: ["latin"], style: "italic", variable: "--font-lora" });
@@ -15,6 +16,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className={`${poppins.variable} ${lora.variable} ${cinzel.variable} ${merriweather.variable}`}>
       <body className="bg-white text-black antialiased">
+        {/* Background music for entire website (volume controlled in client component) */}
+        <BackgroundAudio />
         <GlitterCursorTrail />
         {children}
         <BodhiChatbot />
