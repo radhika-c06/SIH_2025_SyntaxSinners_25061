@@ -149,7 +149,7 @@ export default function TsukMonastery() {
                 </svg>
                 <div>
                   <div className="text-xl font-semibold">Built in</div>
-                  <div className="text-lg">1966 CE</div>
+                  <div className="text-lg">1894 CE</div>
                 </div>
               </div>
             </div>
@@ -305,6 +305,185 @@ export default function TsukMonastery() {
 
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* CULTURAL CALENDAR SECTION */}
+      <section className="relative w-full py-20" style={{ backgroundColor: '#410704' }}>
+        <div className="max-w-7xl mx-auto px-6 lg:px-14">
+          <Reveal>
+            <h2 className="text-5xl font-bold text-amber-100 mb-16 text-center">
+              Cultural Calendar
+            </h2>
+          </Reveal>
+
+          {/* Horizontal Timeline Container */}
+          <div className="relative" style={{ paddingTop: '150px', paddingBottom: '200px' }}>
+            {/* Main horizontal dashed line (centered between top/bottom boxes) */}
+            <div className="absolute left-0 right-0 h-1 transform -translate-y-1/2"
+              style={{
+                top: '50%',
+                backgroundImage: 'repeating-linear-gradient(to right, #d97706 0px, #d97706 15px, transparent 15px, transparent 35px)',
+                zIndex: 10,
+              }}
+            />
+
+            {/* Timeline events - horizontal layout with centered dots/connectors */}
+            <div className="grid grid-cols-5 gap-0 relative" style={{ minHeight: '360px' }}>
+              {/* Column 1 - Saga Dawa (top) */}
+              <div className="relative">
+                <Reveal delay={0.1}>
+                  {/* Top box */}
+                  <div className="absolute left-1/2 transform -translate-x-1/2 rounded-2xl bg-gradient-to-br from-yellow-300 to-yellow-200 border-4 border-yellow-400 p-4 w-44 shadow-lg"
+                    style={{ top: 'calc(50% - 160px)' }}>
+                    <p className="text-xs font-semibold text-amber-900 mb-1">May–June</p>
+                    <p className="text-xs text-amber-900 mb-2">Full-moon of the 4th Tibetan month</p>
+                    <h3 className="text-lg font-bold text-amber-900">Saga Dawa</h3>
+                  </div>
+                  {/* Connector from box down to center line */}
+                  <div className="absolute left-1/2 transform -translate-x-1/2"
+                    style={{ top: 'calc(50% - 64px)', width: '4px', height: '64px', backgroundColor: '#fcd34d' }} />
+                  {/* Dot on center line */}
+                  <div className="absolute left-1/2 transform -translate-x-1/2 rounded-full shadow-md"
+                    style={{ top: '50%', width: '32px', height: '32px', backgroundColor: '#fef08a', border: '4px solid #f59e0b', transformOrigin: 'center' }} />
+                </Reveal>
+              </div>
+
+              {/* Column 2 - Drukpa Teshi (bottom) */}
+              <div className="relative">
+                <Reveal delay={0.2}>
+                  {/* Dot on center line */}
+                  <div className="absolute left-1/2 transform -translate-x-1/2 rounded-full shadow-md"
+                    style={{ top: '50%', width: '32px', height: '32px', backgroundColor: '#f59e0b', border: '4px solid #b45309' }} />
+                  {/* Connector from center line down to box */}
+                  <div className="absolute left-1/2 transform -translate-x-1/2"
+                    style={{ top: '50%', width: '4px', height: '64px', backgroundColor: '#eab308' }} />
+                  {/* Bottom box */}
+                  <div className="absolute left-1/2 transform -translate-x-1/2 rounded-2xl bg-gradient-to-br from-yellow-500 to-yellow-400 border-4 border-yellow-600 p-4 w-44 shadow-lg"
+                    style={{ top: 'calc(50% + 72px)' }}>
+                    <p className="text-xs font-semibold text-white mb-1">July–August</p>
+                    <p className="text-xs text-white mb-2">4th day of the 6th Tibetan month</p>
+                    <h3 className="text-lg font-bold text-white">Drukpa Teshi</h3>
+                  </div>
+                </Reveal>
+              </div>
+
+              {/* Column 3 - Pang Lhabsol (top) */}
+              <div className="relative">
+                <Reveal delay={0.3}>
+                  <div className="absolute left-1/2 transform -translate-x-1/2 rounded-2xl bg-gradient-to-br from-orange-500 to-orange-400 border-4 border-orange-600 p-4 w-44 shadow-lg"
+                    style={{ top: 'calc(50% - 160px)' }}>
+                    <p className="text-xs font-semibold text-white mb-1">Late Aug–Early Sep</p>
+                    <p className="text-xs text-white mb-2">15th day of the 7th Tibetan month</p>
+                    <h3 className="text-lg font-bold text-white">Pang Lhabsol</h3>
+                  </div>
+                  <div className="absolute left-1/2 transform -translate-x-1/2"
+                    style={{ top: 'calc(50% - 64px)', width: '4px', height: '64px', backgroundColor: '#fb923c' }} />
+                  <div className="absolute left-1/2 transform -translate-x-1/2 rounded-full shadow-md"
+                    style={{ top: '50%', width: '32px', height: '32px', backgroundColor: '#fb923c', border: '4px solid #ea580c' }} />
+                </Reveal>
+              </div>
+
+              {/* Column 4 - Kagyed Dance (bottom) */}
+              <div className="relative">
+                <Reveal delay={0.4}>
+                  <div className="absolute left-1/2 transform -translate-x-1/2 rounded-full shadow-md"
+                    style={{ top: '50%', width: '32px', height: '32px', backgroundColor: '#d97706', border: '4px solid #92400e' }} />
+                  <div className="absolute left-1/2 transform -translate-x-1/2"
+                    style={{ top: '50%', width: '4px', height: '64px', backgroundColor: '#d97706' }} />
+                  <div className="absolute left-1/2 transform -translate-x-1/2 rounded-2xl bg-gradient-to-br from-yellow-600 to-yellow-500 border-4 border-yellow-700 p-4 w-44 shadow-lg"
+                    style={{ top: 'calc(50% + 72px)' }}>
+                    <p className="text-xs font-semibold text-white mb-1">Early December</p>
+                    <p className="text-xs text-white mb-2">28th–29th day of 10th Tibetan month</p>
+                    <h3 className="text-lg font-bold text-white">Kagyed Dance</h3>
+                  </div>
+                </Reveal>
+              </div>
+
+              {/* Column 5 - Losoong (top) */}
+              <div className="relative">
+                <Reveal delay={0.5}>
+                  <div className="absolute left-1/2 transform -translate-x-1/2 rounded-2xl bg-gradient-to-br from-orange-600 to-orange-500 border-4 border-orange-700 p-4 w-44 shadow-lg"
+                    style={{ top: 'calc(50% - 160px)' }}>
+                    <p className="text-xs font-semibold text-white mb-1">December</p>
+                    <p className="text-xs text-white mb-2">Last week of 10th Tibetan month</p>
+                    <h3 className="text-lg font-bold text-white">Losoong</h3>
+                  </div>
+                  <div className="absolute left-1/2 transform -translate-x-1/2"
+                    style={{ top: 'calc(50% - 64px)', width: '4px', height: '64px', backgroundColor: '#ea580c' }} />
+                  <div className="absolute left-1/2 transform -translate-x-1/2 rounded-full shadow-md"
+                    style={{ top: '50%', width: '32px', height: '32px', backgroundColor: '#fb6b13', border: '4px solid #c2410c' }} />
+                </Reveal>
+              </div>
+            </div>
+          </div>
+
+          {/* Calendar Narrative Section */}
+          <Reveal delay={0.6}>
+            <div className="mt-32 space-y-8">
+              {/* Festival narratives in grid */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {/* Saga Dawa */}
+                <Reveal delay={0.7}>
+                  <div className="rounded-2xl bg-white/5 backdrop-blur-sm border border-yellow-500/20 p-6 hover:border-yellow-400/40 transition-colors">
+                    <h3 className="text-xl font-bold text-yellow-300 mb-3">Saga Dawa</h3>
+                    <p className="text-sm text-amber-50 leading-relaxed">
+                      Brings a serene, devotional atmosphere. Inside Tsuk La Khang, monks chant scriptures commemorating the Buddha's birth, enlightenment, and parinirvana. Butter lamps glow throughout the day, and devotees circumambulate the monastery with incense and prayer wheels, creating a sense of shared merit.
+                    </p>
+                  </div>
+                </Reveal>
+
+                {/* Drukpa Teshi */}
+                <Reveal delay={0.75}>
+                  <div className="rounded-2xl bg-white/5 backdrop-blur-sm border border-yellow-500/20 p-6 hover:border-yellow-400/40 transition-colors">
+                    <h3 className="text-xl font-bold text-yellow-300 mb-3">Drukpa Teshi</h3>
+                    <p className="text-sm text-amber-50 leading-relaxed">
+                      Introduces a more structured ritual tone. This festival marks the Buddha's first teaching of the Four Noble Truths. Tsuk La Khang conducts special dharma recitations and blessings, and the courtyard becomes a gathering ground for teachings meant to foster clarity and wisdom for the months ahead.
+                    </p>
+                  </div>
+                </Reveal>
+
+                {/* Pang Lhabsol */}
+                <Reveal delay={0.8}>
+                  <div className="rounded-2xl bg-white/5 backdrop-blur-sm border border-orange-500/20 p-6 hover:border-orange-400/40 transition-colors">
+                    <h3 className="text-xl font-bold text-orange-300 mb-3">Pang Lhabsol</h3>
+                    <p className="text-sm text-amber-50 leading-relaxed">
+                      The most distinctive festival of Sikkim. Tsuk La Khang becomes the center of state ritual life, honoring Mount Khangchendzonga as a guardian deity. Sacred Cham dances, masked monks, the boom of long horns, and rhythmic drumbeats turn the monastery into a dramatic spiritual theatre, symbolizing unity and protection of Sikkim's heritage.
+                    </p>
+                  </div>
+                </Reveal>
+
+                {/* Kagyed */}
+                <Reveal delay={0.85}>
+                  <div className="rounded-2xl bg-white/5 backdrop-blur-sm border border-yellow-600/20 p-6 hover:border-yellow-500/40 transition-colors">
+                    <h3 className="text-xl font-bold text-yellow-300 mb-3">Kagyed</h3>
+                    <p className="text-sm text-amber-50 leading-relaxed">
+                      Shifts the mood toward purification. Nighttime masked dances take place in the Tsuk La Khang courtyard, representing protective deities driving away negativity. The interplay of shadows, ritual fire, butter lamps, and precise choreography creates one of the year's most striking ritual performances.
+                    </p>
+                  </div>
+                </Reveal>
+
+                {/* Losoong */}
+                <Reveal delay={0.9}>
+                  <div className="rounded-2xl bg-white/5 backdrop-blur-sm border border-orange-600/20 p-6 hover:border-orange-500/40 transition-colors lg:col-span-2">
+                    <h3 className="text-xl font-bold text-orange-300 mb-3">Losoong</h3>
+                    <p className="text-sm text-amber-50 leading-relaxed">
+                      The Sikkimese New Year. Tsuk La Khang becomes a site of renewal—monks offer year-end prayers, perform auspicious Cham dances, and bless visitors seeking prosperity and a clean beginning for the year ahead.
+                    </p>
+                  </div>
+                </Reveal>
+              </div>
+
+              {/* Closing narrative */}
+              <Reveal delay={0.95}>
+                <div className="rounded-3xl bg-gradient-to-r from-orange-900/20 to-amber-900/20 backdrop-blur-md border border-amber-500/20 p-8">
+                  <p className="text-base text-amber-50 leading-relaxed font-light">
+                    Through these festivals, Tsuk La Khang defines the cultural and spiritual calendar of Sikkim. Each celebration is not just an event but a communal experience that reinforces identity, continuity, and the living heritage of the region.
+                  </p>
+                </div>
+              </Reveal>
+            </div>
+          </Reveal>
         </div>
       </section>
 
