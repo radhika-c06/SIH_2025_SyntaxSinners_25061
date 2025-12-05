@@ -112,7 +112,7 @@ export default function DubdiMonastery() {
                 </svg>
                 <div>
                   <div className="text-xl font-semibold tracking-wide" style={{ fontFamily: 'serif' }}>Built in</div>
-                  <div className="text-lg" style={{ fontFamily: 'serif' }}>1966 CE</div>
+                  <div className="text-lg" style={{ fontFamily: 'serif' }}>1701</div>
                 </div>
               </div>
             </div>
