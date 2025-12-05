@@ -8,6 +8,17 @@ import Footer from '@/components/Footer';
 
 export default function RumtekMonastery() {
   const [activeIndex, setActiveIndex] = useState(0);
+  const [scrollPosition, setScrollPosition] = useState(0);
+  const [activeSidebarItem, setActiveSidebarItem] = useState('overview');
+
+  const sidebarItems = [
+    { id: 'overview', label: 'Overview' },
+    { id: 'digital-archive', label: 'Digital Archive' },
+    { id: 'audio-tour', label: 'Audio Tour' },
+    { id: 'virtual-tour', label: 'Virtual Tour' },
+    { id: 'cultural-calendar', label: 'Cultural Calendar' },
+  ];
+
   const images = [
     { src: '/rumtek/rumtek 1.avif', alt: 'Rumtek 1' },
     { src: '/rumtek/rumtek 2.jpg', alt: 'Rumtek 2' },
@@ -20,6 +31,14 @@ export default function RumtekMonastery() {
     }, 5000); // Change image every 5 seconds
     return () => clearInterval(interval);
   }, [images.length]);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrollPosition(window.scrollY);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const goToSlide = (index: number) => {
     setActiveIndex(index);
@@ -116,10 +135,37 @@ export default function RumtekMonastery() {
 
       {/* Overview Section */}
       <section className="relative w-full min-h-screen bg-gradient-to-b from-red-900 via-red-800 to-amber-900 py-16">
-        <div className="max-w-6xl mx-auto px-8">
-          <Reveal delay={0.2}>
-            <h2 className="text-5xl font-bold text-amber-100 mb-8">Overview</h2>
-          </Reveal>
+        <div className="flex">
+          {/* Sidebar */}
+          <aside className="absolute left-0 top-8 z-40 rounded-r-3xl shadow-2xl p-4 w-64 h-auto max-h-[60vh] overflow-y-auto" style={{ backgroundColor: '#F4E4A6' }}>
+            <div className="text-amber-900 mb-4">
+              <h3 className="text-base font-bold mb-3 flex items-center justify-between">
+                Rumtek Monastery Gangtok
+                <span className="text-xs">›</span>
+              </h3>
+            </div>
+            <nav className="space-y-1">
+              {sidebarItems.map((item) => (
+                <button
+                  key={item.id}
+                  onClick={() => setActiveSidebarItem(item.id)}
+                  className={`w-full text-left px-3 py-2 rounded-lg transition-all text-sm font-semibold ${
+                    activeSidebarItem === item.id
+                      ? 'bg-white/40 text-amber-900'
+                      : 'hover:bg-white/20 text-amber-900'
+                  }`}
+                >
+                  {item.label}
+                </button>
+              ))}
+            </nav>
+          </aside>
+
+          {/* Content */}
+          <div className="max-w-6xl mx-auto px-8 pl-80">
+            <Reveal delay={0.2}>
+              <h2 className="text-5xl font-bold text-amber-100 mb-8">Overview</h2>
+            </Reveal>
           <Reveal delay={0.4}>
             <p className="text-lg text-amber-50 leading-relaxed mb-6">
               Rumtek Monastery, the most significant Karma Kagyu institution in India, stands as a beacon of Buddhist spirituality and architectural brilliance. Built in 1966 CE, this magnificent structure commands breathtaking views of the Kanyam valley and the surrounding Himalayan peaks from its elevated location in East Sikkim.
@@ -130,6 +176,7 @@ export default function RumtekMonastery() {
               The monastery is renowned for its spiritual significance and serves as the principal seat of the Sixteenth Karmapa in exile. Its distinctive architecture, adorned with intricate carvings and traditional designs, reflects the rich cultural heritage of Sikkim and the profound spiritual traditions of Tibetan Buddhism.
             </p>
           </Reveal>
+        </div>
         </div>
       </section>
 
