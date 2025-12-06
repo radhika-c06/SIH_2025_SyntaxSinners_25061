@@ -910,6 +910,14 @@ export default function TashidingMonastery() {
                   </div>
                 </div>
               </div>
+
+              {/* Architecture Info Box */}
+              <div className="rounded-3xl p-6" style={{ backgroundColor: 'rgba(217, 119, 6, 0.15)', border: '2px solid rgba(217, 119, 6, 0.3)', backdropFilter: 'blur(10px)' }}>
+                <h3 className="text-xl font-semibold text-amber-50 mb-4 uppercase text-center" style={{ fontFamily: 'Cinzel' }}>Architecture</h3>
+                <div className="bg-gradient-to-br from-amber-500 to-amber-600 rounded-2xl p-8 h-32 flex items-center justify-center">
+                  <p className="text-amber-900 font-semibold text-center">Architectural Details</p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
