@@ -820,7 +820,7 @@ export default function TashidingMonastery() {
           {/* Header */}
           <div className="text-center mb-16">
             <div className="inline-flex items-center gap-3 mb-6">
-              <img src="/Icons/ICONS/HEADPHONE.png" alt="Virtual Tour" className="w-12 h-12" />
+              <img src="/Icons/ICONS/video tour icon.png" alt="Virtual Tour" className="w-12 h-12" />
               <h2 className="text-5xl font-bold text-amber-50 uppercase" style={{ fontFamily: 'Cinzel Decorative' }}>
                 Virtual Tour
               </h2>
