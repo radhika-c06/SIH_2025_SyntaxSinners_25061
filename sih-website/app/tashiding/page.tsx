@@ -837,7 +837,7 @@ export default function TashidingMonastery() {
               {/* Monastery Card */}
               <div className="rounded-3xl p-6" style={{ backgroundColor: 'rgba(120, 53, 15, 0.6)', border: '2px solid rgba(217, 119, 6, 0.3)', backdropFilter: 'blur(10px)' }}>
                 <div className="flex items-start gap-4">
-                  <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center text-2xl font-bold text-amber-900" style={{ fontFamily: 'Cinzel Decorative' }}>
+                  <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center text-2xl font-extrabold text-amber-900" style={{ fontFamily: 'Cinzel Decorative' }}>
                     T
                   </div>
                   <div className="flex-1">
