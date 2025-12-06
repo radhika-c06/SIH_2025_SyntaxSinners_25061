@@ -858,16 +858,15 @@ export default function TashidingMonastery() {
               </div>
 
               {/* Tour Features Box */}
-              <div className="rounded-3xl p-8" style={{ backgroundColor: 'rgba(217, 119, 6, 0.15)', border: '2px solid rgba(217, 119, 6, 0.3)', backdropFilter: 'blur(10px)' }}>
-                <h3 className="text-2xl font-semibold text-amber-50 mb-6 uppercase" style={{ fontFamily: 'Cinzel' }}>Tour Features</h3>
-                <div className="space-y-4">
+              <div className="rounded-3xl p-6" style={{ backgroundColor: 'rgba(217, 119, 6, 0.15)', border: '2px solid rgba(217, 119, 6, 0.3)', backdropFilter: 'blur(10px)' }}>
+                <h3 className="text-xl font-semibold text-amber-50 mb-4 uppercase" style={{ fontFamily: 'Cinzel' }}>Tour Features</h3>
+                <div className="space-y-3">
                   <div className="flex items-start gap-3">
                     <div className="w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center flex-shrink-0">
                       <span className="text-xl">🎯</span>
                     </div>
                     <div>
-                      <h4 className="text-amber-100 font-semibold mb-1">Interactive Navigation</h4>
-                      <p className="text-amber-200 text-sm">Move freely through sacred spaces with intuitive controls</p>
+                      <h4 className="text-amber-100 font-semibold">Interactive Navigation</h4>
                     </div>
                   </div>
                   <div className="flex items-start gap-3">
@@ -875,8 +874,7 @@ export default function TashidingMonastery() {
                       <span className="text-xl">🎧</span>
                     </div>
                     <div>
-                      <h4 className="text-amber-100 font-semibold mb-1">Audio Narration</h4>
-                      <p className="text-amber-200 text-sm">Guided commentary in multiple languages</p>
+                      <h4 className="text-amber-100 font-semibold">Audio Narration</h4>
                     </div>
                   </div>
                   <div className="flex items-start gap-3">
@@ -884,8 +882,7 @@ export default function TashidingMonastery() {
                       <span className="text-xl">📱</span>
                     </div>
                     <div>
-                      <h4 className="text-amber-100 font-semibold mb-1">Mobile Friendly</h4>
-                      <p className="text-amber-200 text-sm">Experience the tour on any device</p>
+                      <h4 className="text-amber-100 font-semibold">Mobile Friendly</h4>
                     </div>
                   </div>
                   <div className="flex items-start gap-3">
@@ -893,8 +890,7 @@ export default function TashidingMonastery() {
                       <span className="text-xl">🎨</span>
                     </div>
                     <div>
-                      <h4 className="text-amber-100 font-semibold mb-1">High Resolution</h4>
-                      <p className="text-amber-200 text-sm">Crystal clear imagery capturing every detail</p>
+                      <h4 className="text-amber-100 font-semibold">High Resolution</h4>
                     </div>
                   </div>
                 </div>
@@ -919,10 +915,15 @@ export default function TashidingMonastery() {
                 </div>
               </div>
 
-              {/* Architecture Info Box */}
-              <div className="rounded-3xl p-6" style={{ backgroundColor: 'rgba(217, 119, 6, 0.15)', border: '2px solid rgba(217, 119, 6, 0.3)', backdropFilter: 'blur(10px)' }}>
-                <h3 className="text-xl font-semibold text-amber-50 mb-4 uppercase text-center" style={{ fontFamily: 'Cinzel' }}>Architectural Details</h3>
-                <div className="bg-gradient-to-br from-amber-500 to-amber-600 rounded-2xl p-6 space-y-4 text-amber-900">
+            </div>
+          </div>
+
+          {/* Architecture Info Box - Full Width */}
+          <div className="mt-8">
+            <div className="rounded-3xl p-8" style={{ backgroundColor: 'rgba(217, 119, 6, 0.15)', border: '2px solid rgba(217, 119, 6, 0.3)', backdropFilter: 'blur(10px)' }}>
+              <h3 className="text-2xl font-semibold text-amber-50 mb-6 uppercase text-center" style={{ fontFamily: 'Cinzel' }}>Architectural Details</h3>
+              <div className="bg-gradient-to-br from-amber-500 to-amber-600 rounded-2xl p-8">
+                <div className="grid md:grid-cols-2 gap-6 text-amber-900">
                   <div>
                     <h4 className="font-bold text-base mb-1">1. Architectural Style</h4>
                     <p className="text-sm leading-relaxed">Nyingma Tibetan Buddhist design<br/>Simple, symbolic, and spiritually oriented</p>
