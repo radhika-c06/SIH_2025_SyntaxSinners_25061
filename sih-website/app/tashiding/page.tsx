@@ -13,6 +13,9 @@ export default function TashidingMonastery() {
   const [openDialog, setOpenDialog] = useState(false);
   const [activeItem, setActiveItem] = useState<any | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [isLiked, setIsLiked] = useState(false);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(0);
   const audioRef = useRef<HTMLAudioElement>(null);
 
   const togglePlay = () => {
@@ -25,6 +28,46 @@ export default function TashidingMonastery() {
       setIsPlaying(!isPlaying);
     }
   };
+
+  const skipForward = () => {
+    if (audioRef.current) {
+      audioRef.current.currentTime += 10;
+    }
+  };
+
+  const skipBackward = () => {
+    if (audioRef.current) {
+      audioRef.current.currentTime -= 10;
+    }
+  };
+
+  const fastForward = () => {
+    if (audioRef.current) {
+      audioRef.current.currentTime = Math.min(audioRef.current.currentTime + 30, duration);
+    }
+  };
+
+  const fastRewind = () => {
+    if (audioRef.current) {
+      audioRef.current.currentTime = Math.max(audioRef.current.currentTime - 30, 0);
+    }
+  };
+
+  const toggleLike = () => {
+    setIsLiked(!isLiked);
+  };
+
+  const handleProgressClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (audioRef.current) {
+      const progressBar = e.currentTarget;
+      const clickX = e.clientX - progressBar.getBoundingClientRect().left;
+      const width = progressBar.offsetWidth;
+      const clickedTime = (clickX / width) * duration;
+      audioRef.current.currentTime = clickedTime;
+    }
+  };
+
+  const progress = duration > 0 ? (currentTime / duration) * 100 : 0;
 
   const sidebarItems = [
     { id: 'overview', label: 'Overview' },
@@ -797,32 +840,72 @@ export default function TashidingMonastery() {
                 {/* Player Controls */}
                 <div className="flex items-center justify-between gap-4">
                   <button className="text-amber-100 hover:text-white transition">☰</button>
-                  <div className="flex-1 h-1 bg-gradient-to-r from-amber-400 to-amber-200 rounded"></div>
-                  <button className="text-amber-100 hover:text-white transition">♡</button>
+                  <div 
+                    className="flex-1 h-1 bg-gray-600 rounded cursor-pointer relative"
+                    onClick={handleProgressClick}
+                  >
+                    <div 
+                      className="h-full bg-gradient-to-r from-amber-400 to-amber-200 rounded"
+                      style={{ width: `${progress}%` }}
+                    ></div>
+                  </div>
+                  <button 
+                    onClick={toggleLike}
+                    className={`transition ${isLiked ? 'text-red-500' : 'text-amber-100 hover:text-white'}`}
+                  >
+                    {isLiked ? '❤' : '♡'}
+                  </button>
                 </div>
 
                 {/* Audio Element */}
-                <audio ref={audioRef} src="/tashiding audio.mp4" />
+                <audio 
+                  ref={audioRef} 
+                  src="/tashiding audio.mp4"
+                  onTimeUpdate={(e) => setCurrentTime(e.currentTarget.currentTime)}
+                  onLoadedMetadata={(e) => setDuration(e.currentTarget.duration)}
+                />
 
                 {/* Playback Controls */}
                 <div className="flex items-center justify-center gap-6">
-                  <button className="text-amber-100 hover:text-white transition text-2xl">⏮</button>
-                  <button className="text-amber-100 hover:text-white transition text-2xl">◀</button>
+                  <button 
+                    onClick={fastRewind}
+                    className="text-amber-100 hover:text-white transition text-2xl hover:scale-110 active:scale-95"
+                  >
+                    ⏮
+                  </button>
+                  <button 
+                    onClick={skipBackward}
+                    className="text-amber-100 hover:text-white transition text-2xl hover:scale-110 active:scale-95"
+                  >
+                    ◀
+                  </button>
                   <button 
                     onClick={togglePlay}
                     className="w-16 h-16 rounded-full bg-gradient-to-b from-amber-100 to-amber-200 flex items-center justify-center text-2xl text-amber-900 hover:scale-110 transition shadow-lg"
                   >
                     {isPlaying ? '⏸' : '▶'}
                   </button>
-                  <button className="text-amber-100 hover:text-white transition text-2xl">▶</button>
-                  <button className="text-amber-100 hover:text-white transition text-2xl">⏭</button>
+                  <button 
+                    onClick={skipForward}
+                    className="text-amber-100 hover:text-white transition text-2xl hover:scale-110 active:scale-95"
+                  >
+                    ▶
+                  </button>
+                  <button 
+                    onClick={fastForward}
+                    className="text-amber-100 hover:text-white transition text-2xl hover:scale-110 active:scale-95"
+                  >
+                    ⏭
+                  </button>
                 </div>
 
                 {/* Duration and Download */}
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2 text-amber-100">
                     <span className="text-xl">⏱</span>
-                    <span className="font-semibold">5mins</span>
+                    <span className="font-semibold">
+                      {Math.floor(currentTime / 60)}:{String(Math.floor(currentTime % 60)).padStart(2, '0')} / {Math.floor(duration / 60)}:{String(Math.floor(duration % 60)).padStart(2, '0')}
+                    </span>
                   </div>
                   <button className="text-amber-100 hover:text-white transition text-2xl">⬇</button>
                 </div>
