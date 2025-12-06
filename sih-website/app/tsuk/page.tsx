@@ -9,6 +9,8 @@ export default function TsukMonastery() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [scrollPosition, setScrollPosition] = useState(0);
   const [activeSidebarItem, setActiveSidebarItem] = useState('overview');
+  const [openDialog, setOpenDialog] = useState(false);
+  const [activeItem, setActiveItem] = useState<any | null>(null);
 
   const sidebarItems = [
     { id: 'overview', label: 'Overview' },
@@ -23,6 +25,62 @@ export default function TsukMonastery() {
     { src: '/tsuk/tsuk2.avif', alt: 'Tsuk 2' },
     { src: '/tsuk/tsuk3.avif', alt: 'Tsuk 3' },
   ];
+
+  const tsukArchiveItems = [
+    {
+      id: 't1',
+      title: 'Royal Chapel Murals',
+      monastery: 'Tsuk',
+      type: 'mural',
+      year: '19th c.',
+      img: '/tsuk/tsuk4.jpg',
+      tags: ['Color-corrected', 'AI-enhanced'],
+      ocrText: 'Placeholder OCR text for Royal Chapel Murals.',
+      location: 'Tsuk',
+      description:
+        'Vibrant murals within the former royal chapel, depicting scenes from the life of Buddha and various deities, showcasing the rich artistic heritage of Sikkim.',
+    },
+    {
+      id: 't2',
+      title: 'Ancient Buddhist Scriptures',
+      monastery: 'Tsuk',
+      type: 'manuscript',
+      year: '19th c.',
+      img: '/tsuk/tsuk5.avif',
+      tags: ['AI-OCR processed', 'High-res'],
+      ocrText: 'Placeholder OCR text for ancient scriptures.',
+      location: 'Tsuk',
+      description: 'A collection of centuries-old Buddhist scriptures and manuscripts, preserved at the monastery, representing a significant repository of spiritual knowledge.',
+    },
+  ];
+
+  const tsukTimeline = [
+      {
+      title: 'Establishment of Tsuk La Khang',
+      year: '1894 CE',
+      description:
+        'Tsuk La Khang was constructed during the reign of Chogyal Sidkeong Tulku Namgyal, serving as the royal chapel for the Chogyal dynasty of Sikkim.',
+    },
+    {
+      title: 'Center of Royal Rituals',
+      year: 'Late 19th - Mid 20th c.',
+      description:
+        'The monastery was the primary location for royal ceremonies, rituals, and festivals, playing a central role in the spiritual and political life of the kingdom.',
+    },
+    {
+      title: 'Integration with India',
+      year: '1975 CE',
+      description:
+        'Following Sikkim\'s merger with India, the monastery transitioned from a royal chapel to a public place of worship, while retaining its cultural significance.',
+    },
+      {
+      title: 'Preservation Efforts',
+      year: 'c. 2000 CE',
+      description:
+        'Conservation initiatives were undertaken to preserve the monastery\'s unique murals, artifacts, and architectural integrity for future generations.',
+    },
+  ];
+
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -42,6 +100,61 @@ export default function TsukMonastery() {
   const goToSlide = (index: number) => {
     setActiveIndex(index);
   };
+
+  // ArchiveCard component – transparent glass box with smooth hover
+  const ArchiveCard = ({ item, onOpen }: { item: any; onOpen: (it: any) => void }) => {
+    return (
+      <div className="group relative cursor-pointer" onClick={() => onOpen(item)}>
+        <div
+          className="
+            overflow-hidden shadow-lg rounded-2xl border-0
+            transition-all duration-300 ease-out
+            group-hover:shadow-2xl group-hover:scale-[1.08] group-hover:-translate-y-1
+          "
+          style={{
+            borderRadius: '1rem',
+            background: 'rgba(255, 255, 255, 0.04)',
+            backdropFilter: 'blur(12px)',
+            border: '1px solid rgba(212, 175, 55, 0.35)',
+            maxWidth: '360px',
+          }}
+        >
+          <div
+            className="aspect-[4/3] w-full overflow-hidden transition-transform duration-300 ease-out group-hover:scale-110"
+            style={{ background: '#2F3A3D' }}
+          >
+            <img src={item.img} alt={item.title} className="h-full w-full object-cover" />
+          </div>
+
+          <div className="p-4">
+            <h3 className="text-sm font-semibold text-amber-100 line-clamp-2">{item.title}</h3>
+            <div className="mt-1 text-xs text-amber-200">
+              {item.monastery} • {item.location}
+            </div>
+            {item.description && (
+              <div className="mt-2 text-xs text-amber-100 leading-relaxed whitespace-pre-line">
+                {item.description}
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  type TimelineEvent = (typeof tsukTimeline)[number];
+
+  const TimelineCard = ({ event }: { event: TimelineEvent }) => (
+    <div className="rounded-3xl bg-[#4B130E] border border-amber-600/40 px-5 py-4 shadow">
+      <h3 className="text-sm md:text-base font-semibold text-amber-50 mb-2">{event.title}</h3>
+      <p className="text-xs md:text-sm text-amber-100/85 mb-3 leading-snug line-clamp-3">
+        {event.description}
+      </p>
+      <div className="inline-flex items-center gap-2 text-[11px] md:text-xs font-semibold text-amber-950 bg-amber-400 px-3 py-1 rounded-full">
+        <span>{event.year}</span>
+      </div>
+    </div>
+  );
 
   return (
     <main className="overflow-hidden">
@@ -308,11 +421,138 @@ export default function TsukMonastery() {
         </div>
       </section>
 
+      {/* DIGITAL ARCHIVE SECTION */}
+      <section
+        id="digital-archive"
+        className="w-screen min-h-[80vh] py-0"
+        style={{ backgroundColor: '#410704' }}
+      >
+        {/* FULL WIDTH TOP BAR WITH VIDEO BACKGROUND */}
+        <div className="relative w-screen h-56 md:h-72 lg:h-80 overflow-hidden flex items-center">
+          {/* Background video */}
+          <video
+            src="/archive.mp4"
+            autoPlay
+            muted
+            loop
+            playsInline
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+
+          {/* Gradient overlay for contrast */}
+          <div
+            className="absolute inset-0"
+            style={{
+              background:
+                'linear-gradient(90deg, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.45) 35%, rgba(0,0,0,0.1) 100%)',
+            }}
+          />
+
+          {/* DIGITAL ARCHIVE text + icon */}
+          <div className="relative z-10 w-full flex items-center justify-center">
+            <div className="flex flex-col items-center gap-3">
+              <div className="flex items-center justify-center w-12 h-12 rounded-full border border-amber-100">
+                <span className="text-amber-100 text-2xl">⏱</span>
+              </div>
+
+              <h3 className="text-amber-100 text-4xl md:text-5xl font-bold uppercase" style={{ fontFamily: 'Cinzel Decorative', letterSpacing: '0.08em' }}>
+                DIGITAL ARCHIVE
+              </h3>
+            </div>
+          </div>
+        </div>
+
+        {/* FULL WIDTH CONTENT AREA */}
+        <div
+          className="w-screen min-h-[70vh] py-12 px-6 md:px-12 relative"
+          style={{
+            backgroundColor: '#a66437',
+          }}
+        >
+          <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12">
+            {/* LEFT SIDE — Archive Cards */}
+            <div className="flex flex-col gap-6">
+              {tsukArchiveItems.map((it) => (
+                <ArchiveCard
+                  key={it.id}
+                  item={it}
+                  onOpen={(i) => {
+                    setActiveItem(i);
+                    setOpenDialog(true);
+                  }}
+                />
+              ))}
+            </div>
+
+            {/* RIGHT SIDE — Info Section */}
+            <div className="flex flex-col gap-8">
+              <div className="w-full">
+                <h2 className="text-amber-100 text-xl font-bold uppercase mb-4 flex items-center gap-2" style={{ fontFamily: 'Cinzel' }}>
+                  <span className="text-amber-400 text-2xl">⏱</span>
+                  RESEARCH & DOCUMENTATION
+                </h2>
+
+                <div className="flex flex-wrap gap-4 justify-between">
+                  {/* 1 */}
+                  <div className="flex-1 min-w-[220px] max-w-[260px] rounded-3xl bg-[#7b4a26] border border-amber-600/30 px-5 py-4">
+                    <p className="text-sm font-semibold text-amber-100 leading-tight">
+                      Archaeological Survey Date
+                    </p>
+                    <p className="text-sm text-amber-50 mt-1 leading-snug">19th century establishment</p>
+                  </div>
+
+                  {/* 2 */}
+                  <div className="flex-1 min-w-[220px] max-w-[260px] rounded-3xl bg-[#7b4a26] border border-amber-600/30 px-5 py-4">
+                    <p className="text-sm font-semibold text-amber-100 leading-tight">
+                      Archaeological Survey By
+                    </p>
+                    <p className="text-sm text-amber-50 mt-1 leading-snug">
+                      Sikkim State Archaeology Department, Inheritage Foundation
+                    </p>
+                  </div>
+
+                  {/* 3 */}
+                  <div className="flex-1 min-w-[220px] max-w-[260px] rounded-3xl bg-[#7b4a26] border border-amber-600/30 px-5 py-4">
+                    <p className="text-sm font-semibold text-amber-100 leading-tight">
+                      Preservation Status
+                    </p>
+                    <p className="text-sm text-amber-50 mt-1 leading-snug">
+                      Excellent, well-maintained with ongoing conservation efforts
+                    </p>
+                  </div>
+
+                  {/* 4 */}
+                  <div className="flex-1 min-w-[220px] max-w-[260px] rounded-3xl bg-[#7b4a26] border border-amber-600/30 px-5 py-4">
+                    <p className="text-sm font-semibold text-amber-100 leading-tight">
+                      Heritage Status
+                    </p>
+                    <p className="text-sm text-amber-50 mt-1 leading-snug">
+                      Royal Chapel of the former Kingdom of Sikkim
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="w-full space-y-5 mt-6">
+                <h2 className="text-amber-100 text-xl font-bold uppercase mb-2 flex items-center gap-2" style={{ fontFamily: 'Cinzel' }}>
+                  <span className="text-amber-400 text-2xl">📜</span>
+                  CHRONOLOGY OF TSUK
+                </h2>
+
+                {tsukTimeline.map((ev) => (
+                  <TimelineCard key={ev.title} event={ev} />
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* CULTURAL CALENDAR SECTION */}
       <section className="relative w-full py-20" style={{ backgroundColor: '#410704' }}>
         <div className="max-w-7xl mx-auto px-6 lg:px-14">
           <Reveal>
-            <h2 className="text-5xl font-bold text-amber-100 mb-16 text-center">
+            <h2 className="font-cinzeldecorative font-medium text-6xl md:text-7xl text-amber-100 mb-28 text-center">
               Cultural Calendar
             </h2>
           </Reveal>
@@ -420,7 +660,7 @@ export default function TsukMonastery() {
 
           {/* Calendar Narrative Section */}
           <Reveal delay={0.6}>
-            <div className="mt-32 space-y-8">
+            <div className="mt-2 space-y-8">
               {/* Festival narratives in grid */}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 {/* Saga Dawa */}
@@ -487,37 +727,53 @@ export default function TsukMonastery() {
         </div>
       </section>
 
-      {/* DIGITAL ARCHIVE SECTION */}
-      <section
-        id="digital-archive"
-        className="w-screen min-h-[80vh] py-0"
-        style={{ backgroundColor: '#410704' }}
-      >
+      {/* Detail Modal – OCR + Image (matches Rumtek behavior) */}
+      {openDialog && activeItem && (
         <div
-          className="w-screen flex items-center justify-center py-4"
-          style={{
-            backgroundColor: '#5b0505',
-            borderBottom: '1px solid #300000',
-          }}
+          className="fixed inset-0 z-50 flex items-center justify-center p-4"
+          style={{ background: 'rgba(0, 0, 0, 0.8)' }}
+          onClick={() => setOpenDialog(false)}
         >
-          <div className="flex items-center gap-3 justify-center">
-            <div className="flex items-center justify-center w-10 h-10 rounded-full border border-amber-100">
-              <span className="text-amber-100 text-xl">⏱</span>
-            </div>
+          <div
+            className="max-w-3xl w-full overflow-hidden rounded-3xl"
+            style={{
+              background: '#1a1209',
+              border: '1px solid rgba(212, 175, 55, 0.3)',
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="grid md:grid-cols-2">
+              {/* Image */}
+              <div className="relative" style={{ background: '#2F3A3D' }}>
+                <img src={activeItem.img} alt={activeItem.title} className="h-full w-full object-cover" />
+              </div>
 
-            <h3 className="text-amber-100 text-2xl font-semibold tracking-[0.25em] uppercase">
-              DIGITAL ARCHIVE
-            </h3>
+              {/* Content */}
+              <div className="p-6 md:p-8">
+                <h2 className="text-2xl font-semibold text-amber-100">{activeItem.title}</h2>
+
+                {/* OCR / Details */}
+                <div className="mt-5">
+                  <h3 className="font-medium mb-2 text-amber-100">OCR Snippet</h3>
+                  <div
+                    className="rounded-xl p-4 text-sm text-amber-50"
+                    style={{
+                      background: 'rgba(248, 244, 234, 0.1)',
+                      border: '1px solid rgba(212, 175, 55, 0.2)',
+                    }}
+                  >
+                    {activeItem.ocrText}
+                  </div>
+                </div>
+
+                <button onClick={() => setOpenDialog(false)} className="mt-6 text-amber-200 hover:text-amber-100">
+                  Close
+                </button>
+              </div>
+            </div>
           </div>
         </div>
-
-        <div
-          className="w-screen min-h-[70vh]"
-          style={{
-            backgroundColor: '#a66437',
-          }}
-        />
-      </section>
+      )}
 
       <Footer />
     </main>
