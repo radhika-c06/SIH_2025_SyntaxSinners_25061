@@ -13,14 +13,12 @@ const MONASTERIES = [
     image: "/monasteries/tashiding.png",
   },
   {
-    name: "Pemayangtse Monastery",
-    location: "Near Pelling, West Sikkim",
-    altitude: "2,085m",
-    founded: "1705 CE",
-    description:
-      "Meaning 'Perfect Sublime Lotus', Pemayangtse stands among Sikkim's oldest monasteries, embodying purity and spiritual vision for a perfect world.",
-    image: "/monasteries/pemayangtse.jpg",
-  },
+name: "Tsuk La Khang Monastery",
+location: "Gangtok, East Sikkim",
+founded: "1894 CE",
+description: "Tsuk La Khang Monastery, located in the heart of Gangtok, is the former royal chapel of the Chogyal dynasty and one of Sikkim’s most significant centres of Buddhist learning.",
+image: "/tsuk/tsuk.avif"
+},
   {
     name: "Dubdi Monastery",
     location: "Yuksom, West Sikkim",
