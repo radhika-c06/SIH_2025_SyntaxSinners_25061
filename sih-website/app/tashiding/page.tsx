@@ -924,27 +924,27 @@ export default function TashidingMonastery() {
               <h3 className="text-2xl font-semibold text-amber-50 mb-6 uppercase text-center" style={{ fontFamily: 'Cinzel' }}>Architectural Details</h3>
               <div className="bg-gradient-to-br from-amber-500 to-amber-600 rounded-2xl p-8">
                 <div className="grid md:grid-cols-2 gap-6 text-amber-900">
-                  <div className="rounded-xl p-4" style={{ backgroundColor: 'rgba(92, 31, 31, 0.35)' }}>
+                  <div className="rounded-xl p-4 transition-all duration-300 hover:scale-105 hover:shadow-xl cursor-pointer" style={{ backgroundColor: 'rgba(92, 31, 31, 0.35)' }}>
                     <h4 className="font-bold text-base mb-1">1. Architectural Style</h4>
                     <p className="text-sm leading-relaxed">Nyingma Tibetan Buddhist design<br/>Simple, symbolic, and spiritually oriented</p>
                   </div>
-                  <div className="rounded-xl p-4" style={{ backgroundColor: 'rgba(92, 31, 31, 0.35)' }}>
+                  <div className="rounded-xl p-4 transition-all duration-300 hover:scale-105 hover:shadow-xl cursor-pointer" style={{ backgroundColor: 'rgba(92, 31, 31, 0.35)' }}>
                     <h4 className="font-bold text-base mb-1">2. Main Structure</h4>
                     <p className="text-sm leading-relaxed">White stone + wood construction<br/>Carved wooden doors and windows<br/>Rectangular prayer hall</p>
                   </div>
-                  <div className="rounded-xl p-4" style={{ backgroundColor: 'rgba(92, 31, 31, 0.35)' }}>
+                  <div className="rounded-xl p-4 transition-all duration-300 hover:scale-105 hover:shadow-xl cursor-pointer" style={{ backgroundColor: 'rgba(92, 31, 31, 0.35)' }}>
                     <h4 className="font-bold text-base mb-1">3. Roof Design</h4>
                     <p className="text-sm leading-relaxed">Multi-tiered sloping roofs<br/>Red + golden trim<br/>Golden Gajur on top</p>
                   </div>
-                  <div className="rounded-xl p-4" style={{ backgroundColor: 'rgba(92, 31, 31, 0.35)' }}>
+                  <div className="rounded-xl p-4 transition-all duration-300 hover:scale-105 hover:shadow-xl cursor-pointer" style={{ backgroundColor: 'rgba(92, 31, 31, 0.35)' }}>
                     <h4 className="font-bold text-base mb-1">4. Chortens & Stupas</h4>
                     <p className="text-sm leading-relaxed">Sacred Thong-Wa Rang-Dol Stupa<br/>Multiple old chortens in the complex</p>
                   </div>
-                  <div className="rounded-xl p-4" style={{ backgroundColor: 'rgba(92, 31, 31, 0.35)' }}>
+                  <div className="rounded-xl p-4 transition-all duration-300 hover:scale-105 hover:shadow-xl cursor-pointer" style={{ backgroundColor: 'rgba(92, 31, 31, 0.35)' }}>
                     <h4 className="font-bold text-base mb-1">5. Interior</h4>
                     <p className="text-sm leading-relaxed">Thangka-style wall paintings<br/>Painted beams in red, blue, and gold</p>
                   </div>
-                  <div className="rounded-xl p-4" style={{ backgroundColor: 'rgba(92, 31, 31, 0.35)' }}>
+                  <div className="rounded-xl p-4 transition-all duration-300 hover:scale-105 hover:shadow-xl cursor-pointer" style={{ backgroundColor: 'rgba(92, 31, 31, 0.35)' }}>
                     <h4 className="font-bold text-base mb-1">6. Prayer Elements</h4>
                     <p className="text-sm leading-relaxed">Large prayer wheels<br/>Surrounding prayer flags</p>
                   </div>
