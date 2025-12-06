@@ -911,7 +911,7 @@ export default function TashidingMonastery() {
 
               {/* Preview Box */}
               <div className="rounded-3xl overflow-hidden" style={{ backgroundColor: 'rgba(217, 119, 6, 0.15)', border: '2px solid rgba(217, 119, 6, 0.3)', backdropFilter: 'blur(10px)' }}>
-                <div className="h-96 bg-gradient-to-br from-amber-900 to-orange-900 flex items-center justify-center">
+                <div className="h-[28rem] bg-gradient-to-br from-amber-900 to-orange-900 flex items-center justify-center">
                   <div className="text-center text-amber-100">
                     <div className="text-6xl mb-4">🏛️</div>
                     <p className="text-lg">Virtual Tour Preview</p>
