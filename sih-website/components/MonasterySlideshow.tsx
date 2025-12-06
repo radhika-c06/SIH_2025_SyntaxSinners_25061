@@ -15,6 +15,7 @@ const MONASTERIES = [
   {
 name: "Tsuk La Khang Monastery",
 location: "Gangtok, East Sikkim",
+altitude: "1,437m",
 founded: "1894 CE",
 description: "Tsuk La Khang Monastery, located in the heart of Gangtok, is the former royal chapel of the Chogyal dynasty and one of Sikkim’s most significant centres of Buddhist learning.",
 image: "/tsuk/tsuk.avif"
