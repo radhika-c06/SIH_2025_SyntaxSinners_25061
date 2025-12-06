@@ -462,14 +462,33 @@ export default function TsukMonastery() {
           </div>
         </div>
 
-        {/* FULL WIDTH CONTENT AREA */}
-        <div
-          className="w-screen min-h-[70vh] py-12 px-6 md:px-12 relative"
-          style={{
-            backgroundColor: '#a66437',
-          }}
-        >
-          <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12">
+        {/* CONTENT AREA */}
+<div
+  className="relative w-screen min-h-[70vh] py-12 px-6 md:px-12"
+  style={{
+    backgroundColor: '#4b1f0f',
+  }}
+>
+  {/* LEFT-HALF WATERMARK */}
+  <div
+    className="pointer-events-none absolute inset-y-0 left-0 w-1/2 opacity-45"
+    style={{
+      backgroundImage: "url('/design.png')",
+      backgroundRepeat: 'repeat',
+      backgroundSize: '500px auto',
+    }}
+  />
+  <div
+    className="absolute inset-y-0 right-0 w-[50%]"
+    style={{
+      backgroundColor: "#87522d", // <-- CHANGE THIS TO ANY COLOR YOU WANT
+      opacity: 1,
+    }}
+  />
+
+
+  {/* REAL CONTENT (ABOVE THE WATERMARK) */}
+  <div className="relative z-10 max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12">
             {/* LEFT SIDE — Archive Cards */}
             <div className="flex flex-col gap-6">
               {tsukArchiveItems.map((it) => (
@@ -549,14 +568,45 @@ export default function TsukMonastery() {
       </section>
 
       {/* CULTURAL CALENDAR SECTION */}
-      <section className="relative w-full py-20" style={{ backgroundColor: '#410704' }}>
-        <div className="max-w-7xl mx-auto px-6 lg:px-14">
-          <Reveal>
-            <h2 className="font-cinzeldecorative font-medium text-6xl md:text-7xl text-amber-100 mb-28 text-center">
-              Cultural Calendar
-            </h2>
-          </Reveal>
+<section
+  id="cultural-calendar"
+  className="relative w-full"
+  style={{ backgroundColor: '#410704' }}
+>
+  {/* TOP BAR WITH VIDEO */}
+  <div className="relative w-screen h-56 md:h-72 lg:h-80 overflow-hidden flex items-center">
+    <video
+      src="/cultural calendar vid.mp4"
+      autoPlay
+      muted
+      loop
+      playsInline
+      className="absolute inset-0 w-full h-full object-cover"
+    />
 
+    {/* Gradient overlay (same as Digital Archive) */}
+    <div
+      className="absolute inset-0"
+      style={{
+        background:
+          'linear-gradient(90deg, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.45) 35%, rgba(0,0,0,0.1) 100%)',
+      }}
+    />
+
+    {/* Center Title */}
+    <div className="relative z-10 w-full flex items-center justify-center">
+      <div className="flex items-center gap-3">
+        <h3
+          className="text-amber-100 text-3xl md:text-4xl font-semibold tracking-[0.25em] uppercase font-cinzel-decorative"
+        >
+          CULTURAL CALENDAR
+        </h3>
+      </div>
+    </div>
+  </div>
+
+  {/* ORIGINAL CONTENT BELOW VIDEO */}
+  <div className="max-w-7xl mx-auto px-6 lg:px-14 py-20">
           {/* Horizontal Timeline Container */}
           <div className="relative" style={{ paddingTop: '150px', paddingBottom: '0px' }}>
             {/* Main horizontal dashed line (centered between top/bottom boxes) */}
@@ -779,4 +829,3 @@ export default function TsukMonastery() {
     </main>
   );
 }
-
