@@ -712,7 +712,7 @@ export default function TashidingMonastery() {
       </section>
 
       {/* AUDIO TOUR SECTION */}
-      <section className="relative w-full py-20" style={{ backgroundColor: '#3d1f1f' }}>
+      <section className="relative w-full py-20" style={{ backgroundColor: '#410704' }}>
         <div className="max-w-7xl mx-auto px-6 lg:px-14">
           <div className="text-center mb-16">
             <h2 className="text-amber-100 text-6xl md:text-7xl font-bold mb-6 flex items-center justify-center gap-4" style={{ fontFamily: 'Cinzel' }}>
