@@ -921,9 +921,32 @@ export default function TashidingMonastery() {
 
               {/* Architecture Info Box */}
               <div className="rounded-3xl p-6" style={{ backgroundColor: 'rgba(217, 119, 6, 0.15)', border: '2px solid rgba(217, 119, 6, 0.3)', backdropFilter: 'blur(10px)' }}>
-                <h3 className="text-xl font-semibold text-amber-50 mb-4 uppercase text-center" style={{ fontFamily: 'Cinzel' }}>Architecture</h3>
-                <div className="bg-gradient-to-br from-amber-500 to-amber-600 rounded-2xl p-8 h-32 flex items-center justify-center">
-                  <p className="text-amber-900 font-semibold text-center">Architectural Details</p>
+                <h3 className="text-xl font-semibold text-amber-50 mb-4 uppercase text-center" style={{ fontFamily: 'Cinzel' }}>Architectural Details</h3>
+                <div className="bg-gradient-to-br from-amber-500 to-amber-600 rounded-2xl p-6 space-y-4 text-amber-900">
+                  <div>
+                    <h4 className="font-bold text-base mb-1">1. Architectural Style</h4>
+                    <p className="text-sm leading-relaxed">Nyingma Tibetan Buddhist design<br/>Simple, symbolic, and spiritually oriented</p>
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-base mb-1">2. Main Structure</h4>
+                    <p className="text-sm leading-relaxed">White stone + wood construction<br/>Carved wooden doors and windows<br/>Rectangular prayer hall</p>
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-base mb-1">3. Roof Design</h4>
+                    <p className="text-sm leading-relaxed">Multi-tiered sloping roofs<br/>Red + golden trim<br/>Golden Gajur on top</p>
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-base mb-1">4. Chortens & Stupas</h4>
+                    <p className="text-sm leading-relaxed">Sacred Thong-Wa Rang-Dol Stupa<br/>Multiple old chortens in the complex</p>
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-base mb-1">5. Interior</h4>
+                    <p className="text-sm leading-relaxed">Thangka-style wall paintings<br/>Painted beams in red, blue, and gold</p>
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-base mb-1">6. Prayer Elements</h4>
+                    <p className="text-sm leading-relaxed">Large prayer wheels<br/>Surrounding prayer flags</p>
+                  </div>
                 </div>
               </div>
             </div>
