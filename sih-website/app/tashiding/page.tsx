@@ -749,11 +749,11 @@ export default function TashidingMonastery() {
             <div className="max-w-4xl mx-auto rounded-3xl p-8" style={{ backgroundColor: 'rgba(217, 119, 6, 0.15)', border: '2px solid rgba(217, 119, 6, 0.3)', backdropFilter: 'blur(10px)' }}>
             <div className="grid md:grid-cols-2 gap-8 items-center">
               {/* Image */}
-              <div className="rounded-2xl overflow-hidden">
+              <div className="rounded-2xl overflow-hidden group cursor-pointer">
                 <img
                   src="/tashiding/prayer flags and mountain views of tashiding monastery.jpg"
                   alt="Tashiding Monastery"
-                  className="w-full h-full object-cover rounded-2xl"
+                  className="w-full h-full object-cover rounded-2xl transition-transform duration-300 ease-out group-hover:scale-110 group-hover:brightness-110"
                 />
               </div>
 
