@@ -714,7 +714,7 @@ export default function TashidingMonastery() {
       {/* AUDIO TOUR SECTION */}
       <section className="relative w-full py-0" style={{ backgroundColor: '#410704' }}>
         {/* Heading with video background */}
-        <div className="relative w-full py-10 overflow-hidden">
+        <div className="relative w-full overflow-hidden" style={{ paddingTop: '3rem', paddingBottom: '3rem' }}>
           {/* Background video */}
           <video
             src="/audio tour vid.mp4"
