@@ -712,33 +712,41 @@ export default function TashidingMonastery() {
       </section>
 
       {/* AUDIO TOUR SECTION */}
-      <section className="relative w-full py-20" style={{ backgroundColor: '#410704' }}>
-        <div className="max-w-7xl mx-auto px-6 lg:px-14">
-          <div className="text-center mb-16">
-            <h2 className="text-amber-100 text-6xl md:text-7xl font-bold mb-6 flex items-center justify-center gap-4" style={{ fontFamily: 'Cinzel' }}>
+      <section className="relative w-full py-0" style={{ backgroundColor: '#410704' }}>
+        {/* Heading with background */}
+        <div className="w-full py-16" style={{ background: 'linear-gradient(180deg, #6b4a3a 0%, #410704 100%)' }}>
+          <div className="max-w-7xl mx-auto px-6 lg:px-14 text-center">
+            <h2 className="text-amber-100 text-6xl md:text-7xl font-bold mb-4 flex items-center justify-center gap-4" style={{ fontFamily: 'Cinzel' }}>
               <span className="text-4xl">🎧</span>
               AUDIO TOUR
             </h2>
-            <p className="text-amber-50 text-lg italic max-w-2xl mx-auto">
-              Experience immersive audio guided tour covering architecture, history, and spiritual significance. Available in multiple languages with offline mode for remote monastery visits.
-            </p>
           </div>
+        </div>
 
-          {/* Search Bar */}
-          <div className="mb-12 max-w-2xl mx-auto">
-            <div className="relative">
-              <span className="absolute left-6 top-1/2 transform -translate-y-1/2 text-2xl">🔍</span>
-              <input
-                type="text"
-                placeholder="Search audio guides"
-                className="w-full pl-16 pr-6 py-4 rounded-full text-amber-100 placeholder-amber-600 focus:outline-none focus:ring-2 focus:ring-amber-300"
-                style={{ backgroundColor: '#4a2f2f' }}
-              />
+        {/* Content section */}
+        <div className="w-full py-16" style={{ backgroundColor: '#410704' }}>
+          <div className="max-w-7xl mx-auto px-6 lg:px-14">
+            <div className="text-center mb-16">
+              <p className="text-amber-50 text-lg italic max-w-2xl mx-auto">
+                Experience immersive audio guided tour covering architecture, history, and spiritual significance. Available in multiple languages with offline mode for remote monastery visits.
+              </p>
             </div>
-          </div>
 
-          {/* Audio Tour Card */}
-          <div className="max-w-4xl mx-auto rounded-3xl p-8" style={{ backgroundColor: '#4a2f2f', border: '2px solid #5c3d23' }}>
+            {/* Search Bar */}
+            <div className="mb-12 max-w-2xl mx-auto">
+              <div className="relative">
+                <span className="absolute left-6 top-1/2 transform -translate-y-1/2 text-2xl">🔍</span>
+                <input
+                  type="text"
+                  placeholder="Search audio guides"
+                  className="w-full pl-16 pr-6 py-4 rounded-full text-amber-100 placeholder-amber-600 focus:outline-none focus:ring-2 focus:ring-amber-300"
+                  style={{ backgroundColor: '#4a2f2f' }}
+                />
+              </div>
+            </div>
+
+            {/* Audio Tour Card */}
+            <div className="max-w-4xl mx-auto rounded-3xl p-8" style={{ backgroundColor: '#4a2f2f', border: '2px solid #5c3d23' }}>
             <div className="grid md:grid-cols-2 gap-8 items-center">
               {/* Image */}
               <div className="rounded-2xl overflow-hidden">
@@ -782,6 +790,7 @@ export default function TashidingMonastery() {
                   <button className="text-amber-100 hover:text-white transition text-2xl">⬇</button>
                 </div>
               </div>
+            </div>
             </div>
           </div>
         </div>
