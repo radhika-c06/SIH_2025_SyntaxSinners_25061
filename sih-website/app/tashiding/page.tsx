@@ -924,7 +924,7 @@ export default function TashidingMonastery() {
               <h3 className="text-2xl font-semibold text-amber-50 mb-6 uppercase text-center" style={{ fontFamily: 'Cinzel' }}>Architectural Details</h3>
               <div className="bg-gradient-to-br from-amber-500 to-amber-600 rounded-2xl p-8">
                 <div className="grid md:grid-cols-2 gap-6 text-amber-900">
-                  <div>
+                  <div className="rounded-xl p-4" style={{ backgroundColor: 'rgba(92, 31, 31, 0.35)' }}>
                     <h4 className="font-bold text-base mb-1">1. Architectural Style</h4>
                     <p className="text-sm leading-relaxed">Nyingma Tibetan Buddhist design<br/>Simple, symbolic, and spiritually oriented</p>
                   </div>
