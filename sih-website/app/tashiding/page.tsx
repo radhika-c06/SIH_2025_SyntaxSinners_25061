@@ -711,6 +711,82 @@ export default function TashidingMonastery() {
         </div>
       </section>
 
+      {/* AUDIO TOUR SECTION */}
+      <section className="relative w-full py-20" style={{ backgroundColor: '#8b6f47' }}>
+        <div className="max-w-7xl mx-auto px-6 lg:px-14">
+          <div className="text-center mb-16">
+            <h2 className="text-amber-100 text-6xl md:text-7xl font-bold mb-6 flex items-center justify-center gap-4" style={{ fontFamily: 'Cinzel' }}>
+              <span className="text-4xl">🎧</span>
+              AUDIO TOUR
+            </h2>
+            <p className="text-amber-50 text-lg italic max-w-2xl mx-auto">
+              Experience immersive audio guided tour covering architecture, history, and spiritual significance. Available in multiple languages with offline mode for remote monastery visits.
+            </p>
+          </div>
+
+          {/* Search Bar */}
+          <div className="mb-12 max-w-2xl mx-auto">
+            <div className="relative">
+              <span className="absolute left-6 top-1/2 transform -translate-y-1/2 text-2xl">🔍</span>
+              <input
+                type="text"
+                placeholder="Search audio guides"
+                className="w-full pl-16 pr-6 py-4 rounded-full text-amber-900 placeholder-amber-700 focus:outline-none focus:ring-2 focus:ring-amber-300"
+                style={{ backgroundColor: '#6b4423' }}
+              />
+            </div>
+          </div>
+
+          {/* Audio Tour Card */}
+          <div className="max-w-4xl mx-auto rounded-3xl p-8" style={{ backgroundColor: '#5c3d23', border: '2px solid #8b6f47' }}>
+            <div className="grid md:grid-cols-2 gap-8 items-center">
+              {/* Image */}
+              <div className="rounded-2xl overflow-hidden">
+                <img
+                  src="/tashiding/prayer flags and mountain views of tashiding monastery.jpg"
+                  alt="Tashiding Monastery"
+                  className="w-full h-full object-cover rounded-2xl"
+                />
+              </div>
+
+              {/* Audio Content */}
+              <div className="flex flex-col gap-6">
+                <p className="text-amber-50 text-lg italic leading-relaxed">
+                  Visit this sacred monastery perched on a hilltop, famous for its annual Bhumchu festival and ancient Buddhist scriptures dating back centuries.
+                </p>
+
+                {/* Player Controls */}
+                <div className="flex items-center justify-between gap-4">
+                  <button className="text-amber-100 hover:text-white transition">☰</button>
+                  <div className="flex-1 h-1 bg-gradient-to-r from-amber-400 to-amber-200 rounded"></div>
+                  <button className="text-amber-100 hover:text-white transition">♡</button>
+                </div>
+
+                {/* Playback Controls */}
+                <div className="flex items-center justify-center gap-6">
+                  <button className="text-amber-100 hover:text-white transition text-2xl">⏮</button>
+                  <button className="text-amber-100 hover:text-white transition text-2xl">◀</button>
+                  <button className="w-16 h-16 rounded-full bg-gradient-to-b from-amber-100 to-amber-200 flex items-center justify-center text-2xl text-amber-900 hover:scale-110 transition shadow-lg">
+                    ▶
+                  </button>
+                  <button className="text-amber-100 hover:text-white transition text-2xl">▶</button>
+                  <button className="text-amber-100 hover:text-white transition text-2xl">⏭</button>
+                </div>
+
+                {/* Duration and Download */}
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2 text-amber-100">
+                    <span className="text-xl">⏱</span>
+                    <span className="font-semibold">5mins</span>
+                  </div>
+                  <button className="text-amber-100 hover:text-white transition text-2xl">⬇</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <Footer />
     </main>
   );
