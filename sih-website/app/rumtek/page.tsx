@@ -591,7 +591,7 @@ export default function RumtekMonastery() {
   <div
     className="pointer-events-none absolute inset-y-0 left-0 w-1/2 opacity-45"
     style={{
-      backgroundImage: "url('/rumtek/rumtekbg.png')",
+      backgroundImage: "url('/design.png')",
       backgroundRepeat: 'repeat',
       backgroundSize: '500px auto',
     }}
@@ -758,7 +758,7 @@ export default function RumtekMonastery() {
           <Reveal delay={0.1}>
             <div
               className="absolute left-1/2 transform -translate-x-1/2 rounded-2xl bg-gradient-to-br from-yellow-300 to-yellow-200 border-4 border-yellow-400 p-4 w-44 shadow-lg"
-              style={{ top: 'calc(50% - 160px)', zIndex: 2 }}
+              style={{ top: 'calc(50% - 180px)', zIndex: 2 }}
             >
               <p className="text-xs font-semibold text-amber-900 mb-1">
                 June – July
@@ -844,7 +844,7 @@ export default function RumtekMonastery() {
           <Reveal delay={0.3}>
             <div
               className="absolute left-1/2 transform -translate-x-1/2 rounded-2xl bg-gradient-to-br from-orange-500 to-orange-400 border-4 border-orange-600 p-4 w-44 shadow-lg"
-              style={{ top: 'calc(50% - 160px)', zIndex: 2 }}
+              style={{ top: 'calc(50% - 190px)', zIndex: 2 }}
             >
               <p className="text-xs font-semibold text-white mb-1">
                 December
