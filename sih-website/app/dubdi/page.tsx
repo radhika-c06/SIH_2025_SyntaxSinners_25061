@@ -156,9 +156,9 @@ export default function DubdiMonastery() {
   const ResearchRow = () => {
     return (
       <div className="w-full">
-        <h2 className="text-amber-100 text-xl font-semibold mb-4 flex items-center gap-2">
+        <h2 className="text-amber-100 text-xl font-bold uppercase mb-4 flex items-center gap-2" style={{ fontFamily: 'Cinzel' }}>
           <span className="text-amber-400 text-2xl">⏱</span>
-          Research &amp; Documentation
+          RESEARCH &amp; DOCUMENTATION
         </h2>
 
         <div className="flex flex-wrap gap-4 justify-between">
@@ -279,9 +279,9 @@ export default function DubdiMonastery() {
 
   const TimelineColumn = () => (
     <div className="w-full space-y-5 mt-6">
-      <h2 className="text-amber-100 text-xl font-semibold mb-2 flex items-center gap-2">
+      <h2 className="text-amber-100 text-xl font-bold uppercase mb-2 flex items-center gap-2" style={{ fontFamily: 'Cinzel' }}>
         <span className="text-amber-400 text-2xl">📜</span>
-        Chronology of Dubdi
+        CHRONOLOGY OF DUBDI
       </h2>
 
       {dubdiTimeline.map((ev) => (
@@ -330,10 +330,10 @@ export default function DubdiMonastery() {
           {/* Left - Monastery Name */}
           <Reveal delay={0.4}>
             <div className="flex-1">
-              <h1 className="text-6xl font-bold text-amber-100 tracking-wide leading-tight" style={{ fontFamily: "var(--font-cinzel-deco), serif" }}>
+              <h1 className="text-6xl md:text-7xl font-bold text-amber-100 drop-shadow-lg leading-tight font-cinzel-decorative" style={{ fontWeight: '900', letterSpacing: '3px' }}>
                 DUBDI
               </h1>
-              <h2 className="text-5xl font-bold text-amber-100 tracking-wide" style={{ fontFamily: "var(--font-cinzel-deco), serif" }}>
+              <h2 className="text-5xl md:text-6xl font-bold text-amber-100 drop-shadow-lg font-cinzel-decorative" style={{ fontWeight: '900', letterSpacing: '3px' }}>
                 MONASTERY
               </h2>
             </div>
@@ -352,8 +352,8 @@ export default function DubdiMonastery() {
                   />
                 </svg>
                 <div>
-                  <div className="text-xl font-semibold">Dubdi, West Sikkim</div>
-                  <div className="text-lg">Yuksom (737139), India</div>
+                  <div className="text-xl font-bold tracking-wide uppercase" style={{ fontFamily: 'Cormorant SC' }}>Dubdi, West Sikkim</div>
+                  <div className="text-lg uppercase" style={{ fontFamily: 'Cormorant SC' }}>Yuksom (737139), India</div>
                 </div>
               </div>
 
@@ -367,8 +367,8 @@ export default function DubdiMonastery() {
                   />
                 </svg>
                 <div>
-                  <div className="text-xl font-semibold">Built in</div>
-                  <div className="text-lg">1701 CE</div>
+                  <div className="text-xl font-bold tracking-wide uppercase" style={{ fontFamily: 'Cormorant SC' }}>Built in</div>
+                  <div className="text-lg uppercase" style={{ fontFamily: 'Cormorant SC' }}>1701 CE</div>
                 </div>
               </div>
             </div>
@@ -381,7 +381,8 @@ export default function DubdiMonastery() {
             (btn, i) => (
               <button
                 key={i}
-                className="px-8 py-3 bg-amber-200 text-amber-900 rounded-full font-semibold hover:bg-amber-100 transition"
+                className="px-8 py-3 bg-amber-200 text-amber-900 rounded-full font-bold uppercase hover:bg-amber-100 transition"
+                style={{ fontFamily: 'Cinzel' }}
               >
                 {btn}
               </button>
@@ -397,8 +398,8 @@ export default function DubdiMonastery() {
             {/* LEFT: TEXT */}
             <div>
               <Reveal>
-                <h2 className="text-4xl md:text-5xl font-bold text-amber-100 mb-10 leading-tight">
-                      Dubdi Monastery: The Hermit’s Cell of Sikkim
+                <h2 className="text-4xl md:text-5xl font-bold text-amber-100 mb-10 leading-tight uppercase" style={{ fontFamily: 'Cinzel' }}>
+                  Dubdi Monastery: The Hermit's Cell of Sikkim
                 </h2>
               </Reveal>
 
@@ -515,7 +516,7 @@ export default function DubdiMonastery() {
                 <span className="text-amber-100 text-2xl">⏱</span>
               </div>
 
-              <h3 className="text-amber-100 text-3xl md:text-4xl font-semibold tracking-[0.25em] uppercase">
+              <h3 className="text-amber-100 text-4xl md:text-5xl font-bold uppercase" style={{ fontFamily: 'Cinzel Decorative', letterSpacing: '0.08em' }}>
                 DIGITAL ARCHIVE
               </h3>
             </div>
@@ -605,6 +606,139 @@ export default function DubdiMonastery() {
               </div>
             </div>
           )}
+        </div>
+      </section>
+
+      {/* CULTURAL CALENDAR SECTION */}
+      <section className="relative w-full py-20" style={{ backgroundColor: '#410704' }}>
+        <div className="max-w-7xl mx-auto px-6 lg:px-14">
+          <Reveal>
+              <h2 className="font-cinzel-decorative font-medium text-6xl md:text-7xl text-amber-100 mb-16 text-center">
+              Cultural Calendar
+            </h2>
+          </Reveal>
+
+          <div className="relative" style={{ paddingTop: '150px', paddingBottom: '0px' }}>
+            <div className="absolute left-0 right-0 h-1 transform -translate-y-1/2"
+              style={{
+                top: 'calc(50% - 89px)',
+                backgroundImage: 'repeating-linear-gradient(to right, #d97706 0px, #d97706 15px, transparent 15px, transparent 35px)',
+                zIndex: 0,
+              }}
+            />
+
+            <div className="grid grid-cols-4 gap-0 relative" style={{ minHeight: '360px' }}>
+              <div className="relative">
+                <Reveal delay={0.1}>
+                  <div className="absolute left-1/2 transform -translate-x-1/2 rounded-2xl bg-gradient-to-br from-yellow-300 to-yellow-200 border-4 border-yellow-400 p-4 w-44 shadow-lg"
+                    style={{ top: 'calc(50% - 160px)', zIndex:2 }}>
+                    <p className="text-xs font-semibold text-amber-900 mb-1">February – March</p>
+                    <p className="text-xs text-amber-900 mb-2">1st Tibetan Month</p>
+                    <h3 className="text-lg font-bold text-amber-900">Losar</h3>
+                  </div>
+                  <div className="absolute left-1/2 transform -translate-x-1/2"
+                    style={{ top: 'calc(50% - 64px)', width: '4px', height: '64px', backgroundColor: '#fcd34d' }} />
+                  <div className="absolute left-1/2 transform -translate-x-1/2 rounded-full shadow-md"
+                    style={{ top: '50%', width: '32px', height: '32px', backgroundColor: '#fef08a', border: '4px solid #f59e0b', transformOrigin: 'center', zIndex: -1 }} />
+                </Reveal>
+              </div>
+
+              <div className="relative">
+                <Reveal delay={0.2}>
+                  <div className="absolute left-1/2 transform -translate-x-1/2 rounded-full shadow-md"
+                    style={{ top: '50%', width: '32px', height: '32px', backgroundColor: '#f59e0b', border: '4px solid #b45309', zIndex: -1 }} />
+                  <div className="absolute left-1/2 transform -translate-x-1/2"
+                    style={{ top: '50%', width: '4px', height: '80px', backgroundColor: '#eab308', zIndex:-2 }} />
+                  <div className="absolute left-1/2 transform -translate-x-1/2 rounded-2xl bg-gradient-to-br from-yellow-500 to-yellow-400 border-4 border-yellow-600 p-4 w-44 shadow-lg"
+                    style={{ top: 'calc(50% + 72px)' }}>
+                    <p className="text-xs font-semibold text-white mb-1">February (varies)</p>
+                    <p className="text-xs text-white mb-2">1st Tibetan Month — 14th–15th day</p>
+                    <h3 className="text-lg font-bold text-white">Bhumchu</h3>
+                  </div>
+                </Reveal>
+              </div>
+
+              <div className="relative">
+                <Reveal delay={0.3}>
+                  <div className="absolute left-1/2 transform -translate-x-1/2 rounded-2xl bg-gradient-to-br from-orange-500 to-orange-400 border-4 border-orange-600 p-4 w-44 shadow-lg"
+                    style={{ top: 'calc(50% - 160px)', zIndex:2 }}>
+                    <p className="text-xs font-semibold text-white mb-1">May – June</p>
+                    <p className="text-xs text-white mb-2">4th Tibetan Month</p>
+                    <h3 className="text-lg font-bold text-white">Saga Dawa</h3>
+                  </div>
+                  <div className="absolute left-1/2 transform -translate-x-1/2"
+                    style={{ top: 'calc(50% - 64px)', width: '4px', height: '64px', backgroundColor: '#fb923c' }} />
+                  <div className="absolute left-1/2 transform -translate-x-1/2 rounded-full shadow-md"
+                    style={{ top: '50%', width: '32px', height: '32px', backgroundColor: '#fb923c', border: '4px solid #ea580c', zIndex: -1 }} />
+                </Reveal>
+              </div>
+
+              <div className="relative">
+                <Reveal delay={0.4}>
+                  <div className="absolute left-1/2 transform -translate-x-1/2 rounded-full shadow-md"
+                    style={{ top: '50%', width: '32px', height: '32px', backgroundColor: '#f59e0b', border: '4px solid #b45309', zIndex: -1 }} />
+                  <div className="absolute left-1/2 transform -translate-x-1/2"
+                    style={{ top: '50%', width: '4px', height: '80px', backgroundColor: '#eab308', zIndex:-2 }} />
+                  <div className="absolute left-1/2 transform -translate-x-1/2 rounded-2xl bg-gradient-to-br from-yellow-600 to-yellow-500 border-4 border-yellow-700 p-4 w-44 shadow-lg"
+                    style={{ top: 'calc(50% + 72px)' }}>
+                    <p className="text-xs font-semibold text-white mb-1">July – August</p>
+                    <p className="text-xs text-white mb-2">5th Tibetan Month — 10th day</p>
+                    <h3 className="text-lg font-bold text-white">Thrunkar Tshechu</h3>
+                  </div>
+                </Reveal>
+              </div>
+            </div>
+          </div>
+
+          <Reveal delay={0.6}>
+            <div className="mt-32 space-y-8">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <Reveal delay={0.7}>
+                  <div className="rounded-2xl bg-white/5 backdrop-blur-sm border border-yellow-500/20 p-6 hover:border-yellow-400/40 transition-colors">
+                    <h3 className="font-cinzel uppercase text-xl font-bold text-yellow-300 mb-3">Losar (Tibetan New Year)</h3>
+                    <p className="text-sm text-amber-50 leading-relaxed">
+                      Tibetan New Year celebrations at Dubdi mark new beginnings with special prayers, offerings, purification rituals, and community gatherings. Monks perform sacred ceremonies while devotees seek blessings for the year ahead.
+                    </p>
+                  </div>
+                </Reveal>
+
+                <Reveal delay={0.75}>
+                  <div className="rounded-2xl bg-white/5 backdrop-blur-sm border border-yellow-500/20 p-6 hover:border-yellow-400/40 transition-colors">
+                    <h3 className="font-cinzel uppercase text-xl font-bold text-yellow-300 mb-3">Bhumchu</h3>
+                    <p className="text-sm text-amber-50 leading-relaxed">
+                      Major ritual ceremony at Norbugang in Yuksom featuring the opening of the divine vase containing holy water. Pilgrims visit the sacred Yuksom–Dubdi circuit including Norbugang, Kuthok Lake, and Dubdi Monastery during this auspicious time.
+                    </p>
+                  </div>
+                </Reveal>
+
+                <Reveal delay={0.8}>
+                  <div className="rounded-2xl bg-white/5 backdrop-blur-sm border border-orange-500/20 p-6 hover:border-orange-400/40 transition-colors">
+                    <h3 className="font-cinzel uppercase text-xl font-bold text-orange-300 mb-3">Saga Dawa</h3>
+                    <p className="text-sm text-amber-50 leading-relaxed">
+                      The holiest day celebrating Buddha's birth, enlightenment, and parinirvana. Pilgrims visit Dubdi to perform circumambulation, light butter lamps, and engage in merit-making activities on this most auspicious occasion.
+                    </p>
+                  </div>
+                </Reveal>
+
+                <Reveal delay={0.85}>
+                  <div className="rounded-2xl bg-white/5 backdrop-blur-sm border border-orange-600/20 p-6 hover:border-orange-500/40 transition-colors">
+                    <h3 className="font-cinzel uppercase text-xl font-bold text-orange-300 mb-3">Thrunkar Tshechu</h3>
+                    <p className="text-sm text-amber-50 leading-relaxed">
+                      Birth anniversary of Guru Padmasambhava celebrated with special prayers, processions, and Cham (masked ritual dances) depicting episodes from Guru Rinpoche's life. Monasteries in Yuksom area including Dubdi hold sacred rituals throughout the day.
+                    </p>
+                  </div>
+                </Reveal>
+              </div>
+
+              <Reveal delay={0.95}>
+                <div className="rounded-3xl bg-gradient-to-r from-orange-900/20 to-amber-900/20 backdrop-blur-md border border-amber-500/20 p-8">
+                  <p className="text-base text-amber-50 leading-relaxed font-light">
+                    As Sikkim's first monastery, Dubdi holds a special place in the cultural and spiritual calendar of the region. These festivals at Dubdi represent the living heritage of Tibetan Buddhism, connecting past and present through sacred traditions that have endured for over three centuries.
+                  </p>
+                </div>
+              </Reveal>
+            </div>
+          </Reveal>
         </div>
       </section>
 
