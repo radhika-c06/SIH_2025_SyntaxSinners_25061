@@ -858,39 +858,43 @@ export default function TashidingMonastery() {
               </div>
 
               {/* Tour Features Box */}
-              <div className="rounded-3xl p-6 h-96 flex flex-col" style={{ backgroundColor: 'rgba(217, 119, 6, 0.15)', border: '2px solid rgba(217, 119, 6, 0.3)', backdropFilter: 'blur(10px)' }}>
-                <h3 className="text-xl font-semibold text-amber-50 mb-4 uppercase" style={{ fontFamily: 'Cinzel' }}>Tour Features</h3>
-                <div className="space-y-3 flex-1 flex flex-col justify-center">
-                  <div className="flex items-start gap-3 transition-all duration-300 hover:scale-105 cursor-pointer">
-                    <div className="w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center flex-shrink-0">
+              <div className="rounded-3xl p-6 h-96 flex flex-col" style={{ backgroundColor: 'rgba(120, 53, 15, 0.5)', border: '2px solid rgba(217, 119, 6, 0.4)', backdropFilter: 'blur(10px)' }}>
+                <h3 className="text-xl font-semibold text-amber-50 mb-5 uppercase" style={{ fontFamily: 'Cinzel' }}>Tour Features</h3>
+                <div className="space-y-4 flex-1 flex flex-col justify-center">
+                  <div className="flex items-start gap-4 transition-all duration-300 hover:scale-105 cursor-pointer p-3 rounded-lg hover:bg-opacity-60" style={{ backgroundColor: 'rgba(217, 119, 6, 0.1)' }}>
+                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-orange-400 to-amber-500 flex items-center justify-center flex-shrink-0">
                       <span className="text-xl">🎯</span>
                     </div>
-                    <div>
-                      <h4 className="text-amber-100 font-semibold">Interactive Navigation</h4>
+                    <div className="flex-1">
+                      <h4 className="text-amber-100 font-semibold mb-1">Interactive Navigation</h4>
+                      <p className="text-amber-200 text-xs">Move freely through sacred spaces with intuitive controls</p>
                     </div>
                   </div>
-                  <div className="flex items-start gap-3 transition-all duration-300 hover:scale-105 cursor-pointer">
-                    <div className="w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center flex-shrink-0">
+                  <div className="flex items-start gap-4 transition-all duration-300 hover:scale-105 cursor-pointer p-3 rounded-lg hover:bg-opacity-60" style={{ backgroundColor: 'rgba(217, 119, 6, 0.1)' }}>
+                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-amber-400 to-yellow-500 flex items-center justify-center flex-shrink-0">
                       <span className="text-xl">🎧</span>
                     </div>
-                    <div>
-                      <h4 className="text-amber-100 font-semibold">Audio Narration</h4>
+                    <div className="flex-1">
+                      <h4 className="text-amber-100 font-semibold mb-1">Audio Narration</h4>
+                      <p className="text-amber-200 text-xs">Guided commentary in multiple languages</p>
                     </div>
                   </div>
-                  <div className="flex items-start gap-3 transition-all duration-300 hover:scale-105 cursor-pointer">
-                    <div className="w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center flex-shrink-0">
+                  <div className="flex items-start gap-4 transition-all duration-300 hover:scale-105 cursor-pointer p-3 rounded-lg hover:bg-opacity-60" style={{ backgroundColor: 'rgba(217, 119, 6, 0.1)' }}>
+                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-yellow-400 to-orange-500 flex items-center justify-center flex-shrink-0">
                       <span className="text-xl">📱</span>
                     </div>
-                    <div>
-                      <h4 className="text-amber-100 font-semibold">Mobile Friendly</h4>
+                    <div className="flex-1">
+                      <h4 className="text-amber-100 font-semibold mb-1">Mobile Friendly</h4>
+                      <p className="text-amber-200 text-xs">Experience the tour on any device seamlessly</p>
                     </div>
                   </div>
-                  <div className="flex items-start gap-3 transition-all duration-300 hover:scale-105 cursor-pointer">
-                    <div className="w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center flex-shrink-0">
+                  <div className="flex items-start gap-4 transition-all duration-300 hover:scale-105 cursor-pointer p-3 rounded-lg hover:bg-opacity-60" style={{ backgroundColor: 'rgba(217, 119, 6, 0.1)' }}>
+                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-orange-300 to-amber-600 flex items-center justify-center flex-shrink-0">
                       <span className="text-xl">🎨</span>
                     </div>
-                    <div>
-                      <h4 className="text-amber-100 font-semibold">High Resolution</h4>
+                    <div className="flex-1">
+                      <h4 className="text-amber-100 font-semibold mb-1">High Resolution</h4>
+                      <p className="text-amber-200 text-xs">Crystal clear imagery capturing every detail</p>
                     </div>
                   </div>
                 </div>
