@@ -743,7 +743,7 @@ export default function TashidingMonastery() {
         <div className="w-full py-10" style={{ backgroundColor: '#410704' }}>
           <div className="max-w-7xl mx-auto px-6 lg:px-14">
             <div className="text-center mb-10">
-              <p className="text-amber-50 text-lg italic max-w-2xl mx-auto uppercase" style={{ fontFamily: 'Chivo', fontStyle: 'italic' }}>
+              <p className="text-amber-50 text-lg italic max-w-2xl mx-auto uppercase">
                 Experience immersive audio guided tour covering architecture, history, and spiritual significance. Available in multiple languages with offline mode for remote monastery visits.
               </p>
             </div>
@@ -777,7 +777,7 @@ export default function TashidingMonastery() {
 
               {/* Audio Content */}
               <div className="flex flex-col gap-6">
-                <p className="text-amber-50 text-lg italic leading-relaxed" style={{ fontFamily: 'Chivo', fontStyle: 'italic' }}>
+                <p className="text-amber-50 text-lg italic leading-relaxed">
                   Visit this sacred monastery perched on a hilltop, famous for its annual Bhumchu festival and ancient Buddhist scriptures dating back centuries.
                 </p>
 
