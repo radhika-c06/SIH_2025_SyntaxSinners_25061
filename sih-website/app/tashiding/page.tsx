@@ -735,7 +735,7 @@ export default function TashidingMonastery() {
             {/* Search Bar */}
             <div className="mb-12 max-w-2xl mx-auto">
               <div className="relative">
-                <span className="absolute left-6 top-1/2 transform -translate-y-1/2 text-2xl">🔍</span>
+                <img src="/Icons/ICONS/calender.png" alt="Search" className="absolute left-6 top-1/2 transform -translate-y-1/2 w-6 h-6" style={{ filter: 'brightness(0) saturate(100%) invert(60%) sepia(50%) hue-rotate(30deg)' }} />
                 <input
                   type="text"
                   placeholder="Search audio guides"
