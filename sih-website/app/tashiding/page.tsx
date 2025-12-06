@@ -635,14 +635,42 @@ export default function TashidingMonastery() {
       )}
 
       {/* CULTURAL CALENDAR SECTION */}
-      <section className="relative w-full py-20" style={{ backgroundColor: '#410704' }}>
-        <div className="max-w-7xl mx-auto px-6 lg:px-14">
-          <Reveal>
-              <h2 className="text-6xl md:text-7xl text-amber-100 mb-16 text-center font-bold" style={{ fontFamily: 'Cinzel Decorative', fontWeight: 'bold' }}>
-              Cultural Calendar
-            </h2>
-          </Reveal>
+      <section className="relative w-full" style={{ backgroundColor: '#410704' }}>
+        {/* TOP BAR WITH VIDEO */}
+        <div className="relative w-screen h-56 md:h-72 lg:h-80 overflow-hidden flex items-center">
+          <video
+            src="/cultural calendar vid.mp4"
+            autoPlay
+            muted
+            loop
+            playsInline
+            className="absolute inset-0 w-full h-full object-cover"
+          />
 
+          {/* Gradient overlay */}
+          <div
+            className="absolute inset-0"
+            style={{
+              background:
+                'linear-gradient(90deg, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.45) 35%, rgba(0,0,0,0.1) 100%)',
+            }}
+          />
+
+          {/* Center Title */}
+          <div className="relative z-10 w-full flex items-center justify-center">
+            <div className="flex items-center gap-3">
+              <h3
+                className="text-amber-100 text-3xl md:text-4xl font-semibold tracking-[0.25em] uppercase"
+                style={{ fontFamily: 'Cinzel Decorative' }}
+              >
+                CULTURAL CALENDAR
+              </h3>
+            </div>
+          </div>
+        </div>
+
+        {/* ORIGINAL CONTENT BELOW VIDEO */}
+        <div className="max-w-7xl mx-auto px-6 lg:px-14 py-20">
           <div className="relative" style={{ paddingTop: '150px', paddingBottom: '0px' }}>
             <div className="absolute left-0 right-0 h-1 transform -translate-y-1/2"
               style={{
@@ -920,16 +948,32 @@ export default function TashidingMonastery() {
       <section className="relative w-full py-20" style={{ backgroundColor: '#410704' }}>
         <div className="max-w-7xl mx-auto px-6 lg:px-14">
           {/* Header */}
-          <div className="text-center mb-16">
-            <div className="inline-flex items-center gap-3 mb-6">
-              <img src="/Icons/ICONS/video tour icon.png" alt="Virtual Tour" className="w-12 h-12" />
-              <h2 className="text-5xl font-bold text-amber-50 uppercase" style={{ fontFamily: 'Cinzel Decorative' }}>
-                Virtual Tour
-              </h2>
+          <div className="relative text-center mb-16 overflow-hidden rounded-3xl py-20" style={{ marginLeft: 'calc(-100vw / 2 + 100% / 2)', marginRight: 'calc(-100vw / 2 + 100% / 2)' }}>
+            {/* Video Background for Header Only */}
+            <div className="absolute inset-0">
+              <video
+                autoPlay
+                loop
+                muted
+                playsInline
+                className="absolute w-screen h-full object-cover opacity-70"
+              >
+                <source src="/virtual tour video.mp4" type="video/mp4" />
+              </video>
+              <div className="absolute inset-0 bg-gradient-to-b from-[#410704]/30 via-[#410704]/40 to-[#410704]/50"></div>
             </div>
-            <p className="text-amber-50 text-lg italic max-w-3xl mx-auto">
-              Immerse yourself in 360° experiences of Sikkim's most sacred monasteries. Explore ancient halls, prayer rooms, and witness centuries of spiritual heritage.
-            </p>
+
+            <div className="relative z-10">
+              <div className="inline-flex items-center gap-3 mb-6">
+                <img src="/Icons/ICONS/video tour icon.png" alt="Virtual Tour" className="w-12 h-12" />
+                <h2 className="text-5xl font-bold text-amber-50 uppercase" style={{ fontFamily: 'Cinzel Decorative' }}>
+                  Virtual Tour
+                </h2>
+              </div>
+              <p className="text-amber-50 text-lg italic max-w-3xl mx-auto">
+                Immerse yourself in 360° experiences of Sikkim's most sacred monasteries. Explore ancient halls, prayer rooms, and witness centuries of spiritual heritage.
+              </p>
+            </div>
           </div>
 
           {/* Content Grid */}
