@@ -862,28 +862,36 @@ export default function TashidingMonastery() {
                 <h3 className="text-2xl font-semibold text-amber-50 mb-6 uppercase" style={{ fontFamily: 'Cinzel' }}>Tour Features</h3>
                 <div className="space-y-4">
                   <div className="flex items-start gap-3">
-                    <span className="text-2xl">🎯</span>
+                    <div className="w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center flex-shrink-0">
+                      <span className="text-xl">🎯</span>
+                    </div>
                     <div>
                       <h4 className="text-amber-100 font-semibold mb-1">Interactive Navigation</h4>
                       <p className="text-amber-200 text-sm">Move freely through sacred spaces with intuitive controls</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-3">
-                    <span className="text-2xl">🎧</span>
+                    <div className="w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center flex-shrink-0">
+                      <span className="text-xl">🎧</span>
+                    </div>
                     <div>
                       <h4 className="text-amber-100 font-semibold mb-1">Audio Narration</h4>
                       <p className="text-amber-200 text-sm">Guided commentary in multiple languages</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-3">
-                    <span className="text-2xl">📱</span>
+                    <div className="w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center flex-shrink-0">
+                      <span className="text-xl">📱</span>
+                    </div>
                     <div>
                       <h4 className="text-amber-100 font-semibold mb-1">Mobile Friendly</h4>
                       <p className="text-amber-200 text-sm">Experience the tour on any device</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-3">
-                    <span className="text-2xl">🎨</span>
+                    <div className="w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center flex-shrink-0">
+                      <span className="text-xl">🎨</span>
+                    </div>
                     <div>
                       <h4 className="text-amber-100 font-semibold mb-1">High Resolution</h4>
                       <p className="text-amber-200 text-sm">Crystal clear imagery capturing every detail</p>
