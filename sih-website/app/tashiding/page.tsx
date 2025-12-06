@@ -858,43 +858,43 @@ export default function TashidingMonastery() {
               </div>
 
               {/* Tour Features Box */}
-              <div className="rounded-3xl p-6 h-96 flex flex-col" style={{ backgroundColor: 'rgba(120, 53, 15, 0.5)', border: '2px solid rgba(217, 119, 6, 0.4)', backdropFilter: 'blur(10px)' }}>
-                <h3 className="text-xl font-semibold text-amber-50 mb-5 uppercase" style={{ fontFamily: 'Cinzel' }}>Tour Features</h3>
-                <div className="space-y-4 flex-1 flex flex-col justify-center">
-                  <div className="flex items-start gap-4 transition-all duration-300 hover:scale-105 cursor-pointer p-3 rounded-lg hover:bg-opacity-60" style={{ backgroundColor: 'rgba(217, 119, 6, 0.1)' }}>
+              <div className="rounded-3xl p-6 h-96 flex flex-col overflow-hidden" style={{ backgroundColor: 'rgba(120, 53, 15, 0.5)', border: '2px solid rgba(217, 119, 6, 0.4)', backdropFilter: 'blur(10px)' }}>
+                <h3 className="text-lg font-semibold text-amber-50 mb-4 uppercase" style={{ fontFamily: 'Cinzel' }}>Tour Features</h3>
+                <div className="space-y-3 flex-1 flex flex-col justify-center overflow-y-auto">
+                  <div className="flex items-start gap-3 transition-all duration-300 hover:scale-105 cursor-pointer p-2 rounded-lg hover:bg-opacity-60" style={{ backgroundColor: 'rgba(217, 119, 6, 0.1)' }}>
                     <div className="w-12 h-12 rounded-full bg-gradient-to-br from-orange-400 to-amber-500 flex items-center justify-center flex-shrink-0">
-                      <span className="text-xl">🎯</span>
+                      <span className="text-lg">🎯</span>
                     </div>
-                    <div className="flex-1">
-                      <h4 className="text-amber-100 font-semibold mb-1">Interactive Navigation</h4>
-                      <p className="text-amber-200 text-xs">Move freely through sacred spaces with intuitive controls</p>
+                    <div className="flex-1 min-w-0">
+                      <h4 className="text-amber-100 font-semibold text-sm mb-0.5">Interactive Navigation</h4>
+                      <p className="text-amber-200 text-xs leading-snug truncate">Move freely through sacred spaces</p>
                     </div>
                   </div>
-                  <div className="flex items-start gap-4 transition-all duration-300 hover:scale-105 cursor-pointer p-3 rounded-lg hover:bg-opacity-60" style={{ backgroundColor: 'rgba(217, 119, 6, 0.1)' }}>
+                  <div className="flex items-start gap-3 transition-all duration-300 hover:scale-105 cursor-pointer p-2 rounded-lg hover:bg-opacity-60" style={{ backgroundColor: 'rgba(217, 119, 6, 0.1)' }}>
                     <div className="w-12 h-12 rounded-full bg-gradient-to-br from-amber-400 to-yellow-500 flex items-center justify-center flex-shrink-0">
-                      <span className="text-xl">🎧</span>
+                      <span className="text-lg">🎧</span>
                     </div>
-                    <div className="flex-1">
-                      <h4 className="text-amber-100 font-semibold mb-1">Audio Narration</h4>
-                      <p className="text-amber-200 text-xs">Guided commentary in multiple languages</p>
+                    <div className="flex-1 min-w-0">
+                      <h4 className="text-amber-100 font-semibold text-sm mb-0.5">Audio Narration</h4>
+                      <p className="text-amber-200 text-xs leading-snug truncate">Guided commentary in multiple languages</p>
                     </div>
                   </div>
-                  <div className="flex items-start gap-4 transition-all duration-300 hover:scale-105 cursor-pointer p-3 rounded-lg hover:bg-opacity-60" style={{ backgroundColor: 'rgba(217, 119, 6, 0.1)' }}>
+                  <div className="flex items-start gap-3 transition-all duration-300 hover:scale-105 cursor-pointer p-2 rounded-lg hover:bg-opacity-60" style={{ backgroundColor: 'rgba(217, 119, 6, 0.1)' }}>
                     <div className="w-12 h-12 rounded-full bg-gradient-to-br from-yellow-400 to-orange-500 flex items-center justify-center flex-shrink-0">
-                      <span className="text-xl">📱</span>
+                      <span className="text-lg">📱</span>
                     </div>
-                    <div className="flex-1">
-                      <h4 className="text-amber-100 font-semibold mb-1">Mobile Friendly</h4>
-                      <p className="text-amber-200 text-xs">Experience the tour on any device seamlessly</p>
+                    <div className="flex-1 min-w-0">
+                      <h4 className="text-amber-100 font-semibold text-sm mb-0.5">Mobile Friendly</h4>
+                      <p className="text-amber-200 text-xs leading-snug truncate">Experience on any device</p>
                     </div>
                   </div>
-                  <div className="flex items-start gap-4 transition-all duration-300 hover:scale-105 cursor-pointer p-3 rounded-lg hover:bg-opacity-60" style={{ backgroundColor: 'rgba(217, 119, 6, 0.1)' }}>
+                  <div className="flex items-start gap-3 transition-all duration-300 hover:scale-105 cursor-pointer p-2 rounded-lg hover:bg-opacity-60" style={{ backgroundColor: 'rgba(217, 119, 6, 0.1)' }}>
                     <div className="w-12 h-12 rounded-full bg-gradient-to-br from-orange-300 to-amber-600 flex items-center justify-center flex-shrink-0">
-                      <span className="text-xl">🎨</span>
+                      <span className="text-lg">🎨</span>
                     </div>
-                    <div className="flex-1">
-                      <h4 className="text-amber-100 font-semibold mb-1">High Resolution</h4>
-                      <p className="text-amber-200 text-xs">Crystal clear imagery capturing every detail</p>
+                    <div className="flex-1 min-w-0">
+                      <h4 className="text-amber-100 font-semibold text-sm mb-0.5">High Resolution</h4>
+                      <p className="text-amber-200 text-xs leading-snug truncate">Crystal clear imagery</p>
                     </div>
                   </div>
                 </div>
