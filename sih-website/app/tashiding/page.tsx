@@ -18,6 +18,17 @@ export default function TashidingMonastery() {
   const [duration, setDuration] = useState(0);
   const audioRef = useRef<HTMLAudioElement>(null);
 
+  const scrollToSection = (id: string) => {
+    if (typeof document === 'undefined') return;
+    const el = document.getElementById(id);
+    if (!el) return;
+
+    el.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start',
+    });
+  };
+
   const togglePlay = () => {
     if (audioRef.current) {
       if (isPlaying) {
@@ -333,20 +344,27 @@ export default function TashidingMonastery() {
 
         {/* Buttons at Bottom */}
         <div className="flex justify-center gap-4 mt-10 z-20 flex-wrap px-8">
-          {['Overview', 'Digital Archive', 'Audio Tour', 'Virtual Tour', 'Cultural Calendar'].map((btn, i) => (
+          {[
+            { label: 'Overview', target: 'overview' },
+            { label: 'Digital Archive', target: 'digital-archive' },
+            { label: 'Audio Tour', target: 'audio-tour' },
+            { label: 'Virtual Tour', target: 'virtual-tour' },
+            { label: 'Cultural Calendar', target: 'cultural-calendar' },
+          ].map((btn) => (
             <button
-              key={i}
+              key={btn.label}
+              onClick={() => scrollToSection(btn.target)}
               className="px-8 py-3 bg-amber-200 text-amber-900 rounded-full font-bold uppercase hover:bg-amber-100 transition"
               style={{ fontFamily: 'Cinzel' }}
             >
-              {btn}
+              {btn.label}
             </button>
           ))}
         </div>
       </section>
 
       {/* Overview Section */}
-      <section className="relative w-full py-20" style={{ backgroundColor: '#410704' }}>
+      <section id="overview" className="relative w-full py-20" style={{ backgroundColor: '#410704' }}>
         <div className="w-full max-w-7xl xl:max-w-[95rem] mx-auto px-6 lg:px-14">
           <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,2.1fr)_minmax(0,0.9fr)] gap-10 xl:gap-12 items-start">
               {/* LEFT: TEXT */}
@@ -635,7 +653,7 @@ export default function TashidingMonastery() {
       )}
 
       {/* CULTURAL CALENDAR SECTION */}
-      <section className="relative w-full" style={{ backgroundColor: '#410704' }}>
+      <section id="cultural-calendar" className="relative w-full" style={{ backgroundColor: '#410704' }}>
         {/* TOP BAR WITH VIDEO */}
         <div className="relative w-screen h-56 md:h-72 lg:h-80 overflow-hidden flex items-center">
           <video
@@ -796,7 +814,7 @@ export default function TashidingMonastery() {
       </section>
 
       {/* AUDIO TOUR SECTION */}
-      <section className="relative w-full py-0" style={{ backgroundColor: '#410704' }}>
+      <section id="audio-tour" className="relative w-full py-0" style={{ backgroundColor: '#410704' }}>
         {/* Heading with video background */}
         <div className="relative w-full overflow-hidden" style={{ paddingTop: '5rem', paddingBottom: '5rem' }}>
           {/* Background video */}
@@ -945,7 +963,7 @@ export default function TashidingMonastery() {
       </section>
 
       {/* VIRTUAL TOUR SECTION */}
-      <section className="relative w-full py-20" style={{ backgroundColor: '#410704' }}>
+      <section id="virtual-tour" className="relative w-full py-20" style={{ backgroundColor: '#410704' }}>
         <div className="max-w-7xl mx-auto px-6 lg:px-14">
           {/* Header */}
           <div className="relative text-center mb-16 overflow-hidden rounded-3xl py-20" style={{ marginLeft: 'calc(-100vw / 2 + 100% / 2)', marginRight: 'calc(-100vw / 2 + 100% / 2)' }}>
