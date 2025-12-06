@@ -44,6 +44,27 @@ html {
   font-family: 'Cinzel Decorative', serif;
   font-weight: 900;
 }
+
+/* Cultural Calendar styling: use Cinzel Decorative Bold and slightly larger sizes */
+.cultural-calendar h2,
+.cultural-calendar .calendar-heading {
+  font-family: 'Cinzel Decorative', serif;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  /* slightly larger than the existing text-5xl */
+  font-size: clamp(2.6rem, 6vw, 5.2rem);
+}
+.cultural-calendar h3 {
+  font-family: 'Cinzel Decorative', serif;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  font-size: clamp(1.05rem, 2.6vw, 1.5rem);
+}
+.cultural-calendar .rounded-2xl p,
+.cultural-calendar .rounded-2xl .text-xs {
+  font-size: clamp(0.78rem, 1.6vw, 0.95rem);
+}
 .font-merriweather {
   font-family: 'Merriweather', serif;
 }
