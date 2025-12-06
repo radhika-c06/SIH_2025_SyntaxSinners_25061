@@ -841,7 +841,7 @@ export default function TashidingMonastery() {
                     T
                   </div>
                   <div className="flex-1">
-                    <h3 className="text-2xl font-semibold text-amber-50 mb-2">Tashiding Monastery</h3>
+                    <h3 className="text-2xl font-semibold text-amber-50 mb-2 uppercase" style={{ fontFamily: 'Cinzel' }}>Tashiding Monastery</h3>
                     <div className="flex items-center gap-4 text-amber-200 text-sm mb-3">
                       <span className="flex items-center gap-1">
                         📍 West Sikkim
