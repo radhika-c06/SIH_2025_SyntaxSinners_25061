@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Reveal from '@/components/Reveal';
 import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
@@ -10,7 +10,14 @@ export default function RumtekMonastery() {
   const [openDialog, setOpenDialog] = useState(false);
   const [activeItem, setActiveItem] = useState<any | null>(null);
 
-   const scrollToSection = (id: string) => {
+  // AUDIO PLAYER STATE (same pattern as Tashiding)
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [isLiked, setIsLiked] = useState(false);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(0);
+  const audioRef = useRef<HTMLAudioElement>(null);
+
+  const scrollToSection = (id: string) => {
     if (typeof document === 'undefined') return;
     const el = document.getElementById(id);
     if (!el) return;
@@ -285,7 +292,51 @@ export default function RumtekMonastery() {
     </div>
   );
 
-  
+  // AUDIO PLAYER HANDLERS (same as Tashiding)
+  const togglePlay = () => {
+    if (!audioRef.current) return;
+    if (isPlaying) {
+      audioRef.current.pause();
+    } else {
+      audioRef.current.play();
+    }
+    setIsPlaying(!isPlaying);
+  };
+
+  const skipForward = () => {
+    if (!audioRef.current) return;
+    audioRef.current.currentTime += 10;
+  };
+
+  const skipBackward = () => {
+    if (!audioRef.current) return;
+    audioRef.current.currentTime -= 10;
+  };
+
+  const fastForward = () => {
+    if (!audioRef.current) return;
+    audioRef.current.currentTime = Math.min(audioRef.current.currentTime + 30, duration);
+  };
+
+  const fastRewind = () => {
+    if (!audioRef.current) return;
+    audioRef.current.currentTime = Math.max(audioRef.current.currentTime - 30, 0);
+  };
+
+  const toggleLike = () => {
+    setIsLiked(!isLiked);
+  };
+
+  const handleProgressClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!audioRef.current) return;
+    const progressBar = e.currentTarget;
+    const clickX = e.clientX - progressBar.getBoundingClientRect().left;
+    const width = progressBar.offsetWidth;
+    const clickedTime = (clickX / width) * duration;
+    audioRef.current.currentTime = clickedTime;
+  };
+
+  const progress = duration > 0 ? (currentTime / duration) * 100 : 0;
 
   return (
     <main className="overflow-hidden">
@@ -296,7 +347,7 @@ export default function RumtekMonastery() {
         className="relative w-full overflow-hidden pt-8 pb-4"
         style={{
           backgroundImage: 'url(/bg1.png)',
-          backgroundSize: 'cover', 
+          backgroundSize: 'cover',
           backgroundPosition: 'center 30%',
           minHeight: '100vh',
           display: 'flex',
@@ -372,10 +423,7 @@ export default function RumtekMonastery() {
                   >
                     Rumtek, East Sikkim
                   </div>
-                  <div
-                    className="text-lg uppercase"
-                    style={{ fontFamily: 'Cormorant SC' }}
-                  >
+                  <div className="text-lg uppercase" style={{ fontFamily: 'Cormorant SC' }}>
                     Gangtok (737135), India
                   </div>
                 </div>
@@ -397,10 +445,7 @@ export default function RumtekMonastery() {
                   >
                     Built in
                   </div>
-                  <div
-                    className="text-lg uppercase"
-                    style={{ fontFamily: 'Cormorant SC' }}
-                  >
+                  <div className="text-lg uppercase" style={{ fontFamily: 'Cormorant SC' }}>
                     1966 CE
                   </div>
                 </div>
@@ -410,35 +455,32 @@ export default function RumtekMonastery() {
         </div>
 
         {/* Hero Buttons */}
-        {/* Hero Buttons */}
-<div className="flex justify-center gap-4 mt-10 flex-wrap px-8">
-  {[
-    { label: 'Overview', target: 'overview' },
-    { label: 'Digital Archive', target: 'digital-archive' },
-    { label: 'Audio Tour', target: 'audio-tour' },           // optional – section later
-    { label: 'Virtual Tour', target: 'virtual-tour' },       // optional – section later
-    { label: 'Cultural Calendar', target: 'cultural-calendar' },
-  ].map((btn, i) => (
-    <button
-      key={btn.label}
-      onClick={() => scrollToSection(btn.target)}            // 👈 scroll on click
-      className="px-8 py-3 bg-amber-200 text-amber-900 rounded-full font-bold uppercase hover:bg-amber-100 transition"
-      style={{ fontFamily: 'Cinzel' }}
-    >
-      {btn.label}
-    </button>
-  ))}
-</div>
-
+        <div className="flex justify-center gap-4 mt-10 flex-wrap px-8">
+          {[
+            { label: 'Overview', target: 'overview' },
+            { label: 'Digital Archive', target: 'digital-archive' },
+            { label: 'Audio Tour', target: 'audio-tour' },
+            { label: 'Virtual Tour', target: 'virtual-tour' },
+            { label: 'Cultural Calendar', target: 'cultural-calendar' },
+          ].map((btn) => (
+            <button
+              key={btn.label}
+              onClick={() => scrollToSection(btn.target)}
+              className="px-8 py-3 bg-amber-200 text-amber-900 rounded-full font-bold uppercase hover:bg-amber-100 transition"
+              style={{ fontFamily: 'Cinzel' }}
+            >
+              {btn.label}
+            </button>
+          ))}
+        </div>
       </section>
 
       {/* OVERVIEW SECTION */}
-<section
-  id="overview"                       // 👈 add this
-  className="relative w-full py-20"
-  style={{ backgroundColor: '#410704' }}
->
-
+      <section
+        id="overview"
+        className="relative w-full py-20"
+        style={{ backgroundColor: '#410704' }}
+      >
         <div className="w-full max-w-7xl xl:max-w-[95rem] mx-auto px-6 lg:px-14">
           <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,2.1fr)_minmax(0,0.9fr)] gap-10 xl:gap-12 items-start">
             {/* LEFT: TEXT */}
@@ -580,54 +622,51 @@ export default function RumtekMonastery() {
         </div>
 
         {/* CONTENT AREA */}
-        {/* CONTENT AREA */}
-<div
-  className="relative w-screen min-h-[70vh] py-12 px-6 md:px-12"
-  style={{
-    backgroundColor: '#4b1f0f',
-  }}
->
-  {/* LEFT-HALF WATERMARK */}
-  <div
-    className="pointer-events-none absolute inset-y-0 left-0 w-1/2 opacity-45"
-    style={{
-      backgroundImage: "url('/design.png')",
-      backgroundRepeat: 'repeat',
-      backgroundSize: '500px auto',
-    }}
-  />
-  <div
-    className="absolute inset-y-0 right-0 w-[50%]"
-    style={{
-      backgroundColor: "#87522d", // <-- CHANGE THIS TO ANY COLOR YOU WANT
-      opacity: 1,
-    }}
-  />
-
-
-  {/* REAL CONTENT (ABOVE THE WATERMARK) */}
-  <div className="relative z-10 max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12">
-    
-    {/* LEFT – Cards */}
-    <div className="flex flex-col gap-6">
-      {rumtekArchiveItems.map((it) => (
-        <ArchiveCard
-          key={it.id}
-          item={it}
-          onOpen={(i) => {
-            setActiveItem(i);
-            setOpenDialog(true);
+        <div
+          className="relative w-screen min-h-[70vh] py-12 px-6 md:px-12"
+          style={{
+            backgroundColor: '#4b1f0f',
           }}
-        />
-      ))}
-    </div>
+        >
+          {/* LEFT-HALF WATERMARK */}
+          <div
+            className="pointer-events-none absolute inset-y-0 left-0 w-1/2 opacity-45"
+            style={{
+              backgroundImage: "url('/design.png')",
+              backgroundRepeat: 'repeat',
+              backgroundSize: '500px auto',
+            }}
+          />
+          <div
+            className="absolute inset-y-0 right-0 w-[50%]"
+            style={{
+              backgroundColor: '#87522d',
+              opacity: 1,
+            }}
+          />
 
-    {/* RIGHT – Research + Timeline */}
-    <div className="flex flex-col items-stretch gap-8">
-      <ResearchRow />
-      <TimelineColumn />
-    </div>
-  </div>
+          {/* REAL CONTENT */}
+          <div className="relative z-10 max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12">
+            {/* LEFT – Cards */}
+            <div className="flex flex-col gap-6">
+              {rumtekArchiveItems.map((it) => (
+                <ArchiveCard
+                  key={it.id}
+                  item={it}
+                  onOpen={(i) => {
+                    setActiveItem(i);
+                    setOpenDialog(true);
+                  }}
+                />
+              ))}
+            </div>
+
+            {/* RIGHT – Research + Timeline */}
+            <div className="flex flex-col items-stretch gap-8">
+              <ResearchRow />
+              <TimelineColumn />
+            </div>
+          </div>
 
           {/* MODAL */}
           {openDialog && activeItem && (
@@ -694,322 +733,705 @@ export default function RumtekMonastery() {
       </section>
 
       {/* CULTURAL CALENDAR SECTION */}
-
-{/* CULTURAL CALENDAR SECTION */}
-<section
-  id="cultural-calendar"
-  className="relative w-full"
-  style={{ backgroundColor: '#410704' }}
->
-  {/* TOP BAR WITH VIDEO */}
-  <div className="relative w-screen h-56 md:h-72 lg:h-80 overflow-hidden flex items-center">
-    <video
-      src="/cultural calendar vid.mp4"
-      autoPlay
-      muted
-      loop
-      playsInline
-      className="absolute inset-0 w-full h-full object-cover"
-    />
-
-    {/* Gradient overlay (same as Digital Archive) */}
-    <div
-      className="absolute inset-0"
-      style={{
-        background:
-          'linear-gradient(90deg, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.45) 35%, rgba(0,0,0,0.1) 100%)',
-      }}
-    />
-
-    {/* Center Title */}
-    <div className="relative z-10 w-full flex items-center justify-center">
-      <div className="flex items-center gap-3">
-        <h3
-          className="text-amber-100 text-3xl md:text-4xl font-semibold tracking-[0.25em] uppercase font-cinzel-decorative"
-        >
-          CULTURAL CALENDAR
-        </h3>
-      </div>
-    </div>
-  </div>
-
-  {/* ORIGINAL CONTENT BELOW VIDEO */}
-  <div className="max-w-7xl mx-auto px-6 lg:px-14 py-20">
-    
-
-    {/* TIMELINE STRIP */}
-    <div className="relative" style={{ paddingTop: '150px', paddingBottom: '0px' }}>
-      <div
-        className="absolute left-0 right-0 h-1 transform -translate-y-1/2"
-        style={{
-          top: 'calc(50% - 89px)',
-          backgroundImage:
-            'repeating-linear-gradient(to right, #d97706 0px, #d97706 15px, transparent 15px, transparent 35px)',
-          zIndex: 0,
-        }}
-      />
-
-      <div
-        className="grid grid-cols-4 gap-0 relative"
-        style={{ minHeight: '360px' }}
+      <section
+        id="cultural-calendar"
+        className="relative w-full"
+        style={{ backgroundColor: '#410704' }}
       >
-        {/* Rumtek Tse-Chu Cham Festival (masked dances) */}
-        <div className="relative">
-          <Reveal delay={0.1}>
-            <div
-              className="absolute left-1/2 transform -translate-x-1/2 rounded-2xl bg-gradient-to-br from-yellow-300 to-yellow-200 border-4 border-yellow-400 p-4 w-44 shadow-lg"
-              style={{ top: 'calc(50% - 180px)', zIndex: 2 }}
-            >
-              <p className="text-xs font-semibold text-amber-900 mb-1">
-                June – July
-              </p>
-              <p className="text-xs text-amber-900 mb-2">
-                Early monsoon · Masked cham dances
-              </p>
-              <h3 className="text-lg font-bold text-amber-900">
-                Rumtek Tse-Chu Festival
+        {/* TOP BAR WITH VIDEO */}
+        <div className="relative w-screen h-56 md:h-72 lg:h-80 overflow-hidden flex items-center">
+          <video
+            src="/cultural calendar vid.mp4"
+            autoPlay
+            muted
+            loop
+            playsInline
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+
+          {/* Gradient overlay */}
+          <div
+            className="absolute inset-0"
+            style={{
+              background:
+                'linear-gradient(90deg, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.45) 35%, rgba(0,0,0,0.1) 100%)',
+            }}
+          />
+
+          {/* Center Title */}
+          <div className="relative z-10 w-full flex items-center justify-center">
+            <div className="flex items-center gap-3">
+              <h3
+                className="text-amber-100 text-3xl md:text-4xl font-semibold tracking-[0.25em] uppercase font-cinzel-decorative"
+              >
+                CULTURAL CALENDAR
               </h3>
             </div>
-
-            <div
-              className="absolute left-1/2 transform -translate-x-1/2"
-              style={{
-                top: 'calc(50% - 64px)',
-                width: '4px',
-                height: '64px',
-                backgroundColor: '#fcd34d',
-              }}
-            />
-
-            <div
-              className="absolute left-1/2 transform -translate-x-1/2 rounded-full shadow-md"
-              style={{
-                top: '50%',
-                width: '32px',
-                height: '32px',
-                backgroundColor: '#fef08a',
-                border: '4px solid #f59e0b',
-                transformOrigin: 'center',
-                zIndex: -1,
-              }}
-            />
-          </Reveal>
-        </div>
-
-        {/* Saga Dawa at Rumtek */}
-        <div className="relative">
-          <Reveal delay={0.2}>
-            <div
-              className="absolute left-1/2 transform -translate-x-1/2 rounded-full shadow-md"
-              style={{
-                top: '50%',
-                width: '32px',
-                height: '32px',
-                backgroundColor: '#f59e0b',
-                border: '4px solid #b45309',
-                zIndex: -1,
-              }}
-            />
-
-            <div
-              className="absolute left-1/2 transform -translate-x-1/2"
-              style={{
-                top: '50%',
-                width: '4px',
-                height: '80px',
-                backgroundColor: '#eab308',
-                zIndex: -2,
-              }}
-            />
-
-            <div
-              className="absolute left-1/2 transform -translate-x-1/2 rounded-2xl bg-gradient-to-br from-yellow-500 to-yellow-400 border-4 border-yellow-600 p-4 w-44 shadow-lg"
-              style={{ top: 'calc(50% + 72px)' }}
-            >
-              <p className="text-xs font-semibold text-white mb-1">
-                May – June
-              </p>
-              <p className="text-xs text-white mb-2">
-                4th Tibetan Month · Full-moon day
-              </p>
-              <h3 className="text-lg font-bold text-white">
-                Saga Dawa
-              </h3>
-            </div>
-          </Reveal>
-        </div>
-
-        {/* Losoong / Sonam Losoong at Rumtek */}
-        <div className="relative">
-          <Reveal delay={0.3}>
-            <div
-              className="absolute left-1/2 transform -translate-x-1/2 rounded-2xl bg-gradient-to-br from-orange-500 to-orange-400 border-4 border-orange-600 p-4 w-44 shadow-lg"
-              style={{ top: 'calc(50% - 190px)', zIndex: 2 }}
-            >
-              <p className="text-xs font-semibold text-white mb-1">
-                December
-              </p>
-              <p className="text-xs text-white mb-2">
-                11th Tibetan Month · Sikkimese New Year
-              </p>
-              <h3 className="text-lg font-bold text-white">
-                Losoong / Sonam Losoong
-              </h3>
-            </div>
-
-            <div
-              className="absolute left-1/2 transform -translate-x-1/2"
-              style={{
-                top: 'calc(50% - 64px)',
-                width: '4px',
-                height: '64px',
-                backgroundColor: '#fb923c',
-              }}
-            />
-
-            <div
-              className="absolute left-1/2 transform -translate-x-1/2 rounded-full shadow-md"
-              style={{
-                top: '50%',
-                width: '32px',
-                height: '32px',
-                backgroundColor: '#fb923c',
-                border: '4px solid #ea580c',
-                zIndex: -1,
-              }}
-            />
-          </Reveal>
-        </div>
-
-        {/* Losar – Tibetan New Year at Rumtek */}
-        <div className="relative">
-          <Reveal delay={0.4}>
-            <div
-              className="absolute left-1/2 transform -translate-x-1/2 rounded-full shadow-md"
-              style={{
-                top: '50%',
-                width: '32px',
-                height: '32px',
-                backgroundColor: '#f59e0b',
-                border: '4px solid #b45309',
-                zIndex: -1,
-              }}
-            />
-
-            <div
-              className="absolute left-1/2 transform -translate-x-1/2"
-              style={{
-                top: '50%',
-                width: '4px',
-                height: '80px',
-                backgroundColor: '#eab308',
-                zIndex: -2,
-              }}
-            />
-
-            <div
-              className="absolute left-1/2 transform -translate-x-1/2 rounded-2xl bg-gradient-to-br from-yellow-600 to-yellow-500 border-4 border-yellow-700 p-4 w-44 shadow-lg"
-              style={{ top: 'calc(50% + 72px)' }}
-            >
-              <p className="text-xs font-semibold text-white mb-1">
-                February (varies yearly)
-              </p>
-              <p className="text-xs text-white mb-2">
-                1st Tibetan Month · 1st–3rd day
-              </p>
-              <h3 className="text-lg font-bold text-white">
-                Losar (Tibetan New Year)
-              </h3>
-            </div>
-          </Reveal>
-        </div>
-      </div>
-    </div>
-
-    {/* FESTIVAL DESCRIPTIONS */}
-    <Reveal delay={0.6}>
-      <div className="mt-2 space-y-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Rumtek Tse-Chu */}
-          <Reveal delay={0.7}>
-            <div className="rounded-2xl bg-white/5 backdrop-blur-sm border border-yellow-500/20 p-6 hover:border-yellow-400/40 transition-colors">
-              <h3 className="font-cinzel uppercase text-xl font-bold text-yellow-300 mb-3">
-                Rumtek Tse-Chu Cham Festival
-              </h3>
-              <p className="text-sm text-amber-50 leading-relaxed">
-                At Rumtek, Tse-Chu is marked by powerful cham mask dances in the main courtyard. Monks
-                perform elaborate rituals dedicated to Guru Padmasambhava and protective deities, while
-                devotees watch from the galleries, receive blessings, and make offerings for protection,
-                healing, and harmony for the year ahead.
-              </p>
-            </div>
-          </Reveal>
-
-          {/* Saga Dawa */}
-          <Reveal delay={0.75}>
-            <div className="rounded-2xl bg-white/5 backdrop-blur-sm border border-yellow-500/20 p-6 hover:border-yellow-400/40 transition-colors">
-              <h3 className="font-cinzel uppercase text-xl font-bold text-yellow-300 mb-3">
-                Saga Dawa
-              </h3>
-              <p className="text-sm text-amber-50 leading-relaxed">
-                Saga Dawa commemorates the Buddha&apos;s birth, enlightenment, and parinirvana. At Rumtek,
-                monks hold extended pujas and recitations, light thousands of butter lamps, and lead
-                circumambulations of the monastery. Local devotees join in merit-making, charity, and
-                silent prayer, treating this &quot;triple blessed day&quot; as the most auspicious time in
-                the Buddhist year.
-              </p>
-            </div>
-          </Reveal>
-
-          {/* Losoong / Sonam Losoong */}
-          <Reveal delay={0.8}>
-            <div className="rounded-2xl bg-white/5 backdrop-blur-sm border border-orange-500/20 p-6 hover:border-orange-400/40 transition-colors">
-              <h3 className="font-cinzel uppercase text-xl font-bold text-orange-300 mb-3">
-                Losoong / Sonam Losoong
-              </h3>
-              <p className="text-sm text-amber-50 leading-relaxed">
-                Losoong is the Sikkimese New Year and harvest-thanksgiving festival. At Rumtek, the year
-                closes with joyous cham dances, ritual offerings, and gatherings of Bhutia and Lepcha
-                families. The monastery becomes a space of celebration and gratitude—marking the end of
-                the agricultural cycle and inviting good fortune for the coming year.
-              </p>
-            </div>
-          </Reveal>
-
-          {/* Losar */}
-          <Reveal delay={0.85}>
-            <div className="rounded-2xl bg-white/5 backdrop-blur-sm border border-orange-600/20 p-6 hover:border-orange-500/40 transition-colors">
-              <h3 className="font-cinzel uppercase text-xl font-bold text-orange-300 mb-3">
-                Losar (Tibetan New Year)
-              </h3>
-              <p className="text-sm text-amber-50 leading-relaxed">
-                Losar marks the start of the Tibetan New Year. In Rumtek, the festival begins with intensive
-                year-end purification rites and offerings, followed by New Year prayers, raising of fresh
-                prayer flags, and vibrant community celebrations. Families visit the monastery to make
-                offerings, seek blessings, and step into the new year with renewed intention.
-              </p>
-            </div>
-          </Reveal>
-        </div>
-
-        <Reveal delay={0.95}>
-          <div className="rounded-3xl bg-gradient-to-r from-orange-900/20 to-amber-900/20 backdrop-blur-md border border-amber-500/20 p-8">
-            <p className="text-base text-amber-50 leading-relaxed font-light">
-              Together, these festivals trace the spiritual heartbeat of Rumtek. They turn the monastery&apos;s
-              courtyards into living stages of dance, ritual, and prayer; binding monks, pilgrims, and local
-              communities into a shared rhythm of remembrance, renewal, and devotion across the Himalayan year.
-            </p>
           </div>
-        </Reveal>
-      </div>
-    </Reveal>
-  </div>
-</section>
+        </div>
 
-<Footer />
-</main>
+        {/* ORIGINAL CONTENT BELOW VIDEO */}
+        <div className="max-w-7xl mx-auto px-6 lg:px-14 py-20">
+          {/* TIMELINE STRIP */}
+          <div className="relative" style={{ paddingTop: '150px', paddingBottom: '0px' }}>
+            <div
+              className="absolute left-0 right-0 h-1 transform -translate-y-1/2"
+              style={{
+                top: 'calc(50% - 89px)',
+                backgroundImage:
+                  'repeating-linear-gradient(to right, #d97706 0px, #d97706 15px, transparent 15px, transparent 35px)',
+                zIndex: 0,
+              }}
+            />
 
+            <div
+              className="grid grid-cols-4 gap-0 relative"
+              style={{ minHeight: '360px' }}
+            >
+              {/* Rumtek Tse-Chu Cham Festival */}
+              <div className="relative">
+                <Reveal delay={0.1}>
+                  <div
+                    className="absolute left-1/2 transform -translate-x-1/2 rounded-2xl bg-gradient-to-br from-yellow-300 to-yellow-200 border-4 border-yellow-400 p-4 w-44 shadow-lg"
+                    style={{ top: 'calc(50% - 180px)', zIndex: 2 }}
+                  >
+                    <p className="text-xs font-semibold text-amber-900 mb-1">
+                      June – July
+                    </p>
+                    <p className="text-xs text-amber-900 mb-2">
+                      Early monsoon · Masked cham dances
+                    </p>
+                    <h3 className="text-lg font-bold text-amber-900">
+                      Rumtek Tse-Chu Festival
+                    </h3>
+                  </div>
 
+                  <div
+                    className="absolute left-1/2 transform -translate-x-1/2"
+                    style={{
+                      top: 'calc(50% - 64px)',
+                      width: '4px',
+                      height: '64px',
+                      backgroundColor: '#fcd34d',
+                    }}
+                  />
 
+                  <div
+                    className="absolute left-1/2 transform -translate-x-1/2 rounded-full shadow-md"
+                    style={{
+                      top: '50%',
+                      width: '32px',
+                      height: '32px',
+                      backgroundColor: '#fef08a',
+                      border: '4px solid #f59e0b',
+                      transformOrigin: 'center',
+                      zIndex: -1,
+                    }}
+                  />
+                </Reveal>
+              </div>
+
+              {/* Saga Dawa at Rumtek */}
+              <div className="relative">
+                <Reveal delay={0.2}>
+                  <div
+                    className="absolute left-1/2 transform -translate-x-1/2 rounded-full shadow-md"
+                    style={{
+                      top: '50%',
+                      width: '32px',
+                      height: '32px',
+                      backgroundColor: '#f59e0b',
+                      border: '4px solid #b45309',
+                      zIndex: -1,
+                    }}
+                  />
+
+                  <div
+                    className="absolute left-1/2 transform -translate-x-1/2"
+                    style={{
+                      top: '50%',
+                      width: '4px',
+                      height: '80px',
+                      backgroundColor: '#eab308',
+                      zIndex: -2,
+                    }}
+                  />
+
+                  <div
+                    className="absolute left-1/2 transform -translate-x-1/2 rounded-2xl bg-gradient-to-br from-yellow-500 to-yellow-400 border-4 border-yellow-600 p-4 w-44 shadow-lg"
+                    style={{ top: 'calc(50% + 72px)' }}
+                  >
+                    <p className="text-xs font-semibold text-white mb-1">
+                      May – June
+                    </p>
+                    <p className="text-xs text-white mb-2">
+                      4th Tibetan Month · Full-moon day
+                    </p>
+                    <h3 className="text-lg font-bold text-white">
+                      Saga Dawa
+                    </h3>
+                  </div>
+                </Reveal>
+              </div>
+
+              {/* Losoong / Sonam Losoong at Rumtek */}
+              <div className="relative">
+                <Reveal delay={0.3}>
+                  <div
+                    className="absolute left-1/2 transform -translate-x-1/2 rounded-2xl bg-gradient-to-br from-orange-500 to-orange-400 border-4 border-orange-600 p-4 w-44 shadow-lg"
+                    style={{ top: 'calc(50% - 190px)', zIndex: 2 }}
+                  >
+                    <p className="text-xs font-semibold text-white mb-1">
+                      December
+                    </p>
+                    <p className="text-xs text-white mb-2">
+                      11th Tibetan Month · Sikkimese New Year
+                    </p>
+                    <h3 className="text-lg font-bold text-white">
+                      Losoong / Sonam Losoong
+                    </h3>
+                  </div>
+
+                  <div
+                    className="absolute left-1/2 transform -translate-x-1/2"
+                    style={{
+                      top: 'calc(50% - 64px)',
+                      width: '4px',
+                      height: '64px',
+                      backgroundColor: '#fb923c',
+                    }}
+                  />
+
+                  <div
+                    className="absolute left-1/2 transform -translate-x-1/2 rounded-full shadow-md"
+                    style={{
+                      top: '50%',
+                      width: '32px',
+                      height: '32px',
+                      backgroundColor: '#fb923c',
+                      border: '4px solid #ea580c',
+                      zIndex: -1,
+                    }}
+                  />
+                </Reveal>
+              </div>
+
+              {/* Losar – Tibetan New Year at Rumtek */}
+              <div className="relative">
+                <Reveal delay={0.4}>
+                  <div
+                    className="absolute left-1/2 transform -translate-x-1/2 rounded-full shadow-md"
+                    style={{
+                      top: '50%',
+                      width: '32px',
+                      height: '32px',
+                      backgroundColor: '#f59e0b',
+                      border: '4px solid #b45309',
+                      zIndex: -1,
+                    }}
+                  />
+
+                  <div
+                    className="absolute left-1/2 transform -translate-x-1/2"
+                    style={{
+                      top: '50%',
+                      width: '4px',
+                      height: '80px',
+                      backgroundColor: '#eab308',
+                      zIndex: -2,
+                    }}
+                  />
+
+                  <div
+                    className="absolute left-1/2 transform -translate-x-1/2 rounded-2xl bg-gradient-to-br from-yellow-600 to-yellow-500 border-4 border-yellow-700 p-4 w-44 shadow-lg"
+                    style={{ top: 'calc(50% + 72px)' }}
+                  >
+                    <p className="text-xs font-semibold text-white mb-1">
+                      February (varies yearly)
+                    </p>
+                    <p className="text-xs text-white mb-2">
+                      1st Tibetan Month · 1st–3rd day
+                    </p>
+                    <h3 className="text-lg font-bold text-white">
+                      Losar (Tibetan New Year)
+                    </h3>
+                  </div>
+                </Reveal>
+              </div>
+            </div>
+          </div>
+
+          {/* FESTIVAL DESCRIPTIONS */}
+          <Reveal delay={0.6}>
+            <div className="mt-2 space-y-8">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {/* Rumtek Tse-Chu */}
+                <Reveal delay={0.7}>
+                  <div className="rounded-2xl bg-white/5 backdrop-blur-sm border border-yellow-500/20 p-6 hover:border-yellow-400/40 transition-colors">
+                    <h3 className="font-cinzel uppercase text-xl font-bold text-yellow-300 mb-3">
+                      Rumtek Tse-Chu Cham Festival
+                    </h3>
+                    <p className="text-sm text-amber-50 leading-relaxed">
+                      At Rumtek, Tse-Chu is marked by powerful cham mask dances in the main courtyard. Monks
+                      perform elaborate rituals dedicated to Guru Padmasambhava and protective deities, while
+                      devotees watch from the galleries, receive blessings, and make offerings for protection,
+                      healing, and harmony for the year ahead.
+                    </p>
+                  </div>
+                </Reveal>
+
+                {/* Saga Dawa */}
+                <Reveal delay={0.75}>
+                  <div className="rounded-2xl bg-white/5 backdrop-blur-sm border border-yellow-500/20 p-6 hover:border-yellow-400/40 transition-colors">
+                    <h3 className="font-cinzel uppercase text-xl font-bold text-yellow-300 mb-3">
+                      Saga Dawa
+                    </h3>
+                    <p className="text-sm text-amber-50 leading-relaxed">
+                      Saga Dawa commemorates the Buddha&apos;s birth, enlightenment, and parinirvana. At Rumtek,
+                      monks hold extended pujas and recitations, light thousands of butter lamps, and lead
+                      circumambulations of the monastery. Local devotees join in merit-making, charity, and
+                      silent prayer, treating this &quot;triple blessed day&quot; as the most auspicious time in
+                      the Buddhist year.
+                    </p>
+                  </div>
+                </Reveal>
+
+                {/* Losoong / Sonam Losoong */}
+                <Reveal delay={0.8}>
+                  <div className="rounded-2xl bg-white/5 backdrop-blur-sm border border-orange-500/20 p-6 hover:border-orange-400/40 transition-colors">
+                    <h3 className="font-cinzel uppercase text-xl font-bold text-orange-300 mb-3">
+                      Losoong / Sonam Losoong
+                    </h3>
+                    <p className="text-sm text-amber-50 leading-relaxed">
+                      Losoong is the Sikkimese New Year and harvest-thanksgiving festival. At Rumtek, the year
+                      closes with joyous cham dances, ritual offerings, and gatherings of Bhutia and Lepcha
+                      families. The monastery becomes a space of celebration and gratitude—marking the end of
+                      the agricultural cycle and inviting good fortune for the coming year.
+                    </p>
+                  </div>
+                </Reveal>
+
+                {/* Losar */}
+                <Reveal delay={0.85}>
+                  <div className="rounded-2xl bg-white/5 backdrop-blur-sm border border-orange-600/20 p-6 hover:border-orange-500/40 transition-colors">
+                    <h3 className="font-cinzel uppercase text-xl font-bold text-orange-300 mb-3">
+                      Losar (Tibetan New Year)
+                    </h3>
+                    <p className="text-sm text-amber-50 leading-relaxed">
+                      Losar marks the start of the Tibetan New Year. In Rumtek, the festival begins with intensive
+                      year-end purification rites and offerings, followed by New Year prayers, raising of fresh
+                      prayer flags, and vibrant community celebrations. Families visit the monastery to make
+                      offerings, seek blessings, and step into the new year with renewed intention.
+                    </p>
+                  </div>
+                </Reveal>
+              </div>
+
+              <Reveal delay={0.95}>
+                <div className="rounded-3xl bg-gradient-to-r from-orange-900/20 to-amber-900/20 backdrop-blur-md border border-amber-500/20 p-8">
+                  <p className="text-base text-amber-50 leading-relaxed font-light">
+                    Together, these festivals trace the spiritual heartbeat of Rumtek. They turn the monastery&apos;s
+                    courtyards into living stages of dance, ritual, and prayer; binding monks, pilgrims, and local
+                    communities into a shared rhythm of remembrance, renewal, and devotion across the Himalayan year.
+                  </p>
+                </div>
+              </Reveal>
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* AUDIO TOUR SECTION */}
+      <section
+        id="audio-tour"
+        className="relative w-full py-0"
+        style={{ backgroundColor: '#410704' }}
+      >
+        {/* Heading with video background */}
+        <div className="relative w-full overflow-hidden" style={{ paddingTop: '5rem', paddingBottom: '5rem' }}>
+          <video
+            src="/audio tour vid.mp4"
+            autoPlay
+            muted
+            loop
+            playsInline
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+          <div
+            className="absolute inset-0"
+            style={{
+              background: 'linear-gradient(180deg, rgba(107, 74, 58, 0.8) 0%, rgba(65, 7, 4, 0.8) 100%)',
+            }}
+          />
+          <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-14 text-center">
+            <h2
+              className="text-amber-100 text-6xl md:text-7xl font-bold mb-2 flex items-center justify-center gap-4"
+              style={{ fontFamily: 'Cinzel Decorative', fontWeight: 'bold' }}
+            >
+              <img
+                src="/Icons/ICONS/HEADPHONE.png"
+                alt="Headphone"
+                className="w-16 h-16"
+                style={{
+                  filter:
+                    'brightness(0) saturate(100%) invert(80%) sepia(60%) hue-rotate(30deg) saturate(120%)',
+                }}
+              />
+              AUDIO TOUR
+            </h2>
+          </div>
+        </div>
+
+        {/* Content section */}
+        <div className="w-full py-10" style={{ backgroundColor: '#410704' }}>
+          <div className="max-w-7xl mx-auto px-6 lg:px-14">
+            <div className="text-center mb-10">
+              <p className="text-amber-50 text-lg italic max-w-2xl mx-auto uppercase">
+                Experience Rumtek through an immersive audio-guided journey—its golden stupa, chanting halls,
+                and sacred courtyards brought to life through sound.
+              </p>
+            </div>
+
+            {/* Search Bar */}
+            <div className="mb-12 max-w-2xl mx-auto">
+              <div className="relative">
+                <svg
+                  className="absolute left-6 top-1/2 transform -translate-y-1/2 w-5 h-5 text-white"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+                <input
+                  type="text"
+                  placeholder="Search audio guides"
+                  className="w-full pl-16 pr-6 py-4 rounded-full text-amber-100 placeholder-amber-600 focus:outline-none focus:ring-2 focus:ring-amber-300"
+                  style={{
+                    backgroundColor: 'rgba(217, 119, 6, 0.2)',
+                    border: '2px solid rgba(217, 119, 6, 0.3)',
+                    backdropFilter: 'blur(10px)',
+                  }}
+                />
+              </div>
+            </div>
+
+            {/* Audio Tour Card */}
+            <div
+              className="max-w-4xl mx-auto rounded-3xl p-8"
+              style={{
+                backgroundColor: 'rgba(217, 119, 6, 0.15)',
+                border: '2px solid rgba(217, 119, 6, 0.3)',
+                backdropFilter: 'blur(10px)',
+              }}
+            >
+              <div className="grid md:grid-cols-2 gap-8 items-center">
+                {/* Image */}
+                <div className="rounded-2xl overflow-hidden group cursor-pointer">
+                  <img
+                    src="/rumtek/golden stupa.jpg"
+                    alt="Rumtek Monastery"
+                    className="w-full h-full object-cover rounded-2xl transition-transform duration-300 ease-out group-hover:scale-110 group-hover:brightness-110"
+                  />
+                </div>
+
+                {/* Audio Content */}
+                <div className="flex flex-col gap-6">
+                  <p className="text-amber-50 text-lg italic leading-relaxed">
+                    Walk through the courtyards of Rumtek as this guided audio takes you past the golden stupa,
+                    mural-lined corridors, and chanting halls, revealing stories of the Karmapa lineage and the
+                    monastery&apos;s rebirth in exile.
+                  </p>
+
+                  {/* Player Controls */}
+                  <div className="flex items-center justify-between gap-4">
+                    <button className="text-amber-100 hover:text-white transition">☰</button>
+                    <div
+                      className="flex-1 h-1 bg-gray-600 rounded cursor-pointer relative"
+                      onClick={handleProgressClick}
+                    >
+                      <div
+                        className="h-full bg-gradient-to-r from-amber-400 to-amber-200 rounded"
+                        style={{ width: `${progress}%` }}
+                      ></div>
+                    </div>
+                    <button
+                      onClick={toggleLike}
+                      className={`transition ${
+                        isLiked ? 'text-red-500' : 'text-amber-100 hover:text-white'
+                      }`}
+                    >
+                      {isLiked ? '❤' : '♡'}
+                    </button>
+                  </div>
+
+                  {/* Audio Element */}
+                  <audio
+                    ref={audioRef}
+                    src="/rumtek audio.mp4"
+                    onTimeUpdate={(e) => setCurrentTime(e.currentTarget.currentTime)}
+                    onLoadedMetadata={(e) => setDuration(e.currentTarget.duration)}
+                  />
+
+                  {/* Playback Controls */}
+                  <div className="flex items-center justify-center gap-6">
+                    <button
+                      onClick={fastRewind}
+                      className="text-amber-100 hover:text-white transition text-2xl hover:scale-110 active:scale-95"
+                    >
+                      ⏮
+                    </button>
+                    <button
+                      onClick={skipBackward}
+                      className="text-amber-100 hover:text-white transition text-2xl hover:scale-110 active:scale-95"
+                    >
+                      ◀
+                    </button>
+                    <button
+                      onClick={togglePlay}
+                      className="w-16 h-16 rounded-full bg-gradient-to-b from-amber-100 to-amber-200 flex items-center justify-center text-2xl text-amber-900 hover:scale-110 transition shadow-lg"
+                    >
+                      {isPlaying ? '⏸' : '▶'}
+                    </button>
+                    <button
+                      onClick={skipForward}
+                      className="text-amber-100 hover:text-white transition text-2xl hover:scale-110 active:scale-95"
+                    >
+                      ▶
+                    </button>
+                    <button
+                      onClick={fastForward}
+                      className="text-amber-100 hover:text-white transition text-2xl hover:scale-110 active:scale-95"
+                    >
+                      ⏭
+                    </button>
+                  </div>
+
+                  {/* Duration and Download */}
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2 text-amber-100">
+                      <span className="text-xl">⏱</span>
+                      <span className="font-semibold">
+                        {Math.floor(currentTime / 60)}:
+                        {String(Math.floor(currentTime % 60)).padStart(2, '0')} /{' '}
+                        {Math.floor(duration / 60)}:
+                        {String(Math.floor(duration % 60)).padStart(2, '0')}
+                      </span>
+                    </div>
+                    <button className="text-amber-100 hover:text-white transition text-2xl">⬇</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* VIRTUAL TOUR SECTION */}
+      <section
+        id="virtual-tour"
+        className="relative w-full py-20"
+        style={{ backgroundColor: '#410704' }}
+      >
+        <div className="max-w-7xl mx-auto px-6 lg:px-14">
+          {/* Header */}
+          <div
+            className="relative text-center mb-16 overflow-hidden rounded-3xl py-20"
+            style={{
+              marginLeft: 'calc(-100vw / 2 + 100% / 2)',
+              marginRight: 'calc(-100vw / 2 + 100% / 2)',
+            }}
+          >
+            {/* Video Background for Header Only */}
+            <div className="absolute inset-0">
+              <video
+                autoPlay
+                loop
+                muted
+                playsInline
+                className="absolute w-screen h-full object-cover opacity-70"
+              >
+                <source src="/virtual tour video.mp4" type="video/mp4" />
+              </video>
+              <div className="absolute inset-0 bg-gradient-to-b from-[#410704]/30 via-[#410704]/40 to-[#410704]/50"></div>
+            </div>
+
+            <div className="relative z-10">
+              <div className="inline-flex items-center gap-3 mb-6">
+                <img src="/Icons/ICONS/video tour icon.png" alt="Virtual Tour" className="w-12 h-12" />
+                <h2
+                  className="text-5xl font-bold text-amber-50 uppercase"
+                  style={{ fontFamily: 'Cinzel Decorative' }}
+                >
+                  Virtual Tour
+                </h2>
+              </div>
+              <p className="text-amber-50 text-lg italic max-w-3xl mx-auto">
+                Step into Rumtek Monastery digitally—explore its courtyards, prayer halls, and surrounding
+                hills in an immersive 360° experience.
+              </p>
+            </div>
+          </div>
+
+          {/* Content Grid */}
+          <div className="grid lg:grid-cols-2 gap-8">
+            {/* Left Side - Tour Features */}
+            <div className="space-y-6">
+              {/* Monastery Card */}
+              <div
+                className="rounded-3xl p-6"
+                style={{
+                  backgroundColor: 'rgba(120, 53, 15, 0.6)',
+                  border: '2px solid rgba(217, 119, 6, 0.3)',
+                  backdropFilter: 'blur(10px)',
+                }}
+              >
+                <div className="flex items-start gap-4">
+                  <div
+                    className="w-16 h-16 rounded-2xl bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center text-2xl font-extrabold text-amber-900"
+                    style={{ fontFamily: 'Cinzel Decorative' }}
+                  >
+                    R
+                  </div>
+                  <div className="flex-1">
+                    <h3
+                      className="text-2xl font-semibold text-amber-50 mb-2 uppercase"
+                      style={{ fontFamily: 'Cinzel' }}
+                    >
+                      Rumtek Monastery
+                    </h3>
+                    <div className="flex items-center gap-4 text-amber-200 text-sm mb-3">
+                      <span className="flex items-center gap-1">📍 East Sikkim</span>
+                      <span className="flex items-center gap-1">📅 Est 1966</span>
+                    </div>
+                    <span className="inline-block px-4 py-1 rounded-full text-sm font-medium text-amber-900 bg-amber-100">
+                      360° Tour Available
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Tour Features Box */}
+              <div
+                className="rounded-3xl p-6 h-96 flex flex-col overflow-hidden"
+                style={{
+                  backgroundColor: 'rgba(120, 53, 15, 0.5)',
+                  border: '2px solid rgba(217, 119, 6, 0.4)',
+                  backdropFilter: 'blur(10px)',
+                }}
+              >
+                <h3
+                  className="text-lg font-semibold text-amber-50 mb-4 uppercase"
+                  style={{ fontFamily: 'Cinzel' }}
+                >
+                  Tour Features
+                </h3>
+                <div className="space-y-3 flex-1 flex flex-col justify-center overflow-y-auto">
+                  <div
+                    className="flex items-start gap-3 transition-all duration-300 hover:scale-105 cursor-pointer p-2 rounded-lg hover:bg-opacity-60"
+                    style={{ backgroundColor: 'rgba(217, 119, 6, 0.1)' }}
+                  >
+                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-orange-400 to-amber-500 flex items-center justify-center flex-shrink-0">
+                      <span className="text-lg">🎯</span>
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h4 className="text-amber-100 font-semibold text-sm mb-0.5">
+                        Interactive Navigation
+                      </h4>
+                      <p className="text-amber-200 text-xs leading-snug truncate">
+                        Move freely through courtyards, halls, and stairways.
+                      </p>
+                    </div>
+                  </div>
+                  <div
+                    className="flex items-start gap-3 transition-all duration-300 hover:scale-105 cursor-pointer p-2 rounded-lg hover:bg-opacity-60"
+                    style={{ backgroundColor: 'rgba(217, 119, 6, 0.1)' }}
+                  >
+                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-amber-400 to-yellow-500 flex items-center justify-center flex-shrink-0">
+                      <span className="text-lg">🎧</span>
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h4 className="text-amber-100 font-semibold text-sm mb-0.5">
+                        Audio Narration
+                      </h4>
+                      <p className="text-amber-200 text-xs leading-snug truncate">
+                        Layered storytelling on history, art, and rituals.
+                      </p>
+                    </div>
+                  </div>
+                  <div
+                    className="flex items-start gap-3 transition-all duration-300 hover:scale-105 cursor-pointer p-2 rounded-lg hover:bg-opacity-60"
+                    style={{ backgroundColor: 'rgba(217, 119, 6, 0.1)' }}
+                  >
+                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-yellow-400 to-orange-500 flex items-center justify-center flex-shrink-0">
+                      <span className="text-lg">📱</span>
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h4 className="text-amber-100 font-semibold text-sm mb-0.5">
+                        Mobile Friendly
+                      </h4>
+                      <p className="text-amber-200 text-xs leading-snug truncate">
+                        Explore Rumtek from any device, anywhere.
+                      </p>
+                    </div>
+                  </div>
+                  <div
+                    className="flex items-start gap-3 transition-all duration-300 hover:scale-105 cursor-pointer p-2 rounded-lg hover:bg-opacity-60"
+                    style={{ backgroundColor: 'rgba(217, 119, 6, 0.1)' }}
+                  >
+                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-orange-300 to-amber-600 flex items-center justify-center flex-shrink-0">
+                      <span className="text-lg">🎨</span>
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h4 className="text-amber-100 font-semibold text-sm mb-0.5">
+                        High Resolution
+                      </h4>
+                      <p className="text-amber-200 text-xs leading-snug truncate">
+                        Crisp details of murals, stupas, and textures.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Right Side - Tour Preview */}
+            <div className="space-y-6">
+              {/* Start Tour Button */}
+              <button className="w-full py-6 rounded-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 transition-all duration-300 shadow-lg hover:shadow-xl flex items-center justify-center gap-3 group">
+                <span className="text-3xl group-hover:scale-110 transition-transform">▶</span>
+                <span className="text-2xl font-bold text-amber-900">Start Tour</span>
+              </button>
+
+              {/* Preview Box */}
+              <div
+                className="rounded-3xl overflow-hidden"
+                style={{
+                  backgroundColor: 'rgba(217, 119, 6, 0.15)',
+                  border: '2px solid rgba(217, 119, 6, 0.3)',
+                  backdropFilter: 'blur(10px)',
+                }}
+              >
+                <div className="h-[28rem] bg-gradient-to-br from-amber-900 to-orange-900 flex items-center justify-center">
+                  <div className="text-center text-amber-100">
+                    <div className="text-6xl mb-4">🏛️</div>
+                    <p className="text-lg">Virtual Tour Preview of Rumtek Monastery</p>
+                    <p className="text-sm text-amber-200 mt-2">
+                      Soon, you&apos;ll be able to move through every corner of the monastery—from the main
+                      courtyard to the monks&apos; living quarters—in a seamless 360° environment.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <Footer />
+    </main>
   );
 }
