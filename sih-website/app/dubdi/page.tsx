@@ -594,6 +594,23 @@ export default function DubdiMonastery() {
             backgroundColor: '#4b1f0f',
           }}
         >
+          {/* LEFT-HALF WATERMARK */}
+          <div
+            className="pointer-events-none absolute inset-y-0 left-0 w-1/2 opacity-45"
+            style={{
+              backgroundImage: "url('/design.png')",
+              backgroundRepeat: 'repeat',
+              backgroundSize: '500px auto',
+            }}
+          />
+          <div
+            className="absolute inset-y-0 right-0 w-[50%]"
+            style={{
+              backgroundColor: "#87522d",
+              opacity: 1,
+            }}
+          />
+
           {/* REAL CONTENT (ABOVE THE WATERMARK) */}
           <div className="relative z-10 max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12">
             {/* LEFT SIDE — Archive Cards */}
