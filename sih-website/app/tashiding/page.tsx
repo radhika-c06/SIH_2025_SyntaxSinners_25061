@@ -171,7 +171,7 @@ export default function TashidingMonastery() {
           </div>
 
           <div className="p-4">
-            <h3 className="text-sm font-semibold text-amber-100 line-clamp-2">{item.title}</h3>
+            <h3 className="text-sm font-semibold text-amber-100 line-clamp-2 uppercase" style={{ fontFamily: 'Cinzel' }}>{item.title}</h3>
             <div className="mt-1 text-xs text-amber-200">
               {item.monastery} • {item.location}
             </div>
@@ -428,12 +428,30 @@ export default function TashidingMonastery() {
 
         {/* FULL WIDTH CONTENT AREA */}
         <div
-          className="w-screen min-h-[70vh] py-12 px-6 md:px-12 relative"
+          className="relative w-screen min-h-[70vh] py-12 px-6 md:px-12"
           style={{
-            backgroundColor: '#a66437',
+            backgroundColor: '#4b1f0f',
           }}
         >
-          <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12">
+          {/* LEFT-HALF WATERMARK */}
+          <div
+            className="pointer-events-none absolute inset-y-0 left-0 w-1/2 opacity-45"
+            style={{
+              backgroundImage: "url('/rumtek/rumtekbg.png')",
+              backgroundRepeat: 'repeat',
+              backgroundSize: '500px auto',
+            }}
+          />
+          <div
+            className="absolute inset-y-0 right-0 w-[50%]"
+            style={{
+              backgroundColor: "#87522d",
+              opacity: 1,
+            }}
+          />
+
+          {/* REAL CONTENT (ABOVE THE WATERMARK) */}
+          <div className="relative z-10 max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12">
             {/* LEFT SIDE — Archive Cards */}
             <div className="flex flex-col gap-6">
               {tashidingArchiveItems.map((it) => (
@@ -585,7 +603,7 @@ export default function TashidingMonastery() {
                     style={{ top: 'calc(50% - 160px)', zIndex:2 }}>
                     <p className="text-xs font-semibold text-amber-900 mb-1">February – March</p>
                     <p className="text-xs text-amber-900 mb-2">1st Tibetan Month — 14th–15th day</p>
-                    <h3 className="text-lg font-bold text-amber-900">Bhumchu Festival</h3>
+                    <h3 className="text-lg font-bold text-amber-900 uppercase" style={{ fontFamily: 'Cinzel' }}>Bhumchu Festival</h3>
                   </div>
                   <div className="absolute left-1/2 transform -translate-x-1/2"
                     style={{ top: 'calc(50% - 64px)', width: '4px', height: '64px', backgroundColor: '#fcd34d' }} />
@@ -604,7 +622,7 @@ export default function TashidingMonastery() {
                     style={{ top: 'calc(50% + 72px)' }}>
                     <p className="text-xs font-semibold text-white mb-1">May – June</p>
                     <p className="text-xs text-white mb-2">4th Tibetan Month — Full-moon day</p>
-                    <h3 className="text-lg font-bold text-white">Saga Dawa</h3>
+                    <h3 className="text-lg font-bold text-white uppercase" style={{ fontFamily: 'Cinzel' }}>Saga Dawa</h3>
                   </div>
                 </Reveal>
               </div>
@@ -615,7 +633,7 @@ export default function TashidingMonastery() {
                     style={{ top: 'calc(50% - 160px)', zIndex:2 }}>
                     <p className="text-xs font-semibold text-white mb-1">October – November</p>
                     <p className="text-xs text-white mb-2">9th Tibetan Month — 22nd day</p>
-                    <h3 className="text-lg font-bold text-white">Lhabab Düchen</h3>
+                    <h3 className="text-lg font-bold text-white uppercase" style={{ fontFamily: 'Cinzel' }}>Lhabab Düchen</h3>
                   </div>
                   <div className="absolute left-1/2 transform -translate-x-1/2"
                     style={{ top: 'calc(50% - 64px)', width: '4px', height: '64px', backgroundColor: '#fb923c' }} />
@@ -634,7 +652,7 @@ export default function TashidingMonastery() {
                     style={{ top: 'calc(50% + 72px)' }}>
                     <p className="text-xs font-semibold text-white mb-1">February (varies yearly)</p>
                     <p className="text-xs text-white mb-2">1st Tibetan Month — 1st–3rd day</p>
-                    <h3 className="text-lg font-bold text-white">Losar (Tibetan New Year)</h3>
+                    <h3 className="text-lg font-bold text-white uppercase" style={{ fontFamily: 'Cinzel' }}>Losar (Tibetan New Year)</h3>
                   </div>
                 </Reveal>
               </div>
