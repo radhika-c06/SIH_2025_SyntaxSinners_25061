@@ -740,13 +740,13 @@ export default function TashidingMonastery() {
                   type="text"
                   placeholder="Search audio guides"
                   className="w-full pl-16 pr-6 py-4 rounded-full text-amber-100 placeholder-amber-600 focus:outline-none focus:ring-2 focus:ring-amber-300"
-                  style={{ backgroundColor: '#4a2f2f' }}
+                  style={{ backgroundColor: 'rgba(217, 119, 6, 0.2)', border: '2px solid rgba(217, 119, 6, 0.3)', backdropFilter: 'blur(10px)' }}
                 />
               </div>
             </div>
 
             {/* Audio Tour Card */}
-            <div className="max-w-4xl mx-auto rounded-3xl p-8" style={{ backgroundColor: '#4a2f2f', border: '2px solid #5c3d23' }}>
+            <div className="max-w-4xl mx-auto rounded-3xl p-8" style={{ backgroundColor: 'rgba(217, 119, 6, 0.15)', border: '2px solid rgba(217, 119, 6, 0.3)', backdropFilter: 'blur(10px)' }}>
             <div className="grid md:grid-cols-2 gap-8 items-center">
               {/* Image */}
               <div className="rounded-2xl overflow-hidden">
