@@ -582,7 +582,7 @@ export default function TashidingMonastery() {
       <section className="relative w-full py-20" style={{ backgroundColor: '#410704' }}>
         <div className="max-w-7xl mx-auto px-6 lg:px-14">
           <Reveal>
-              <h2 className="font-cinzel-decorative font-medium text-6xl md:text-7xl text-amber-100 mb-16 text-center">
+              <h2 className="text-6xl md:text-7xl text-amber-100 mb-16 text-center font-bold" style={{ fontFamily: 'Cinzel Decorative', fontWeight: 'bold' }}>
               Cultural Calendar
             </h2>
           </Reveal>
@@ -708,6 +708,109 @@ export default function TashidingMonastery() {
               </Reveal>
             </div>
           </Reveal>
+        </div>
+      </section>
+
+      {/* AUDIO TOUR SECTION */}
+      <section className="relative w-full py-0" style={{ backgroundColor: '#410704' }}>
+        {/* Heading with video background */}
+        <div className="relative w-full overflow-hidden" style={{ paddingTop: '5rem', paddingBottom: '5rem' }}>
+          {/* Background video */}
+          <video
+            src="/audio tour vid.mp4"
+            autoPlay
+            muted
+            loop
+            playsInline
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+          {/* Gradient overlay */}
+          <div
+            className="absolute inset-0"
+            style={{
+              background: 'linear-gradient(180deg, rgba(107, 74, 58, 0.8) 0%, rgba(65, 7, 4, 0.8) 100%)',
+            }}
+          />
+          <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-14 text-center">
+            <h2 className="text-amber-100 text-6xl md:text-7xl font-bold mb-2 flex items-center justify-center gap-4" style={{ fontFamily: 'Cinzel Decorative', fontWeight: 'bold' }}>
+              <img src="/Icons/ICONS/HEADPHONE.png" alt="Headphone" className="w-16 h-16" style={{ filter: 'brightness(0) saturate(100%) invert(80%) sepia(60%) hue-rotate(30deg) saturate(120%)' }} />
+              AUDIO TOUR
+            </h2>
+          </div>
+        </div>
+
+        {/* Content section */}
+        <div className="w-full py-10" style={{ backgroundColor: '#410704' }}>
+          <div className="max-w-7xl mx-auto px-6 lg:px-14">
+            <div className="text-center mb-10">
+              <p className="text-amber-50 text-lg italic max-w-2xl mx-auto uppercase">
+                Experience immersive audio guided tour covering architecture, history, and spiritual significance. Available in multiple languages with offline mode for remote monastery visits.
+              </p>
+            </div>
+
+            {/* Search Bar */}
+            <div className="mb-12 max-w-2xl mx-auto">
+              <div className="relative">
+                <svg className="absolute left-6 top-1/2 transform -translate-y-1/2 w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clipRule="evenodd" />
+                </svg>
+                <input
+                  type="text"
+                  placeholder="Search audio guides"
+                  className="w-full pl-16 pr-6 py-4 rounded-full text-amber-100 placeholder-amber-600 focus:outline-none focus:ring-2 focus:ring-amber-300"
+                  style={{ backgroundColor: 'rgba(217, 119, 6, 0.2)', border: '2px solid rgba(217, 119, 6, 0.3)', backdropFilter: 'blur(10px)' }}
+                />
+              </div>
+            </div>
+
+            {/* Audio Tour Card */}
+            <div className="max-w-4xl mx-auto rounded-3xl p-8" style={{ backgroundColor: 'rgba(217, 119, 6, 0.15)', border: '2px solid rgba(217, 119, 6, 0.3)', backdropFilter: 'blur(10px)' }}>
+            <div className="grid md:grid-cols-2 gap-8 items-center">
+              {/* Image */}
+              <div className="rounded-2xl overflow-hidden group cursor-pointer">
+                <img
+                  src="/tashiding/prayer flags and mountain views of tashiding monastery.jpg"
+                  alt="Tashiding Monastery"
+                  className="w-full h-full object-cover rounded-2xl transition-transform duration-300 ease-out group-hover:scale-110 group-hover:brightness-110"
+                />
+              </div>
+
+              {/* Audio Content */}
+              <div className="flex flex-col gap-6">
+                <p className="text-amber-50 text-lg italic leading-relaxed">
+                  Visit this sacred monastery perched on a hilltop, famous for its annual Bhumchu festival and ancient Buddhist scriptures dating back centuries.
+                </p>
+
+                {/* Player Controls */}
+                <div className="flex items-center justify-between gap-4">
+                  <button className="text-amber-100 hover:text-white transition">☰</button>
+                  <div className="flex-1 h-1 bg-gradient-to-r from-amber-400 to-amber-200 rounded"></div>
+                  <button className="text-amber-100 hover:text-white transition">♡</button>
+                </div>
+
+                {/* Playback Controls */}
+                <div className="flex items-center justify-center gap-6">
+                  <button className="text-amber-100 hover:text-white transition text-2xl">⏮</button>
+                  <button className="text-amber-100 hover:text-white transition text-2xl">◀</button>
+                  <button className="w-16 h-16 rounded-full bg-gradient-to-b from-amber-100 to-amber-200 flex items-center justify-center text-2xl text-amber-900 hover:scale-110 transition shadow-lg">
+                    ▶
+                  </button>
+                  <button className="text-amber-100 hover:text-white transition text-2xl">▶</button>
+                  <button className="text-amber-100 hover:text-white transition text-2xl">⏭</button>
+                </div>
+
+                {/* Duration and Download */}
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2 text-amber-100">
+                    <span className="text-xl">⏱</span>
+                    <span className="font-semibold">5mins</span>
+                  </div>
+                  <button className="text-amber-100 hover:text-white transition text-2xl">⬇</button>
+                </div>
+              </div>
+            </div>
+            </div>
+          </div>
         </div>
       </section>
 
