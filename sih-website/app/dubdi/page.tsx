@@ -525,12 +525,13 @@ export default function DubdiMonastery() {
 
         {/* FULL WIDTH CONTENT AREA */}
         <div
-          className="w-screen min-h-[70vh] py-12 px-6 md:px-12 relative"
+          className="relative w-screen min-h-[70vh] py-12 px-6 md:px-12"
           style={{
-            backgroundColor: '#a66437',
+            backgroundColor: '#4b1f0f',
           }}
         >
-          <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12">
+          {/* REAL CONTENT (ABOVE THE WATERMARK) */}
+          <div className="relative z-10 max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12">
             {/* LEFT SIDE — Archive Cards */}
             <div className="flex flex-col gap-6">
               {dubdiArchiveItems.map((it) => (
@@ -579,11 +580,11 @@ export default function DubdiMonastery() {
 
                   {/* Content */}
                   <div className="p-6 md:p-8">
-                    <h2 className="text-2xl font-semibold text-amber-100">{activeItem.title}</h2>
+                    <h2 className="text-2xl font-semibold text-amber-100" style={{ fontFamily: 'Cinzel' }}>{activeItem.title}</h2>
 
                     {/* OCR ONLY */}
                     <div className="mt-5">
-                      <h3 className="font-medium mb-2 text-amber-100">OCR Snippet</h3>
+                      <h3 className="font-medium mb-2 text-amber-100" style={{ fontFamily: 'Cinzel' }}>OCR Snippet</h3>
                       <div
                         className="rounded-xl p-4 text-sm text-amber-50"
                         style={{
