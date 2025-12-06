@@ -727,7 +727,7 @@ export default function TashidingMonastery() {
         <div className="w-full py-10" style={{ backgroundColor: '#410704' }}>
           <div className="max-w-7xl mx-auto px-6 lg:px-14">
             <div className="text-center mb-10">
-              <p className="text-amber-50 text-lg italic max-w-2xl mx-auto">
+              <p className="text-amber-50 text-lg italic max-w-2xl mx-auto" style={{ fontFamily: 'Cinzel', fontStyle: 'italic' }}>
                 Experience immersive audio guided tour covering architecture, history, and spiritual significance. Available in multiple languages with offline mode for remote monastery visits.
               </p>
             </div>
