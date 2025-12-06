@@ -582,7 +582,7 @@ export default function TashidingMonastery() {
       <section className="relative w-full py-20" style={{ backgroundColor: '#410704' }}>
         <div className="max-w-7xl mx-auto px-6 lg:px-14">
           <Reveal>
-              <h2 className="font-cinzel-decorative font-medium text-6xl md:text-7xl text-amber-100 mb-16 text-center">
+              <h2 className="text-6xl md:text-7xl text-amber-100 mb-16 text-center font-bold" style={{ fontFamily: 'Cinzel Decorative', fontWeight: 'bold' }}>
               Cultural Calendar
             </h2>
           </Reveal>
