@@ -553,7 +553,7 @@ export default function DubdiMonastery() {
             </div>
           </div>
 
-          {/* Detail Modal – ONLY OCR snippet */}
+        {/* Detail Modal – ONLY OCR snippet */}
           {openDialog && activeItem && (
             <div
               className="fixed inset-0 z-50 flex items-center justify-center p-4"
@@ -631,7 +631,7 @@ export default function DubdiMonastery() {
             <div className="grid grid-cols-4 gap-0 relative" style={{ minHeight: '360px' }}>
               <div className="relative">
                 <Reveal delay={0.1}>
-                  <div className="absolute left-1/2 transform -translate-x-1/2 rounded-2xl bg-gradient-to-br from-yellow-300 to-yellow-200 border-4 border-yellow-400 p-4 w-44 shadow-lg"
+                  <div className="absolute left-1/2 transform -translate-x-1/2 rounded-2xl bg-gradient-to-br from-yellow-300 to-yellow-200 border-4 border-yellow-400 p-4 w-44 min-h-[150px] shadow-lg"
                     style={{ top: 'calc(50% - 160px)', zIndex:2 }}>
                     <p className="text-xs font-semibold text-amber-900 mb-1">February – March</p>
                     <p className="text-xs text-amber-900 mb-2">1st Tibetan Month</p>
@@ -650,7 +650,7 @@ export default function DubdiMonastery() {
                     style={{ top: '50%', width: '32px', height: '32px', backgroundColor: '#f59e0b', border: '4px solid #b45309', zIndex: -1 }} />
                   <div className="absolute left-1/2 transform -translate-x-1/2"
                     style={{ top: '50%', width: '4px', height: '80px', backgroundColor: '#eab308', zIndex:-2 }} />
-                  <div className="absolute left-1/2 transform -translate-x-1/2 rounded-2xl bg-gradient-to-br from-yellow-500 to-yellow-400 border-4 border-yellow-600 p-4 w-44 shadow-lg"
+                  <div className="absolute left-1/2 transform -translate-x-1/2 rounded-2xl bg-gradient-to-br from-yellow-500 to-yellow-400 border-4 border-yellow-600 p-4 w-44 min-h-[150px] shadow-lg"
                     style={{ top: 'calc(50% + 72px)' }}>
                     <p className="text-xs font-semibold text-white mb-1">February (varies)</p>
                     <p className="text-xs text-white mb-2">1st Tibetan Month — 14th–15th day</p>
@@ -661,7 +661,7 @@ export default function DubdiMonastery() {
 
               <div className="relative">
                 <Reveal delay={0.3}>
-                  <div className="absolute left-1/2 transform -translate-x-1/2 rounded-2xl bg-gradient-to-br from-orange-500 to-orange-400 border-4 border-orange-600 p-4 w-44 shadow-lg"
+                  <div className="absolute left-1/2 transform -translate-x-1/2 rounded-2xl bg-gradient-to-br from-orange-500 to-orange-400 border-4 border-orange-600 p-4 w-44 min-h-[150px] shadow-lg"
                     style={{ top: 'calc(50% - 160px)', zIndex:2 }}>
                     <p className="text-xs font-semibold text-white mb-1">May – June</p>
                     <p className="text-xs text-white mb-2">4th Tibetan Month</p>
@@ -680,7 +680,7 @@ export default function DubdiMonastery() {
                     style={{ top: '50%', width: '32px', height: '32px', backgroundColor: '#f59e0b', border: '4px solid #b45309', zIndex: -1 }} />
                   <div className="absolute left-1/2 transform -translate-x-1/2"
                     style={{ top: '50%', width: '4px', height: '80px', backgroundColor: '#eab308', zIndex:-2 }} />
-                  <div className="absolute left-1/2 transform -translate-x-1/2 rounded-2xl bg-gradient-to-br from-yellow-600 to-yellow-500 border-4 border-yellow-700 p-4 w-44 shadow-lg"
+                  <div className="absolute left-1/2 transform -translate-x-1/2 rounded-2xl bg-gradient-to-br from-yellow-600 to-yellow-500 border-4 border-yellow-700 p-4 w-44 min-h-[150px] shadow-lg"
                     style={{ top: 'calc(50% + 72px)' }}>
                     <p className="text-xs font-semibold text-white mb-1">July – August</p>
                     <p className="text-xs text-white mb-2">5th Tibetan Month — 10th day</p>
