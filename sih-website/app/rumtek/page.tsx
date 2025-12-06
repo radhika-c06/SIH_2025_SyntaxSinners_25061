@@ -10,6 +10,17 @@ export default function RumtekMonastery() {
   const [openDialog, setOpenDialog] = useState(false);
   const [activeItem, setActiveItem] = useState<any | null>(null);
 
+   const scrollToSection = (id: string) => {
+    if (typeof document === 'undefined') return;
+    const el = document.getElementById(id);
+    if (!el) return;
+
+    el.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start',
+    });
+  };
+
   const images = [
     { src: '/rumtek/rumtek 1.avif', alt: 'Rumtek 1' },
     { src: '/rumtek/rumtek 2.jpg', alt: 'Rumtek 2' },
@@ -274,6 +285,8 @@ export default function RumtekMonastery() {
     </div>
   );
 
+  
+
   return (
     <main className="overflow-hidden">
       <Nav />
@@ -397,23 +410,35 @@ export default function RumtekMonastery() {
         </div>
 
         {/* Hero Buttons */}
-        <div className="flex justify-center gap-4 mt-10 flex-wrap px-8">
-          {['Overview', 'Digital Archive', 'Audio Tour', 'Virtual Tour', 'Cultural Calendar'].map(
-            (btn, i) => (
-              <button
-                key={i}
-                className="px-8 py-3 bg-amber-200 text-amber-900 rounded-full font-bold uppercase hover:bg-amber-100 transition"
-                style={{ fontFamily: 'Cinzel' }}
-              >
-                {btn}
-              </button>
-            ),
-          )}
-        </div>
+        {/* Hero Buttons */}
+<div className="flex justify-center gap-4 mt-10 flex-wrap px-8">
+  {[
+    { label: 'Overview', target: 'overview' },
+    { label: 'Digital Archive', target: 'digital-archive' },
+    { label: 'Audio Tour', target: 'audio-tour' },           // optional – section later
+    { label: 'Virtual Tour', target: 'virtual-tour' },       // optional – section later
+    { label: 'Cultural Calendar', target: 'cultural-calendar' },
+  ].map((btn, i) => (
+    <button
+      key={btn.label}
+      onClick={() => scrollToSection(btn.target)}            // 👈 scroll on click
+      className="px-8 py-3 bg-amber-200 text-amber-900 rounded-full font-bold uppercase hover:bg-amber-100 transition"
+      style={{ fontFamily: 'Cinzel' }}
+    >
+      {btn.label}
+    </button>
+  ))}
+</div>
+
       </section>
 
       {/* OVERVIEW SECTION */}
-      <section className="relative w-full py-20" style={{ backgroundColor: '#410704' }}>
+<section
+  id="overview"                       // 👈 add this
+  className="relative w-full py-20"
+  style={{ backgroundColor: '#410704' }}
+>
+
         <div className="w-full max-w-7xl xl:max-w-[95rem] mx-auto px-6 lg:px-14">
           <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,2.1fr)_minmax(0,0.9fr)] gap-10 xl:gap-12 items-start">
             {/* LEFT: TEXT */}
@@ -566,7 +591,7 @@ export default function RumtekMonastery() {
   <div
     className="pointer-events-none absolute inset-y-0 left-0 w-1/2 opacity-45"
     style={{
-      backgroundImage: "url('/rumtek/rumtekbg.png')",
+      backgroundImage: "url('/design.png')",
       backgroundRepeat: 'repeat',
       backgroundSize: '500px auto',
     }}
@@ -669,16 +694,48 @@ export default function RumtekMonastery() {
       </section>
 
       {/* CULTURAL CALENDAR SECTION */}
+
+{/* CULTURAL CALENDAR SECTION */}
 <section
-  className="relative w-full py-20"
+  id="cultural-calendar"
+  className="relative w-full"
   style={{ backgroundColor: '#410704' }}
 >
-  <div className="max-w-7xl mx-auto px-6 lg:px-14">
-    <Reveal>
-      <h2 className="font-cinzel-decorative font-medium text-6xl md:text-7xl text-amber-100 mb-28 text-center">
-        Cultural Calendar
-      </h2>
-    </Reveal>
+  {/* TOP BAR WITH VIDEO */}
+  <div className="relative w-screen h-56 md:h-72 lg:h-80 overflow-hidden flex items-center">
+    <video
+      src="/cultural calendar vid.mp4"
+      autoPlay
+      muted
+      loop
+      playsInline
+      className="absolute inset-0 w-full h-full object-cover"
+    />
+
+    {/* Gradient overlay (same as Digital Archive) */}
+    <div
+      className="absolute inset-0"
+      style={{
+        background:
+          'linear-gradient(90deg, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.45) 35%, rgba(0,0,0,0.1) 100%)',
+      }}
+    />
+
+    {/* Center Title */}
+    <div className="relative z-10 w-full flex items-center justify-center">
+      <div className="flex items-center gap-3">
+        <h3
+          className="text-amber-100 text-3xl md:text-4xl font-semibold tracking-[0.25em] uppercase font-cinzel-decorative"
+        >
+          CULTURAL CALENDAR
+        </h3>
+      </div>
+    </div>
+  </div>
+
+  {/* ORIGINAL CONTENT BELOW VIDEO */}
+  <div className="max-w-7xl mx-auto px-6 lg:px-14 py-20">
+    
 
     {/* TIMELINE STRIP */}
     <div className="relative" style={{ paddingTop: '150px', paddingBottom: '0px' }}>
@@ -701,7 +758,7 @@ export default function RumtekMonastery() {
           <Reveal delay={0.1}>
             <div
               className="absolute left-1/2 transform -translate-x-1/2 rounded-2xl bg-gradient-to-br from-yellow-300 to-yellow-200 border-4 border-yellow-400 p-4 w-44 shadow-lg"
-              style={{ top: 'calc(50% - 160px)', zIndex: 2 }}
+              style={{ top: 'calc(50% - 180px)', zIndex: 2 }}
             >
               <p className="text-xs font-semibold text-amber-900 mb-1">
                 June – July
@@ -787,7 +844,7 @@ export default function RumtekMonastery() {
           <Reveal delay={0.3}>
             <div
               className="absolute left-1/2 transform -translate-x-1/2 rounded-2xl bg-gradient-to-br from-orange-500 to-orange-400 border-4 border-orange-600 p-4 w-44 shadow-lg"
-              style={{ top: 'calc(50% - 160px)', zIndex: 2 }}
+              style={{ top: 'calc(50% - 190px)', zIndex: 2 }}
             >
               <p className="text-xs font-semibold text-white mb-1">
                 December
@@ -880,7 +937,10 @@ export default function RumtekMonastery() {
                 Rumtek Tse-Chu Cham Festival
               </h3>
               <p className="text-sm text-amber-50 leading-relaxed">
-                At Rumtek, Tse-Chu is marked by powerful cham mask dances in the main courtyard. Monks perform elaborate rituals dedicated to Guru Padmasambhava and protective deities, while devotees watch from the galleries, receive blessings, and make offerings for protection, healing, and harmony for the year ahead.
+                At Rumtek, Tse-Chu is marked by powerful cham mask dances in the main courtyard. Monks
+                perform elaborate rituals dedicated to Guru Padmasambhava and protective deities, while
+                devotees watch from the galleries, receive blessings, and make offerings for protection,
+                healing, and harmony for the year ahead.
               </p>
             </div>
           </Reveal>
@@ -892,7 +952,11 @@ export default function RumtekMonastery() {
                 Saga Dawa
               </h3>
               <p className="text-sm text-amber-50 leading-relaxed">
-                Saga Dawa commemorates the Buddha&apos;s birth, enlightenment, and parinirvana. At Rumtek, monks hold extended pujas and recitations, light thousands of butter lamps, and lead circumambulations of the monastery. Local devotees join in merit-making, charity, and silent prayer, treating this “triple blessed day” as the most auspicious time in the Buddhist year.
+                Saga Dawa commemorates the Buddha&apos;s birth, enlightenment, and parinirvana. At Rumtek,
+                monks hold extended pujas and recitations, light thousands of butter lamps, and lead
+                circumambulations of the monastery. Local devotees join in merit-making, charity, and
+                silent prayer, treating this &quot;triple blessed day&quot; as the most auspicious time in
+                the Buddhist year.
               </p>
             </div>
           </Reveal>
@@ -904,7 +968,10 @@ export default function RumtekMonastery() {
                 Losoong / Sonam Losoong
               </h3>
               <p className="text-sm text-amber-50 leading-relaxed">
-                Losoong is the Sikkimese New Year and harvest-thanksgiving festival. At Rumtek, the year closes with joyous cham dances, ritual offerings, and gatherings of Bhutia and Lepcha families. The monastery becomes a space of celebration and gratitude—marking the end of the agricultural cycle and inviting good fortune for the coming year.
+                Losoong is the Sikkimese New Year and harvest-thanksgiving festival. At Rumtek, the year
+                closes with joyous cham dances, ritual offerings, and gatherings of Bhutia and Lepcha
+                families. The monastery becomes a space of celebration and gratitude—marking the end of
+                the agricultural cycle and inviting good fortune for the coming year.
               </p>
             </div>
           </Reveal>
@@ -916,7 +983,10 @@ export default function RumtekMonastery() {
                 Losar (Tibetan New Year)
               </h3>
               <p className="text-sm text-amber-50 leading-relaxed">
-                Losar marks the start of the Tibetan New Year. In Rumtek, the festival begins with intensive year-end purification rites and offerings, followed by New Year prayers, raising of fresh prayer flags, and vibrant community celebrations. Families visit the monastery to make offerings, seek the Karmapa&apos;s blessing, and step into the new year with renewed intention.
+                Losar marks the start of the Tibetan New Year. In Rumtek, the festival begins with intensive
+                year-end purification rites and offerings, followed by New Year prayers, raising of fresh
+                prayer flags, and vibrant community celebrations. Families visit the monastery to make
+                offerings, seek blessings, and step into the new year with renewed intention.
               </p>
             </div>
           </Reveal>
@@ -925,7 +995,9 @@ export default function RumtekMonastery() {
         <Reveal delay={0.95}>
           <div className="rounded-3xl bg-gradient-to-r from-orange-900/20 to-amber-900/20 backdrop-blur-md border border-amber-500/20 p-8">
             <p className="text-base text-amber-50 leading-relaxed font-light">
-              Together, these festivals trace the spiritual heartbeat of Rumtek. They turn the monastery&apos;s courtyards into living stages of dance, ritual, and prayer; binding monks, pilgrims, and local communities into a shared rhythm of remembrance, renewal, and devotion across the Himalayan year.
+              Together, these festivals trace the spiritual heartbeat of Rumtek. They turn the monastery&apos;s
+              courtyards into living stages of dance, ritual, and prayer; binding monks, pilgrims, and local
+              communities into a shared rhythm of remembrance, renewal, and devotion across the Himalayan year.
             </p>
           </div>
         </Reveal>
@@ -934,8 +1006,10 @@ export default function RumtekMonastery() {
   </div>
 </section>
 
+<Footer />
+</main>
 
-      <Footer />
-    </main>
+
+
   );
 }
