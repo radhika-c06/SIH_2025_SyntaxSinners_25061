@@ -814,6 +814,107 @@ export default function TashidingMonastery() {
         </div>
       </section>
 
+      {/* VIRTUAL TOUR SECTION */}
+      <section className="relative w-full py-20" style={{ backgroundColor: '#410704' }}>
+        <div className="max-w-7xl mx-auto px-6 lg:px-14">
+          {/* Header */}
+          <div className="text-center mb-16">
+            <div className="inline-flex items-center gap-3 mb-6">
+              <img src="/Icons/ICONS/HEADPHONE.png" alt="Virtual Tour" className="w-12 h-12" />
+              <h2 className="text-5xl font-bold text-amber-50 uppercase" style={{ fontFamily: 'Cinzel Decorative' }}>
+                Virtual Tour
+              </h2>
+            </div>
+            <p className="text-amber-50 text-lg italic max-w-3xl mx-auto">
+              Immerse yourself in 360° experiences of Sikkim's most sacred monasteries. Explore ancient halls, prayer rooms, and witness centuries of spiritual heritage.
+            </p>
+          </div>
+
+          {/* Content Grid */}
+          <div className="grid lg:grid-cols-2 gap-8">
+            {/* Left Side - Tour Features */}
+            <div className="space-y-6">
+              {/* Monastery Card */}
+              <div className="rounded-3xl p-6" style={{ backgroundColor: 'rgba(120, 53, 15, 0.6)', border: '2px solid rgba(217, 119, 6, 0.3)', backdropFilter: 'blur(10px)' }}>
+                <div className="flex items-start gap-4">
+                  <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center text-2xl font-bold text-amber-900">
+                    T
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="text-2xl font-semibold text-amber-50 mb-2">Tashiding Monastery</h3>
+                    <div className="flex items-center gap-4 text-amber-200 text-sm mb-3">
+                      <span className="flex items-center gap-1">
+                        📍 West Sikkim
+                      </span>
+                      <span className="flex items-center gap-1">
+                        📅 Est 1641
+                      </span>
+                    </div>
+                    <span className="inline-block px-4 py-1 rounded-full text-sm font-medium text-amber-900 bg-amber-100">
+                      360° Tour Available
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Tour Features Box */}
+              <div className="rounded-3xl p-8" style={{ backgroundColor: 'rgba(217, 119, 6, 0.15)', border: '2px solid rgba(217, 119, 6, 0.3)', backdropFilter: 'blur(10px)' }}>
+                <h3 className="text-2xl font-semibold text-amber-50 mb-6 uppercase" style={{ fontFamily: 'Cinzel' }}>Tour Features</h3>
+                <div className="space-y-4">
+                  <div className="flex items-start gap-3">
+                    <span className="text-2xl">🎯</span>
+                    <div>
+                      <h4 className="text-amber-100 font-semibold mb-1">Interactive Navigation</h4>
+                      <p className="text-amber-200 text-sm">Move freely through sacred spaces with intuitive controls</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <span className="text-2xl">🎧</span>
+                    <div>
+                      <h4 className="text-amber-100 font-semibold mb-1">Audio Narration</h4>
+                      <p className="text-amber-200 text-sm">Guided commentary in multiple languages</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <span className="text-2xl">📱</span>
+                    <div>
+                      <h4 className="text-amber-100 font-semibold mb-1">Mobile Friendly</h4>
+                      <p className="text-amber-200 text-sm">Experience the tour on any device</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <span className="text-2xl">🎨</span>
+                    <div>
+                      <h4 className="text-amber-100 font-semibold mb-1">High Resolution</h4>
+                      <p className="text-amber-200 text-sm">Crystal clear imagery capturing every detail</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Right Side - Tour Preview */}
+            <div className="space-y-6">
+              {/* Start Tour Button */}
+              <button className="w-full py-6 rounded-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 transition-all duration-300 shadow-lg hover:shadow-xl flex items-center justify-center gap-3 group">
+                <span className="text-3xl group-hover:scale-110 transition-transform">▶</span>
+                <span className="text-2xl font-bold text-amber-900">Start Tour</span>
+              </button>
+
+              {/* Preview Box */}
+              <div className="rounded-3xl overflow-hidden" style={{ backgroundColor: 'rgba(217, 119, 6, 0.15)', border: '2px solid rgba(217, 119, 6, 0.3)', backdropFilter: 'blur(10px)' }}>
+                <div className="h-80 bg-gradient-to-br from-amber-900 to-orange-900 flex items-center justify-center">
+                  <div className="text-center text-amber-100">
+                    <div className="text-6xl mb-4">🏛️</div>
+                    <p className="text-lg">Virtual Tour Preview</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <Footer />
     </main>
   );
