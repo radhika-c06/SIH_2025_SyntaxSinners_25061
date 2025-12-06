@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Reveal from '@/components/Reveal';
 // Removed MonasterySlideshow and ExploreCarouselMount per page requirements
 import Nav from '@/components/Nav';
@@ -12,6 +12,62 @@ export default function TashidingMonastery() {
   const [activeSidebarItem, setActiveSidebarItem] = useState('overview');
   const [openDialog, setOpenDialog] = useState(false);
   const [activeItem, setActiveItem] = useState<any | null>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [isLiked, setIsLiked] = useState(false);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(0);
+  const audioRef = useRef<HTMLAudioElement>(null);
+
+  const togglePlay = () => {
+    if (audioRef.current) {
+      if (isPlaying) {
+        audioRef.current.pause();
+      } else {
+        audioRef.current.play();
+      }
+      setIsPlaying(!isPlaying);
+    }
+  };
+
+  const skipForward = () => {
+    if (audioRef.current) {
+      audioRef.current.currentTime += 10;
+    }
+  };
+
+  const skipBackward = () => {
+    if (audioRef.current) {
+      audioRef.current.currentTime -= 10;
+    }
+  };
+
+  const fastForward = () => {
+    if (audioRef.current) {
+      audioRef.current.currentTime = Math.min(audioRef.current.currentTime + 30, duration);
+    }
+  };
+
+  const fastRewind = () => {
+    if (audioRef.current) {
+      audioRef.current.currentTime = Math.max(audioRef.current.currentTime - 30, 0);
+    }
+  };
+
+  const toggleLike = () => {
+    setIsLiked(!isLiked);
+  };
+
+  const handleProgressClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (audioRef.current) {
+      const progressBar = e.currentTarget;
+      const clickX = e.clientX - progressBar.getBoundingClientRect().left;
+      const width = progressBar.offsetWidth;
+      const clickedTime = (clickX / width) * duration;
+      audioRef.current.currentTime = clickedTime;
+    }
+  };
+
+  const progress = duration > 0 ? (currentTime / duration) * 100 : 0;
 
   const sidebarItems = [
     { id: 'overview', label: 'Overview' },
@@ -579,14 +635,42 @@ export default function TashidingMonastery() {
       )}
 
       {/* CULTURAL CALENDAR SECTION */}
-      <section className="relative w-full py-20" style={{ backgroundColor: '#410704' }}>
-        <div className="max-w-7xl mx-auto px-6 lg:px-14">
-          <Reveal>
-              <h2 className="text-6xl md:text-7xl text-amber-100 mb-16 text-center font-bold" style={{ fontFamily: 'Cinzel Decorative', fontWeight: 'bold' }}>
-              Cultural Calendar
-            </h2>
-          </Reveal>
+      <section className="relative w-full" style={{ backgroundColor: '#410704' }}>
+        {/* TOP BAR WITH VIDEO */}
+        <div className="relative w-screen h-56 md:h-72 lg:h-80 overflow-hidden flex items-center">
+          <video
+            src="/cultural calendar vid.mp4"
+            autoPlay
+            muted
+            loop
+            playsInline
+            className="absolute inset-0 w-full h-full object-cover"
+          />
 
+          {/* Gradient overlay */}
+          <div
+            className="absolute inset-0"
+            style={{
+              background:
+                'linear-gradient(90deg, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.45) 35%, rgba(0,0,0,0.1) 100%)',
+            }}
+          />
+
+          {/* Center Title */}
+          <div className="relative z-10 w-full flex items-center justify-center">
+            <div className="flex items-center gap-3">
+              <h3
+                className="text-amber-100 text-3xl md:text-4xl font-semibold tracking-[0.25em] uppercase"
+                style={{ fontFamily: 'Cinzel Decorative' }}
+              >
+                CULTURAL CALENDAR
+              </h3>
+            </div>
+          </div>
+        </div>
+
+        {/* ORIGINAL CONTENT BELOW VIDEO */}
+        <div className="max-w-7xl mx-auto px-6 lg:px-14 py-20">
           <div className="relative" style={{ paddingTop: '150px', paddingBottom: '0px' }}>
             <div className="absolute left-0 right-0 h-1 transform -translate-y-1/2"
               style={{
@@ -784,31 +868,203 @@ export default function TashidingMonastery() {
                 {/* Player Controls */}
                 <div className="flex items-center justify-between gap-4">
                   <button className="text-amber-100 hover:text-white transition">☰</button>
-                  <div className="flex-1 h-1 bg-gradient-to-r from-amber-400 to-amber-200 rounded"></div>
-                  <button className="text-amber-100 hover:text-white transition">♡</button>
+                  <div 
+                    className="flex-1 h-1 bg-gray-600 rounded cursor-pointer relative"
+                    onClick={handleProgressClick}
+                  >
+                    <div 
+                      className="h-full bg-gradient-to-r from-amber-400 to-amber-200 rounded"
+                      style={{ width: `${progress}%` }}
+                    ></div>
+                  </div>
+                  <button 
+                    onClick={toggleLike}
+                    className={`transition ${isLiked ? 'text-red-500' : 'text-amber-100 hover:text-white'}`}
+                  >
+                    {isLiked ? '❤' : '♡'}
+                  </button>
                 </div>
+
+                {/* Audio Element */}
+                <audio 
+                  ref={audioRef} 
+                  src="/tashiding audio.mp4"
+                  onTimeUpdate={(e) => setCurrentTime(e.currentTarget.currentTime)}
+                  onLoadedMetadata={(e) => setDuration(e.currentTarget.duration)}
+                />
 
                 {/* Playback Controls */}
                 <div className="flex items-center justify-center gap-6">
-                  <button className="text-amber-100 hover:text-white transition text-2xl">⏮</button>
-                  <button className="text-amber-100 hover:text-white transition text-2xl">◀</button>
-                  <button className="w-16 h-16 rounded-full bg-gradient-to-b from-amber-100 to-amber-200 flex items-center justify-center text-2xl text-amber-900 hover:scale-110 transition shadow-lg">
+                  <button 
+                    onClick={fastRewind}
+                    className="text-amber-100 hover:text-white transition text-2xl hover:scale-110 active:scale-95"
+                  >
+                    ⏮
+                  </button>
+                  <button 
+                    onClick={skipBackward}
+                    className="text-amber-100 hover:text-white transition text-2xl hover:scale-110 active:scale-95"
+                  >
+                    ◀
+                  </button>
+                  <button 
+                    onClick={togglePlay}
+                    className="w-16 h-16 rounded-full bg-gradient-to-b from-amber-100 to-amber-200 flex items-center justify-center text-2xl text-amber-900 hover:scale-110 transition shadow-lg"
+                  >
+                    {isPlaying ? '⏸' : '▶'}
+                  </button>
+                  <button 
+                    onClick={skipForward}
+                    className="text-amber-100 hover:text-white transition text-2xl hover:scale-110 active:scale-95"
+                  >
                     ▶
                   </button>
-                  <button className="text-amber-100 hover:text-white transition text-2xl">▶</button>
-                  <button className="text-amber-100 hover:text-white transition text-2xl">⏭</button>
+                  <button 
+                    onClick={fastForward}
+                    className="text-amber-100 hover:text-white transition text-2xl hover:scale-110 active:scale-95"
+                  >
+                    ⏭
+                  </button>
                 </div>
 
                 {/* Duration and Download */}
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2 text-amber-100">
                     <span className="text-xl">⏱</span>
-                    <span className="font-semibold">5mins</span>
+                    <span className="font-semibold">
+                      {Math.floor(currentTime / 60)}:{String(Math.floor(currentTime % 60)).padStart(2, '0')} / {Math.floor(duration / 60)}:{String(Math.floor(duration % 60)).padStart(2, '0')}
+                    </span>
                   </div>
                   <button className="text-amber-100 hover:text-white transition text-2xl">⬇</button>
                 </div>
               </div>
             </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* VIRTUAL TOUR SECTION */}
+      <section className="relative w-full py-20" style={{ backgroundColor: '#410704' }}>
+        <div className="max-w-7xl mx-auto px-6 lg:px-14">
+          {/* Header */}
+          <div className="relative text-center mb-16 overflow-hidden rounded-3xl py-20" style={{ marginLeft: 'calc(-100vw / 2 + 100% / 2)', marginRight: 'calc(-100vw / 2 + 100% / 2)' }}>
+            {/* Video Background for Header Only */}
+            <div className="absolute inset-0">
+              <video
+                autoPlay
+                loop
+                muted
+                playsInline
+                className="absolute w-screen h-full object-cover opacity-70"
+              >
+                <source src="/virtual tour video.mp4" type="video/mp4" />
+              </video>
+              <div className="absolute inset-0 bg-gradient-to-b from-[#410704]/30 via-[#410704]/40 to-[#410704]/50"></div>
+            </div>
+
+            <div className="relative z-10">
+              <div className="inline-flex items-center gap-3 mb-6">
+                <img src="/Icons/ICONS/video tour icon.png" alt="Virtual Tour" className="w-12 h-12" />
+                <h2 className="text-5xl font-bold text-amber-50 uppercase" style={{ fontFamily: 'Cinzel Decorative' }}>
+                  Virtual Tour
+                </h2>
+              </div>
+              <p className="text-amber-50 text-lg italic max-w-3xl mx-auto">
+                Immerse yourself in 360° experiences of Sikkim's most sacred monasteries. Explore ancient halls, prayer rooms, and witness centuries of spiritual heritage.
+              </p>
+            </div>
+          </div>
+
+          {/* Content Grid */}
+          <div className="grid lg:grid-cols-2 gap-8">
+            {/* Left Side - Tour Features */}
+            <div className="space-y-6">
+              {/* Monastery Card */}
+              <div className="rounded-3xl p-6" style={{ backgroundColor: 'rgba(120, 53, 15, 0.6)', border: '2px solid rgba(217, 119, 6, 0.3)', backdropFilter: 'blur(10px)' }}>
+                <div className="flex items-start gap-4">
+                  <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center text-2xl font-extrabold text-amber-900" style={{ fontFamily: 'Cinzel Decorative' }}>
+                    T
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="text-2xl font-semibold text-amber-50 mb-2 uppercase" style={{ fontFamily: 'Cinzel' }}>Tashiding Monastery</h3>
+                    <div className="flex items-center gap-4 text-amber-200 text-sm mb-3">
+                      <span className="flex items-center gap-1">
+                        📍 West Sikkim
+                      </span>
+                      <span className="flex items-center gap-1">
+                        📅 Est 1641
+                      </span>
+                    </div>
+                    <span className="inline-block px-4 py-1 rounded-full text-sm font-medium text-amber-900 bg-amber-100">
+                      360° Tour Available
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Tour Features Box */}
+              <div className="rounded-3xl p-6 h-96 flex flex-col overflow-hidden" style={{ backgroundColor: 'rgba(120, 53, 15, 0.5)', border: '2px solid rgba(217, 119, 6, 0.4)', backdropFilter: 'blur(10px)' }}>
+                <h3 className="text-lg font-semibold text-amber-50 mb-4 uppercase" style={{ fontFamily: 'Cinzel' }}>Tour Features</h3>
+                <div className="space-y-3 flex-1 flex flex-col justify-center overflow-y-auto">
+                  <div className="flex items-start gap-3 transition-all duration-300 hover:scale-105 cursor-pointer p-2 rounded-lg hover:bg-opacity-60" style={{ backgroundColor: 'rgba(217, 119, 6, 0.1)' }}>
+                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-orange-400 to-amber-500 flex items-center justify-center flex-shrink-0">
+                      <span className="text-lg">🎯</span>
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h4 className="text-amber-100 font-semibold text-sm mb-0.5">Interactive Navigation</h4>
+                      <p className="text-amber-200 text-xs leading-snug truncate">Move freely through sacred spaces</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3 transition-all duration-300 hover:scale-105 cursor-pointer p-2 rounded-lg hover:bg-opacity-60" style={{ backgroundColor: 'rgba(217, 119, 6, 0.1)' }}>
+                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-amber-400 to-yellow-500 flex items-center justify-center flex-shrink-0">
+                      <span className="text-lg">🎧</span>
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h4 className="text-amber-100 font-semibold text-sm mb-0.5">Audio Narration</h4>
+                      <p className="text-amber-200 text-xs leading-snug truncate">Guided commentary in multiple languages</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3 transition-all duration-300 hover:scale-105 cursor-pointer p-2 rounded-lg hover:bg-opacity-60" style={{ backgroundColor: 'rgba(217, 119, 6, 0.1)' }}>
+                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-yellow-400 to-orange-500 flex items-center justify-center flex-shrink-0">
+                      <span className="text-lg">📱</span>
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h4 className="text-amber-100 font-semibold text-sm mb-0.5">Mobile Friendly</h4>
+                      <p className="text-amber-200 text-xs leading-snug truncate">Experience on any device</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3 transition-all duration-300 hover:scale-105 cursor-pointer p-2 rounded-lg hover:bg-opacity-60" style={{ backgroundColor: 'rgba(217, 119, 6, 0.1)' }}>
+                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-orange-300 to-amber-600 flex items-center justify-center flex-shrink-0">
+                      <span className="text-lg">🎨</span>
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h4 className="text-amber-100 font-semibold text-sm mb-0.5">High Resolution</h4>
+                      <p className="text-amber-200 text-xs leading-snug truncate">Crystal clear imagery</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Right Side - Tour Preview */}
+            <div className="space-y-6">
+              {/* Start Tour Button */}
+              <button className="w-full py-6 rounded-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 transition-all duration-300 shadow-lg hover:shadow-xl flex items-center justify-center gap-3 group">
+                <span className="text-3xl group-hover:scale-110 transition-transform">▶</span>
+                <span className="text-2xl font-bold text-amber-900">Start Tour</span>
+              </button>
+
+              {/* Preview Box */}
+              <div className="rounded-3xl overflow-hidden" style={{ backgroundColor: 'rgba(217, 119, 6, 0.15)', border: '2px solid rgba(217, 119, 6, 0.3)', backdropFilter: 'blur(10px)' }}>
+                <div className="h-[28rem] bg-gradient-to-br from-amber-900 to-orange-900 flex items-center justify-center">
+                  <div className="text-center text-amber-100">
+                    <div className="text-6xl mb-4">🏛️</div>
+                    <p className="text-lg">Virtual Tour Preview</p>
+                  </div>
+                </div>
+              </div>
+
             </div>
           </div>
         </div>
