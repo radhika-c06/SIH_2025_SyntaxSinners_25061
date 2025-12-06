@@ -713,9 +713,25 @@ export default function TashidingMonastery() {
 
       {/* AUDIO TOUR SECTION */}
       <section className="relative w-full py-0" style={{ backgroundColor: '#410704' }}>
-        {/* Heading with background */}
-        <div className="w-full py-10" style={{ background: 'linear-gradient(180deg, #6b4a3a 0%, #410704 100%)' }}>
-          <div className="max-w-7xl mx-auto px-6 lg:px-14 text-center">
+        {/* Heading with video background */}
+        <div className="relative w-full py-10 overflow-hidden">
+          {/* Background video */}
+          <video
+            src="/audio tour vid.mp4"
+            autoPlay
+            muted
+            loop
+            playsInline
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+          {/* Gradient overlay */}
+          <div
+            className="absolute inset-0"
+            style={{
+              background: 'linear-gradient(180deg, rgba(107, 74, 58, 0.8) 0%, rgba(65, 7, 4, 0.8) 100%)',
+            }}
+          />
+          <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-14 text-center">
             <h2 className="text-amber-100 text-6xl md:text-7xl font-bold mb-2 flex items-center justify-center gap-4" style={{ fontFamily: 'Cinzel Decorative', fontWeight: 'bold' }}>
               <img src="/Icons/ICONS/HEADPHONE.png" alt="Headphone" className="w-16 h-16" style={{ filter: 'brightness(0) saturate(100%) invert(80%) sepia(60%) hue-rotate(30deg) saturate(120%)' }} />
               AUDIO TOUR
