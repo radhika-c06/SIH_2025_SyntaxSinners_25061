@@ -93,23 +93,23 @@ export default function DubdiMonastery() {
             </div>
           </Reveal>
 
-          {/* Right - Info */}
-          <Reveal delay={0.5}>
-            <div className="flex-1 flex flex-col gap-6 text-amber-100 pl-10 mt-6">
-              <div className="flex items-start gap-4">
-                <svg className="w-8 h-8 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                </svg>
-                <div>
-                  <div className="text-xl font-semibold tracking-wide" style={{ fontFamily: 'serif' }}>Dubdi, West Sikkim</div>
-                  <div className="text-lg" style={{ fontFamily: 'serif' }}>Yuksom, West Sikkim</div>
-                </div>
+          {/* Title + Info */}
+          <div className="max-w-7xl mx-auto px-10 flex justify-between items-center">
+            {/* Left - Monastery Name */}
+            <Reveal delay={0.4}>
+              <div className="flex-1">
+                <h1 className="text-6xl font-bold text-amber-100 tracking-wide leading-tight" style={{ fontFamily: "var(--font-cinzel-deco), serif", fontWeight: 900, letterSpacing: '3px' }}>
+                  DUBDI
+                </h1>
+                <h2 className="text-5xl font-bold text-amber-100 tracking-wide" style={{ fontFamily: "var(--font-cinzel-deco), serif", fontWeight: 900, letterSpacing: '3px' }}>
+                  MONASTERY
+                </h2>
               </div>
+            </Reveal>
 
-              <div className="flex items-start gap-4">
-                <svg className="w-8 h-8 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
+            {/* Right - Info */}
+            <Reveal delay={0.5}>
+              <div className="flex-1 flex flex-col gap-6 text-amber-100 pl-12">
                 <div>
                   <div className="text-xl font-semibold tracking-wide" style={{ fontFamily: 'serif' }}>Built in</div>
                   <div className="text-lg" style={{ fontFamily: 'serif' }}>1701</div>
@@ -136,36 +136,10 @@ export default function DubdiMonastery() {
       {/* Overview Section */}
       <section className="relative w-full min-h-screen py-16" style={{ backgroundColor: '#410704' }}>
         <div className="flex">
-          {/* Sidebar */}
-          <aside
-            className="absolute left-0 top-10 z-40 rounded-r-3xl shadow-2xl p-4 w-64 max-h-[60vh] overflow-y-auto"
-            style={{ backgroundColor: '#E0C76C' }}
-          >
-            <div className="text-amber-900 mb-4">
-              <h3 className="text-base font-bold mb-3 flex items-center justify-between">
-                Dubdi Monastery
-                <span className="text-xs">›</span>
-              </h3>
-            </div>
-            <nav className="space-y-1">
-              {sidebarItems.map((item) => (
-                <button
-                  key={item.id}
-                  onClick={() => setActiveSidebarItem(item.id)}
-                  className={`w-full text-left px-3 py-2 rounded-lg transition-all text-sm font-semibold ${
-                    activeSidebarItem === item.id
-                      ? 'bg-white/40 text-amber-900'
-                      : 'hover:bg-white/20 text-amber-900'
-                  }`}
-                >
-                  {item.label}
-                </button>
-              ))}
-            </nav>
-          </aside>
+          {/* Sidebar removed to eliminate yellow left box */}
 
           {/* Main Content */}
-          <div className="w-full max-w-7xl xl:max-w-[95rem] mx-auto px-6 lg:px-14 lg:pl-80">
+          <div className="w-full max-w-7xl xl:max-w-[95rem] mx-auto px-6 lg:px-14">
             <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,2.1fr)_minmax(0,0.9fr)] gap-10 xl:gap-12 items-start">
               {/* LEFT: TEXT */}
               <div>

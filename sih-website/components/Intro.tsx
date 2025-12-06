@@ -13,8 +13,8 @@ type IntroProps = {
 
 export default function Intro({
   mp4 = "/hero.mp4",
-  webm = "/hero.webm",       // optional, can be missing
-  poster = "/hero.jpg",      // optional
+  webm = undefined,           // optional (leave undefined to skip webm source)
+  poster = "/bg1.png",       // use existing background as poster to avoid 404
   title = "Sangha",
   subtitle = "A digital window into Sikkim’s monasteries",
   buttonLabel = "Enter",
