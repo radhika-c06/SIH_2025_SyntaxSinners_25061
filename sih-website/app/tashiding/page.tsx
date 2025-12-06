@@ -861,7 +861,7 @@ export default function TashidingMonastery() {
               <div className="rounded-3xl p-6 h-96 flex flex-col" style={{ backgroundColor: 'rgba(217, 119, 6, 0.15)', border: '2px solid rgba(217, 119, 6, 0.3)', backdropFilter: 'blur(10px)' }}>
                 <h3 className="text-xl font-semibold text-amber-50 mb-4 uppercase" style={{ fontFamily: 'Cinzel' }}>Tour Features</h3>
                 <div className="space-y-3 flex-1 flex flex-col justify-center">
-                  <div className="flex items-start gap-3">
+                  <div className="flex items-start gap-3 transition-all duration-300 hover:scale-105 cursor-pointer">
                     <div className="w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center flex-shrink-0">
                       <span className="text-xl">🎯</span>
                     </div>
@@ -869,7 +869,7 @@ export default function TashidingMonastery() {
                       <h4 className="text-amber-100 font-semibold">Interactive Navigation</h4>
                     </div>
                   </div>
-                  <div className="flex items-start gap-3">
+                  <div className="flex items-start gap-3 transition-all duration-300 hover:scale-105 cursor-pointer">
                     <div className="w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center flex-shrink-0">
                       <span className="text-xl">🎧</span>
                     </div>
@@ -877,7 +877,7 @@ export default function TashidingMonastery() {
                       <h4 className="text-amber-100 font-semibold">Audio Narration</h4>
                     </div>
                   </div>
-                  <div className="flex items-start gap-3">
+                  <div className="flex items-start gap-3 transition-all duration-300 hover:scale-105 cursor-pointer">
                     <div className="w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center flex-shrink-0">
                       <span className="text-xl">📱</span>
                     </div>
@@ -885,7 +885,7 @@ export default function TashidingMonastery() {
                       <h4 className="text-amber-100 font-semibold">Mobile Friendly</h4>
                     </div>
                   </div>
-                  <div className="flex items-start gap-3">
+                  <div className="flex items-start gap-3 transition-all duration-300 hover:scale-105 cursor-pointer">
                     <div className="w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center flex-shrink-0">
                       <span className="text-xl">🎨</span>
                     </div>
