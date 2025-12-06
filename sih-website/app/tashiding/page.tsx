@@ -712,7 +712,7 @@ export default function TashidingMonastery() {
       </section>
 
       {/* AUDIO TOUR SECTION */}
-      <section className="relative w-full py-20" style={{ backgroundColor: '#8b6f47' }}>
+      <section className="relative w-full py-20" style={{ backgroundColor: '#3d1f1f' }}>
         <div className="max-w-7xl mx-auto px-6 lg:px-14">
           <div className="text-center mb-16">
             <h2 className="text-amber-100 text-6xl md:text-7xl font-bold mb-6 flex items-center justify-center gap-4" style={{ fontFamily: 'Cinzel' }}>
@@ -731,14 +731,14 @@ export default function TashidingMonastery() {
               <input
                 type="text"
                 placeholder="Search audio guides"
-                className="w-full pl-16 pr-6 py-4 rounded-full text-amber-900 placeholder-amber-700 focus:outline-none focus:ring-2 focus:ring-amber-300"
-                style={{ backgroundColor: '#6b4423' }}
+                className="w-full pl-16 pr-6 py-4 rounded-full text-amber-100 placeholder-amber-600 focus:outline-none focus:ring-2 focus:ring-amber-300"
+                style={{ backgroundColor: '#4a2f2f' }}
               />
             </div>
           </div>
 
           {/* Audio Tour Card */}
-          <div className="max-w-4xl mx-auto rounded-3xl p-8" style={{ backgroundColor: '#5c3d23', border: '2px solid #8b6f47' }}>
+          <div className="max-w-4xl mx-auto rounded-3xl p-8" style={{ backgroundColor: '#4a2f2f', border: '2px solid #5c3d23' }}>
             <div className="grid md:grid-cols-2 gap-8 items-center">
               {/* Image */}
               <div className="rounded-2xl overflow-hidden">
