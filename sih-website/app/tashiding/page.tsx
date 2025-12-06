@@ -714,9 +714,9 @@ export default function TashidingMonastery() {
       {/* AUDIO TOUR SECTION */}
       <section className="relative w-full py-0" style={{ backgroundColor: '#410704' }}>
         {/* Heading with background */}
-        <div className="w-full py-16" style={{ background: 'linear-gradient(180deg, #6b4a3a 0%, #410704 100%)' }}>
+        <div className="w-full py-10" style={{ background: 'linear-gradient(180deg, #6b4a3a 0%, #410704 100%)' }}>
           <div className="max-w-7xl mx-auto px-6 lg:px-14 text-center">
-            <h2 className="text-amber-100 text-6xl md:text-7xl font-bold mb-4 flex items-center justify-center gap-4" style={{ fontFamily: 'Cinzel' }}>
+            <h2 className="text-amber-100 text-6xl md:text-7xl font-bold mb-2 flex items-center justify-center gap-4" style={{ fontFamily: 'Cinzel' }}>
               <span className="text-4xl">🎧</span>
               AUDIO TOUR
             </h2>
@@ -724,9 +724,9 @@ export default function TashidingMonastery() {
         </div>
 
         {/* Content section */}
-        <div className="w-full py-16" style={{ backgroundColor: '#410704' }}>
+        <div className="w-full py-10" style={{ backgroundColor: '#410704' }}>
           <div className="max-w-7xl mx-auto px-6 lg:px-14">
-            <div className="text-center mb-16">
+            <div className="text-center mb-10">
               <p className="text-amber-50 text-lg italic max-w-2xl mx-auto">
                 Experience immersive audio guided tour covering architecture, history, and spiritual significance. Available in multiple languages with offline mode for remote monastery visits.
               </p>
