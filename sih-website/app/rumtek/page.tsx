@@ -27,7 +27,6 @@ export default function RumtekMonastery() {
     setActiveIndex(index);
   };
 
-  // Icon helpers (kept in case you use them later)
   const Icon = ({ children, className = '' }: { children: React.ReactNode; className?: string }) => (
     <span className={className} aria-hidden>
       {children}
@@ -38,7 +37,6 @@ export default function RumtekMonastery() {
   const Eye = (props: any) => <Icon {...props}>👁️</Icon>;
   const Download = (props: any) => <Icon {...props}>⬇️</Icon>;
 
-  // Sample archive items for Rumtek
   const rumtekArchiveItems = [
     {
       id: 'r1',
@@ -93,7 +91,6 @@ export default function RumtekMonastery() {
     },
   ];
 
-  // ArchiveCard component – transparent glass box with smooth hover
   const ArchiveCard = ({ item, onOpen }: { item: any; onOpen: (it: any) => void }) => {
     return (
       <div className="group relative cursor-pointer" onClick={() => onOpen(item)}>
@@ -119,7 +116,12 @@ export default function RumtekMonastery() {
           </div>
 
           <div className="p-4">
-            <h3 className="text-sm font-semibold text-amber-100 line-clamp-2">{item.title}</h3>
+            <h3
+              className="text-sm font-semibold text-amber-100 line-clamp-2"
+              style={{ fontFamily: 'Cinzel' }}
+            >
+              {item.title}
+            </h3>
             <div className="mt-1 text-xs text-amber-200">
               {item.monastery} • {item.location}
             </div>
@@ -137,55 +139,43 @@ export default function RumtekMonastery() {
   const ResearchRow = () => {
     return (
       <div className="w-full">
-        <h2 className="text-amber-100 text-xl font-semibold mb-4 flex items-center gap-2">
+        <h2
+          className="text-amber-100 text-xl font-bold mb-4 flex items-center gap-2 uppercase"
+          style={{ fontFamily: 'Cinzel' }}
+        >
           <span className="text-amber-400 text-2xl">⏱</span>
           Research &amp; Documentation
         </h2>
 
         <div className="flex flex-wrap gap-4 justify-between">
-          {/* 1 */}
           <div className="flex-1 min-w-[220px] max-w-[260px] rounded-3xl bg-[#7b4a26] border border-amber-600/30 px-5 py-4">
-            <p className="text-sm font-semibold text-amber-100 leading-tight">
-              Archaeological Survey Date
-            </p>
+            <p className="text-sm font-semibold text-amber-100 leading-tight">Archaeological Survey Date</p>
             <p className="text-sm text-amber-50 mt-1 leading-snug">Unknown</p>
           </div>
 
-          {/* 2 */}
           <div className="flex-1 min-w-[220px] max-w-[260px] rounded-3xl bg-[#7b4a26] border border-amber-600/30 px-5 py-4">
-            <p className="text-sm font-semibold text-amber-100 leading-tight">
-              Archaeological Survey By
-            </p>
+            <p className="text-sm font-semibold text-amber-100 leading-tight">Archaeological Survey By</p>
             <p className="text-sm text-amber-50 mt-1 leading-snug">
               Archaeological Survey of India (ASI), Sikkim State Archaeology Department
             </p>
           </div>
 
-          {/* 3 */}
           <div className="flex-1 min-w-[220px] max-w-[260px] rounded-3xl bg-[#7b4a26] border border-amber-600/30 px-5 py-4">
-            <p className="text-sm font-semibold text-amber-100 leading-tight">
-              Preservation Status
-            </p>
+            <p className="text-sm font-semibold text-amber-100 leading-tight">Preservation Status</p>
             <p className="text-sm text-amber-50 mt-1 leading-snug">
               Excellent, well-maintained with ongoing conservation efforts
             </p>
           </div>
 
-          {/* 4 */}
           <div className="flex-1 min-w-[220px] max-w-[260px] rounded-3xl bg-[#7b4a26] border border-amber-600/30 px-5 py-4">
-            <p className="text-sm font-semibold text-amber-100 leading-tight">
-              Heritage Status
-            </p>
-            <p className="text-sm text-amber-50 mt-1 leading-snug">
-              National Heritage Site
-            </p>
+            <p className="text-sm font-semibold text-amber-100 leading-tight">Heritage Status</p>
+            <p className="text-sm text-amber-50 mt-1 leading-snug">National Heritage Site</p>
           </div>
         </div>
       </div>
     );
   };
 
-  // ---------- TIMELINE BELOW RESEARCH ROW (RIGHT COLUMN) ----------
   const rumtekTimeline = [
     {
       title: 'Original Construction',
@@ -229,7 +219,6 @@ export default function RumtekMonastery() {
       description:
         'Conservation programmes focused on murals, relics, and structural stability of the monastery complex.',
     },
-   
     {
       title: "Ogyen Trinley Dorje's Visit",
       year: '2011 CE',
@@ -254,12 +243,16 @@ export default function RumtekMonastery() {
 
   const TimelineCard = ({ event }: { event: TimelineEvent }) => (
     <div className="rounded-3xl bg-[#4B130E] border border-amber-600/40 px-5 py-4 shadow">
-      <h3 className="text-sm md:text-base font-semibold text-amber-50 mb-2">{event.title}</h3>
+      <h3
+        className="text-sm md:text-base font-semibold text-amber-50 mb-2"
+        style={{ fontFamily: 'Cinzel' }}
+      >
+        {event.title}
+      </h3>
       <p className="text-xs md:text-sm text-amber-100/85 mb-3 leading-snug line-clamp-3">
         {event.description}
       </p>
       <div className="inline-flex items-center gap-2 text-[11px] md:text-xs font-semibold text-amber-950 bg-amber-400 px-3 py-1 rounded-full">
-        
         <span>{event.year}</span>
       </div>
     </div>
@@ -267,7 +260,10 @@ export default function RumtekMonastery() {
 
   const TimelineColumn = () => (
     <div className="w-full space-y-5 mt-6">
-      <h2 className="text-amber-100 text-xl font-semibold mb-2 flex items-center gap-2">
+      <h2
+        className="text-amber-100 text-xl font-bold mb-2 flex items-center gap-2 uppercase"
+        style={{ fontFamily: 'Cinzel' }}
+      >
         <span className="text-amber-400 text-2xl">📜</span>
         Chronology of Rumtek
       </h2>
@@ -278,8 +274,6 @@ export default function RumtekMonastery() {
     </div>
   );
 
-  // ----------------------------------------------------------------
-
   return (
     <main className="overflow-hidden">
       <Nav />
@@ -289,7 +283,7 @@ export default function RumtekMonastery() {
         className="relative w-full overflow-hidden pt-8 pb-4"
         style={{
           backgroundImage: 'url(/bg1.png)',
-          backgroundSize: 'cover',
+          backgroundSize: 'cover', 
           backgroundPosition: 'center 30%',
           minHeight: '100vh',
           display: 'flex',
@@ -302,9 +296,7 @@ export default function RumtekMonastery() {
           {[0, 1, 2].map((i) => (
             <Reveal delay={0.1 * (i + 1)} key={i}>
               <div
-                className={`${
-                  i === 1 ? 'w-[700px]' : 'w-96'
-                } h-72 rounded-3xl overflow-hidden shadow-2xl transition-all duration-500 cursor-pointer`}
+                className={`${i === 1 ? 'w-[700px]' : 'w-96'} h-72 rounded-3xl overflow-hidden shadow-2xl transition-all duration-500 cursor-pointer`}
                 onClick={() => goToSlide(i)}
                 style={{
                   opacity: activeIndex === i ? 1 : 0.6,
@@ -334,17 +326,23 @@ export default function RumtekMonastery() {
         <div className="max-w-7xl mx-auto px-10 flex justify-between items-center">
           <Reveal delay={0.4}>
             <div className="flex-1">
-              <h1 className="text-6xl font-bold text-amber-100 tracking-wide leading-tight">
+              <h1
+                className="text-6xl md:text-7xl font-bold text-amber-100 drop-shadow-lg leading-tight font-cinzel-decorative"
+                style={{ fontWeight: '900', letterSpacing: '3px' }}
+              >
                 RUMTEK
               </h1>
-              <h2 className="text-5xl font-bold text-amber-100 tracking-wide">
+              <h2
+                className="text-5xl md:text-6xl font-bold text-amber-100 drop-shadow-lg font-cinzel-decorative"
+                style={{ fontWeight: '900', letterSpacing: '3px' }}
+              >
                 MONASTERY
               </h2>
             </div>
           </Reveal>
 
           <Reveal delay={0.5}>
-            <div className="flex-1 flex flex-col gap-6 text-amber-100 pl-12">
+            <div className="flex-1 flex flex-col gap-6 text-amber-100 pl-12 mt-6">
               <div className="flex items-start gap-4">
                 <svg className="w-8 h-8 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path
@@ -355,8 +353,18 @@ export default function RumtekMonastery() {
                   />
                 </svg>
                 <div>
-                  <div className="text-xl font-semibold">Rumtek, East Sikkim</div>
-                  <div className="text-lg">Gangtok (737135), India</div>
+                  <div
+                    className="text-xl font-bold tracking-wide uppercase"
+                    style={{ fontFamily: 'Cormorant SC' }}
+                  >
+                    Rumtek, East Sikkim
+                  </div>
+                  <div
+                    className="text-lg uppercase"
+                    style={{ fontFamily: 'Cormorant SC' }}
+                  >
+                    Gangtok (737135), India
+                  </div>
                 </div>
               </div>
 
@@ -370,8 +378,18 @@ export default function RumtekMonastery() {
                   />
                 </svg>
                 <div>
-                  <div className="text-xl font-semibold">Built in</div>
-                  <div className="text-lg">1966 CE</div>
+                  <div
+                    className="text-xl font-bold tracking-wide uppercase"
+                    style={{ fontFamily: 'Cormorant SC' }}
+                  >
+                    Built in
+                  </div>
+                  <div
+                    className="text-lg uppercase"
+                    style={{ fontFamily: 'Cormorant SC' }}
+                  >
+                    1966 CE
+                  </div>
                 </div>
               </div>
             </div>
@@ -384,7 +402,8 @@ export default function RumtekMonastery() {
             (btn, i) => (
               <button
                 key={i}
-                className="px-8 py-3 bg-amber-200 text-amber-900 rounded-full font-semibold hover:bg-amber-100 transition"
+                className="px-8 py-3 bg-amber-200 text-amber-900 rounded-full font-bold uppercase hover:bg-amber-100 transition"
+                style={{ fontFamily: 'Cinzel' }}
               >
                 {btn}
               </button>
@@ -400,12 +419,14 @@ export default function RumtekMonastery() {
             {/* LEFT: TEXT */}
             <div>
               <Reveal>
-                <h2 className="text-4xl md:text-5xl font-bold text-amber-100 mb-10 leading-tight">
+                <h2
+                  className="text-4xl md:text-5xl font-bold text-amber-100 mb-10 leading-tight uppercase"
+                  style={{ fontFamily: 'Cinzel' }}
+                >
                   Rumtek Monastery: Where the Himalayas Meet Living Tradition
                 </h2>
               </Reveal>
 
-              {/* Transparent Aesthetic Box */}
               <div className="rounded-3xl p-8 md:p-10 backdrop-blur-sm bg-amber-100/5 border border-amber-200/20 shadow-2xl">
                 {[
                   'Perched on a ridge overlooking Gangtok, Rumtek Monastery—also known as the Dharma Chakra Centre—feels alive with the spirit of the Himalayas. As the mountain wind whipped vibrant prayer flags into motion, the monastery revealed itself as a powerful symbol of Tibetan Buddhism and cultural resilience.',
@@ -425,7 +446,10 @@ export default function RumtekMonastery() {
             <aside className="space-y-8">
               {/* Location card */}
               <div className="ml-auto w-[340px] max-w-full rounded-3xl bg-[#1a1209] border border-amber-500/40 p-5 shadow-xl">
-                <h3 className="text-lg font-semibold text-amber-100 mb-2 flex items-center gap-2">
+                <h3
+                  className="text-lg font-semibold text-amber-100 mb-2 flex items-center gap-2"
+                  style={{ fontFamily: 'Cinzel' }}
+                >
                   Location Map
                 </h3>
 
@@ -457,7 +481,12 @@ export default function RumtekMonastery() {
 
               {/* Visit info card */}
               <div className="ml-auto w-[340px] max-w-full rounded-3xl bg-[#1a1209] border border-amber-500/40 p-5 shadow-xl">
-                <h3 className="text-lg font-semibold text-amber-100 mb-3">Visit Information</h3>
+                <h3
+                  className="text-lg font-semibold text-amber-100 mb-3"
+                  style={{ fontFamily: 'Cinzel' }}
+                >
+                  Visit Information
+                </h3>
 
                 <div className="space-y-3 text-xs text-amber-50">
                   <div>
@@ -487,82 +516,95 @@ export default function RumtekMonastery() {
         </div>
       </section>
 
-      
-{/* DIGITAL ARCHIVE SECTION */}
-<section
-  id="digital-archive"
-  className="w-screen min-h-[80vh] py-0"
-  style={{ backgroundColor: '#410704' }}
->
-  {/* FULL WIDTH TOP BAR WITH VIDEO BACKGROUND */}
-  <div className="relative w-screen h-56 md:h-72 lg:h-80 overflow-hidden flex items-center">
-    {/* Background video – same pattern as your old page */}
-    <video
-      src="/archive.mp4"
-      autoPlay
-      muted
-      loop
-      playsInline
-      className="absolute inset-0 w-full h-full object-cover"
-      // you can add controls temporarily for debugging:
-      // controls
-    />
+      {/* DIGITAL ARCHIVE SECTION */}
+      <section
+        id="digital-archive"
+        className="w-screen min-h-[80vh] py-0"
+        style={{ backgroundColor: '#410704' }}
+      >
+        {/* TOP BAR */}
+        <div className="relative w-screen h-56 md:h-72 lg:h-80 overflow-hidden flex items-center">
+          <video
+            src="/archive.mp4"
+            autoPlay
+            muted
+            loop
+            playsInline
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+          <div
+            className="absolute inset-0"
+            style={{
+              background:
+                'linear-gradient(90deg, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.45) 35%, rgba(0,0,0,0.1) 100%)',
+            }}
+          />
+          <div className="relative z-10 w-full flex items-center justify-center">
+            <div className="flex items-center gap-3">
+              <div className="flex items-center justify-center w-12 h-12 rounded-full border border-amber-100">
+                <span className="text-amber-100 text-2xl">⏱</span>
+              </div>
 
-    {/* Gradient overlay for contrast (optional) */}
-    <div
-      className="absolute inset-0"
-      style={{
-        background:
-          'linear-gradient(90deg, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.45) 35%, rgba(0,0,0,0.1) 100%)',
-      }}
-    />
-
-    {/* DIGITAL ARCHIVE text + icon */}
-    <div className="relative z-10 w-full flex items-center justify-center">
-      <div className="flex items-center gap-3">
-        <div className="flex items-center justify-center w-12 h-12 rounded-full border border-amber-100">
-          <span className="text-amber-100 text-2xl">⏱</span>
+              <h3
+                className="text-amber-100 text-3xl md:text-4xl font-semibold tracking-[0.25em] uppercase font-cinzel-decorative"
+              >
+                DIGITAL ARCHIVE
+              </h3>
+            </div>
+          </div>
         </div>
 
-        <h3 className="text-amber-100 text-3xl md:text-4xl font-semibold tracking-[0.25em] uppercase">
-          DIGITAL ARCHIVE
-        </h3>
-      </div>
+        {/* CONTENT AREA */}
+        {/* CONTENT AREA */}
+<div
+  className="relative w-screen min-h-[70vh] py-12 px-6 md:px-12"
+  style={{
+    backgroundColor: '#4b1f0f',
+  }}
+>
+  {/* LEFT-HALF WATERMARK */}
+  <div
+    className="pointer-events-none absolute inset-y-0 left-0 w-1/2 opacity-45"
+    style={{
+      backgroundImage: "url('/rumtek/rumtekbg.png')",
+      backgroundRepeat: 'repeat',
+      backgroundSize: '500px auto',
+    }}
+  />
+  <div
+    className="absolute inset-y-0 right-0 w-[50%]"
+    style={{
+      backgroundColor: "#87522d", // <-- CHANGE THIS TO ANY COLOR YOU WANT
+      opacity: 1,
+    }}
+  />
+
+
+  {/* REAL CONTENT (ABOVE THE WATERMARK) */}
+  <div className="relative z-10 max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12">
+    
+    {/* LEFT – Cards */}
+    <div className="flex flex-col gap-6">
+      {rumtekArchiveItems.map((it) => (
+        <ArchiveCard
+          key={it.id}
+          item={it}
+          onOpen={(i) => {
+            setActiveItem(i);
+            setOpenDialog(true);
+          }}
+        />
+      ))}
+    </div>
+
+    {/* RIGHT – Research + Timeline */}
+    <div className="flex flex-col items-stretch gap-8">
+      <ResearchRow />
+      <TimelineColumn />
     </div>
   </div>
 
-
-
-        {/* FULL WIDTH CONTENT AREA */}
-        <div
-          className="w-screen min-h-[70vh] py-12 px-6 md:px-12 relative"
-          style={{
-            backgroundColor: '#a66437',
-          }}
-        >
-          <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12">
-            {/* LEFT SIDE — Archive Cards */}
-            <div className="flex flex-col gap-6">
-              {rumtekArchiveItems.map((it) => (
-                <ArchiveCard
-                  key={it.id}
-                  item={it}
-                  onOpen={(i) => {
-                    setActiveItem(i);
-                    setOpenDialog(true);
-                  }}
-                />
-              ))}
-            </div>
-
-            {/* RIGHT SIDE — Research Row + Timeline below it */}
-            <div className="flex flex-col items-stretch gap-8">
-              <ResearchRow />
-              <TimelineColumn />
-            </div>
-          </div>
-
-          {/* Detail Modal – ONLY OCR snippet */}
+          {/* MODAL */}
           {openDialog && activeItem && (
             <div
               className="fixed inset-0 z-50 flex items-center justify-center p-4"
@@ -578,7 +620,6 @@ export default function RumtekMonastery() {
                 onClick={(e) => e.stopPropagation()}
               >
                 <div className="grid md:grid-cols-2">
-                  {/* Image */}
                   <div className="relative" style={{ background: '#2F3A3D' }}>
                     <img
                       src={activeItem.img}
@@ -587,13 +628,21 @@ export default function RumtekMonastery() {
                     />
                   </div>
 
-                  {/* Content */}
                   <div className="p-6 md:p-8">
-                    <h2 className="text-2xl font-semibold text-amber-100">{activeItem.title}</h2>
+                    <h2
+                      className="text-2xl font-semibold text-amber-100"
+                      style={{ fontFamily: 'Cinzel' }}
+                    >
+                      {activeItem.title}
+                    </h2>
 
-                    {/* OCR ONLY */}
                     <div className="mt-5">
-                      <h3 className="font-medium mb-2 text-amber-100">OCR Snippet</h3>
+                      <h3
+                        className="font-medium mb-2 text-amber-100"
+                        style={{ fontFamily: 'Cinzel' }}
+                      >
+                        OCR Snippet
+                      </h3>
                       <div
                         className="rounded-xl p-4 text-sm text-amber-50"
                         style={{
@@ -618,6 +667,273 @@ export default function RumtekMonastery() {
           )}
         </div>
       </section>
+
+      {/* CULTURAL CALENDAR SECTION */}
+<section
+  className="relative w-full py-20"
+  style={{ backgroundColor: '#410704' }}
+>
+  <div className="max-w-7xl mx-auto px-6 lg:px-14">
+    <Reveal>
+      <h2 className="font-cinzel-decorative font-medium text-6xl md:text-7xl text-amber-100 mb-28 text-center">
+        Cultural Calendar
+      </h2>
+    </Reveal>
+
+    {/* TIMELINE STRIP */}
+    <div className="relative" style={{ paddingTop: '150px', paddingBottom: '0px' }}>
+      <div
+        className="absolute left-0 right-0 h-1 transform -translate-y-1/2"
+        style={{
+          top: 'calc(50% - 89px)',
+          backgroundImage:
+            'repeating-linear-gradient(to right, #d97706 0px, #d97706 15px, transparent 15px, transparent 35px)',
+          zIndex: 0,
+        }}
+      />
+
+      <div
+        className="grid grid-cols-4 gap-0 relative"
+        style={{ minHeight: '360px' }}
+      >
+        {/* Rumtek Tse-Chu Cham Festival (masked dances) */}
+        <div className="relative">
+          <Reveal delay={0.1}>
+            <div
+              className="absolute left-1/2 transform -translate-x-1/2 rounded-2xl bg-gradient-to-br from-yellow-300 to-yellow-200 border-4 border-yellow-400 p-4 w-44 shadow-lg"
+              style={{ top: 'calc(50% - 160px)', zIndex: 2 }}
+            >
+              <p className="text-xs font-semibold text-amber-900 mb-1">
+                June – July
+              </p>
+              <p className="text-xs text-amber-900 mb-2">
+                Early monsoon · Masked cham dances
+              </p>
+              <h3 className="text-lg font-bold text-amber-900">
+                Rumtek Tse-Chu Festival
+              </h3>
+            </div>
+
+            <div
+              className="absolute left-1/2 transform -translate-x-1/2"
+              style={{
+                top: 'calc(50% - 64px)',
+                width: '4px',
+                height: '64px',
+                backgroundColor: '#fcd34d',
+              }}
+            />
+
+            <div
+              className="absolute left-1/2 transform -translate-x-1/2 rounded-full shadow-md"
+              style={{
+                top: '50%',
+                width: '32px',
+                height: '32px',
+                backgroundColor: '#fef08a',
+                border: '4px solid #f59e0b',
+                transformOrigin: 'center',
+                zIndex: -1,
+              }}
+            />
+          </Reveal>
+        </div>
+
+        {/* Saga Dawa at Rumtek */}
+        <div className="relative">
+          <Reveal delay={0.2}>
+            <div
+              className="absolute left-1/2 transform -translate-x-1/2 rounded-full shadow-md"
+              style={{
+                top: '50%',
+                width: '32px',
+                height: '32px',
+                backgroundColor: '#f59e0b',
+                border: '4px solid #b45309',
+                zIndex: -1,
+              }}
+            />
+
+            <div
+              className="absolute left-1/2 transform -translate-x-1/2"
+              style={{
+                top: '50%',
+                width: '4px',
+                height: '80px',
+                backgroundColor: '#eab308',
+                zIndex: -2,
+              }}
+            />
+
+            <div
+              className="absolute left-1/2 transform -translate-x-1/2 rounded-2xl bg-gradient-to-br from-yellow-500 to-yellow-400 border-4 border-yellow-600 p-4 w-44 shadow-lg"
+              style={{ top: 'calc(50% + 72px)' }}
+            >
+              <p className="text-xs font-semibold text-white mb-1">
+                May – June
+              </p>
+              <p className="text-xs text-white mb-2">
+                4th Tibetan Month · Full-moon day
+              </p>
+              <h3 className="text-lg font-bold text-white">
+                Saga Dawa
+              </h3>
+            </div>
+          </Reveal>
+        </div>
+
+        {/* Losoong / Sonam Losoong at Rumtek */}
+        <div className="relative">
+          <Reveal delay={0.3}>
+            <div
+              className="absolute left-1/2 transform -translate-x-1/2 rounded-2xl bg-gradient-to-br from-orange-500 to-orange-400 border-4 border-orange-600 p-4 w-44 shadow-lg"
+              style={{ top: 'calc(50% - 160px)', zIndex: 2 }}
+            >
+              <p className="text-xs font-semibold text-white mb-1">
+                December
+              </p>
+              <p className="text-xs text-white mb-2">
+                11th Tibetan Month · Sikkimese New Year
+              </p>
+              <h3 className="text-lg font-bold text-white">
+                Losoong / Sonam Losoong
+              </h3>
+            </div>
+
+            <div
+              className="absolute left-1/2 transform -translate-x-1/2"
+              style={{
+                top: 'calc(50% - 64px)',
+                width: '4px',
+                height: '64px',
+                backgroundColor: '#fb923c',
+              }}
+            />
+
+            <div
+              className="absolute left-1/2 transform -translate-x-1/2 rounded-full shadow-md"
+              style={{
+                top: '50%',
+                width: '32px',
+                height: '32px',
+                backgroundColor: '#fb923c',
+                border: '4px solid #ea580c',
+                zIndex: -1,
+              }}
+            />
+          </Reveal>
+        </div>
+
+        {/* Losar – Tibetan New Year at Rumtek */}
+        <div className="relative">
+          <Reveal delay={0.4}>
+            <div
+              className="absolute left-1/2 transform -translate-x-1/2 rounded-full shadow-md"
+              style={{
+                top: '50%',
+                width: '32px',
+                height: '32px',
+                backgroundColor: '#f59e0b',
+                border: '4px solid #b45309',
+                zIndex: -1,
+              }}
+            />
+
+            <div
+              className="absolute left-1/2 transform -translate-x-1/2"
+              style={{
+                top: '50%',
+                width: '4px',
+                height: '80px',
+                backgroundColor: '#eab308',
+                zIndex: -2,
+              }}
+            />
+
+            <div
+              className="absolute left-1/2 transform -translate-x-1/2 rounded-2xl bg-gradient-to-br from-yellow-600 to-yellow-500 border-4 border-yellow-700 p-4 w-44 shadow-lg"
+              style={{ top: 'calc(50% + 72px)' }}
+            >
+              <p className="text-xs font-semibold text-white mb-1">
+                February (varies yearly)
+              </p>
+              <p className="text-xs text-white mb-2">
+                1st Tibetan Month · 1st–3rd day
+              </p>
+              <h3 className="text-lg font-bold text-white">
+                Losar (Tibetan New Year)
+              </h3>
+            </div>
+          </Reveal>
+        </div>
+      </div>
+    </div>
+
+    {/* FESTIVAL DESCRIPTIONS */}
+    <Reveal delay={0.6}>
+      <div className="mt-2 space-y-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Rumtek Tse-Chu */}
+          <Reveal delay={0.7}>
+            <div className="rounded-2xl bg-white/5 backdrop-blur-sm border border-yellow-500/20 p-6 hover:border-yellow-400/40 transition-colors">
+              <h3 className="font-cinzel uppercase text-xl font-bold text-yellow-300 mb-3">
+                Rumtek Tse-Chu Cham Festival
+              </h3>
+              <p className="text-sm text-amber-50 leading-relaxed">
+                At Rumtek, Tse-Chu is marked by powerful cham mask dances in the main courtyard. Monks perform elaborate rituals dedicated to Guru Padmasambhava and protective deities, while devotees watch from the galleries, receive blessings, and make offerings for protection, healing, and harmony for the year ahead.
+              </p>
+            </div>
+          </Reveal>
+
+          {/* Saga Dawa */}
+          <Reveal delay={0.75}>
+            <div className="rounded-2xl bg-white/5 backdrop-blur-sm border border-yellow-500/20 p-6 hover:border-yellow-400/40 transition-colors">
+              <h3 className="font-cinzel uppercase text-xl font-bold text-yellow-300 mb-3">
+                Saga Dawa
+              </h3>
+              <p className="text-sm text-amber-50 leading-relaxed">
+                Saga Dawa commemorates the Buddha&apos;s birth, enlightenment, and parinirvana. At Rumtek, monks hold extended pujas and recitations, light thousands of butter lamps, and lead circumambulations of the monastery. Local devotees join in merit-making, charity, and silent prayer, treating this “triple blessed day” as the most auspicious time in the Buddhist year.
+              </p>
+            </div>
+          </Reveal>
+
+          {/* Losoong / Sonam Losoong */}
+          <Reveal delay={0.8}>
+            <div className="rounded-2xl bg-white/5 backdrop-blur-sm border border-orange-500/20 p-6 hover:border-orange-400/40 transition-colors">
+              <h3 className="font-cinzel uppercase text-xl font-bold text-orange-300 mb-3">
+                Losoong / Sonam Losoong
+              </h3>
+              <p className="text-sm text-amber-50 leading-relaxed">
+                Losoong is the Sikkimese New Year and harvest-thanksgiving festival. At Rumtek, the year closes with joyous cham dances, ritual offerings, and gatherings of Bhutia and Lepcha families. The monastery becomes a space of celebration and gratitude—marking the end of the agricultural cycle and inviting good fortune for the coming year.
+              </p>
+            </div>
+          </Reveal>
+
+          {/* Losar */}
+          <Reveal delay={0.85}>
+            <div className="rounded-2xl bg-white/5 backdrop-blur-sm border border-orange-600/20 p-6 hover:border-orange-500/40 transition-colors">
+              <h3 className="font-cinzel uppercase text-xl font-bold text-orange-300 mb-3">
+                Losar (Tibetan New Year)
+              </h3>
+              <p className="text-sm text-amber-50 leading-relaxed">
+                Losar marks the start of the Tibetan New Year. In Rumtek, the festival begins with intensive year-end purification rites and offerings, followed by New Year prayers, raising of fresh prayer flags, and vibrant community celebrations. Families visit the monastery to make offerings, seek the Karmapa&apos;s blessing, and step into the new year with renewed intention.
+              </p>
+            </div>
+          </Reveal>
+        </div>
+
+        <Reveal delay={0.95}>
+          <div className="rounded-3xl bg-gradient-to-r from-orange-900/20 to-amber-900/20 backdrop-blur-md border border-amber-500/20 p-8">
+            <p className="text-base text-amber-50 leading-relaxed font-light">
+              Together, these festivals trace the spiritual heartbeat of Rumtek. They turn the monastery&apos;s courtyards into living stages of dance, ritual, and prayer; binding monks, pilgrims, and local communities into a shared rhythm of remembrance, renewal, and devotion across the Himalayan year.
+            </p>
+          </div>
+        </Reveal>
+      </div>
+    </Reveal>
+  </div>
+</section>
+
 
       <Footer />
     </main>
