@@ -759,7 +759,7 @@ export default function TashidingMonastery() {
 
               {/* Audio Content */}
               <div className="flex flex-col gap-6">
-                <p className="text-amber-50 text-lg italic leading-relaxed">
+                <p className="text-amber-50 text-lg italic leading-relaxed" style={{ fontFamily: 'Chivo', fontStyle: 'italic' }}>
                   Visit this sacred monastery perched on a hilltop, famous for its annual Bhumchu festival and ancient Buddhist scriptures dating back centuries.
                 </p>
 
