@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Reveal from '@/components/Reveal';
 // Removed MonasterySlideshow and ExploreCarouselMount per page requirements
 import Nav from '@/components/Nav';
@@ -12,6 +12,19 @@ export default function TashidingMonastery() {
   const [activeSidebarItem, setActiveSidebarItem] = useState('overview');
   const [openDialog, setOpenDialog] = useState(false);
   const [activeItem, setActiveItem] = useState<any | null>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const audioRef = useRef<HTMLAudioElement>(null);
+
+  const togglePlay = () => {
+    if (audioRef.current) {
+      if (isPlaying) {
+        audioRef.current.pause();
+      } else {
+        audioRef.current.play();
+      }
+      setIsPlaying(!isPlaying);
+    }
+  };
 
   const sidebarItems = [
     { id: 'overview', label: 'Overview' },
@@ -788,12 +801,18 @@ export default function TashidingMonastery() {
                   <button className="text-amber-100 hover:text-white transition">♡</button>
                 </div>
 
+                {/* Audio Element */}
+                <audio ref={audioRef} src="/tashiding audio.mp4" />
+
                 {/* Playback Controls */}
                 <div className="flex items-center justify-center gap-6">
                   <button className="text-amber-100 hover:text-white transition text-2xl">⏮</button>
                   <button className="text-amber-100 hover:text-white transition text-2xl">◀</button>
-                  <button className="w-16 h-16 rounded-full bg-gradient-to-b from-amber-100 to-amber-200 flex items-center justify-center text-2xl text-amber-900 hover:scale-110 transition shadow-lg">
-                    ▶
+                  <button 
+                    onClick={togglePlay}
+                    className="w-16 h-16 rounded-full bg-gradient-to-b from-amber-100 to-amber-200 flex items-center justify-center text-2xl text-amber-900 hover:scale-110 transition shadow-lg"
+                  >
+                    {isPlaying ? '⏸' : '▶'}
                   </button>
                   <button className="text-amber-100 hover:text-white transition text-2xl">▶</button>
                   <button className="text-amber-100 hover:text-white transition text-2xl">⏭</button>
