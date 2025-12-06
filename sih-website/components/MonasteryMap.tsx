@@ -11,13 +11,13 @@ const MONASTERIES = [
 			"Tashiding is vital to Sikkimese monasticism, its sublime mountain site and stupa are iconic.",
 	},
 	{
-		name: "Pemayangtse Monastery",
-		location: "Near Pelling, West Sikkim",
-		image: "/monasteries/pemayangtse.jpg",
+		name: "Tsuk La Khang Monastery",
+		location: "Gangtok, East Sikkim",
+		image: "/tsuk/archive2.jpg",
 		mapPos: { top: "37%", left: "33%" },
-		visitors: "120K+ Annual visitors",
+		visitors: "100K+ Annual visitors",
 		description:
-			"Pemayangtse stands among Sikkim's oldest monasteries, embodying purity and spiritual vision.",
+			"Tsuk La Khang is the royal chapel of the former monarchs of Sikkim, a place of worship and assembly.",
 	},
 	{
 		name: "Dubdi Monastery",
