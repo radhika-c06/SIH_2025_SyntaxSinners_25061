@@ -493,7 +493,7 @@ export default function TashidingMonastery() {
           <div
             className="pointer-events-none absolute inset-y-0 left-0 w-1/2 opacity-45"
             style={{
-              backgroundImage: "url('/rumtek/rumtekbg.png')",
+              backgroundImage: "url('/design.png')",
               backgroundRepeat: 'repeat',
               backgroundSize: '500px auto',
             }}
