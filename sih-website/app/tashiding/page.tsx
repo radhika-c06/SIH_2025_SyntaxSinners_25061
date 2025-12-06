@@ -858,9 +858,9 @@ export default function TashidingMonastery() {
               </div>
 
               {/* Tour Features Box */}
-              <div className="rounded-3xl p-6" style={{ backgroundColor: 'rgba(217, 119, 6, 0.15)', border: '2px solid rgba(217, 119, 6, 0.3)', backdropFilter: 'blur(10px)' }}>
+              <div className="rounded-3xl p-6 h-96 flex flex-col" style={{ backgroundColor: 'rgba(217, 119, 6, 0.15)', border: '2px solid rgba(217, 119, 6, 0.3)', backdropFilter: 'blur(10px)' }}>
                 <h3 className="text-xl font-semibold text-amber-50 mb-4 uppercase" style={{ fontFamily: 'Cinzel' }}>Tour Features</h3>
-                <div className="space-y-3">
+                <div className="space-y-3 flex-1 flex flex-col justify-center">
                   <div className="flex items-start gap-3">
                     <div className="w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center flex-shrink-0">
                       <span className="text-xl">🎯</span>
@@ -907,7 +907,7 @@ export default function TashidingMonastery() {
 
               {/* Preview Box */}
               <div className="rounded-3xl overflow-hidden" style={{ backgroundColor: 'rgba(217, 119, 6, 0.15)', border: '2px solid rgba(217, 119, 6, 0.3)', backdropFilter: 'blur(10px)' }}>
-                <div className="h-80 bg-gradient-to-br from-amber-900 to-orange-900 flex items-center justify-center">
+                <div className="h-96 bg-gradient-to-br from-amber-900 to-orange-900 flex items-center justify-center">
                   <div className="text-center text-amber-100">
                     <div className="text-6xl mb-4">🏛️</div>
                     <p className="text-lg">Virtual Tour Preview</p>
