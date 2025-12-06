@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Reveal from '@/components/Reveal';
 // Removed MonasterySlideshow and ExploreCarouselMount per page requirements
 import Nav from '@/components/Nav';
@@ -12,6 +12,12 @@ export default function DubdiMonastery() {
   const [activeSidebarItem, setActiveSidebarItem] = useState('overview');
   const [openDialog, setOpenDialog] = useState(false);
   const [activeItem, setActiveItem] = useState<any | null>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [audioDuration, setAudioDuration] = useState('0:00');
+  const [isLiked, setIsLiked] = useState(false);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(0);
+  const audioRef = useRef<HTMLAudioElement>(null);
 
   const sidebarItems = [
     { id: 'overview', label: 'Overview' },
@@ -45,6 +51,64 @@ export default function DubdiMonastery() {
   const goToSlide = (index: number) => {
     setActiveIndex(index);
   };
+
+  const toggleAudio = () => {
+    if (audioRef.current) {
+      if (isPlaying) {
+        audioRef.current.pause();
+        setIsPlaying(false);
+      } else {
+        audioRef.current.play().catch(err => console.error('Play error:', err));
+        setIsPlaying(true);
+      }
+    }
+  };
+
+  const skipForward = () => {
+    if (audioRef.current) {
+      audioRef.current.currentTime += 10;
+    }
+  };
+
+  const skipBackward = () => {
+    if (audioRef.current) {
+      audioRef.current.currentTime -= 10;
+    }
+  };
+
+  const fastForward = () => {
+    if (audioRef.current) {
+      audioRef.current.playbackRate = 2.0;
+    }
+  };
+
+  const fastRewind = () => {
+    if (audioRef.current) {
+      audioRef.current.playbackRate = -2.0;
+    }
+  };
+
+  const normalSpeed = () => {
+    if (audioRef.current) {
+      audioRef.current.playbackRate = 1.0;
+    }
+  };
+
+  const toggleLike = () => {
+    setIsLiked(!isLiked);
+  };
+
+  const handleProgressClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (audioRef.current) {
+      const progressBar = e.currentTarget;
+      const clickX = e.clientX - progressBar.getBoundingClientRect().left;
+      const width = progressBar.offsetWidth;
+      const clickedTime = (clickX / width) * duration;
+      audioRef.current.currentTime = clickedTime;
+    }
+  };
+
+  const progress = duration > 0 ? (currentTime / duration) * 100 : 0;
 
   // Icon helpers (kept in case you use them later)
   const Icon = ({ children, className = '' }: { children: React.ReactNode; className?: string }) => (
@@ -610,15 +674,200 @@ export default function DubdiMonastery() {
         </div>
       </section>
 
-      {/* CULTURAL CALENDAR SECTION */}
-      <section className="relative w-full py-20" style={{ backgroundColor: '#410704' }}>
-        <div className="max-w-7xl mx-auto px-6 lg:px-14">
-          <Reveal>
-              <h2 className="font-cinzel-decorative font-medium text-6xl md:text-7xl text-amber-100 mb-16 text-center">
-              Cultural Calendar
+      {/* AUDIO TOUR SECTION */}
+      <section className="relative w-full py-0" style={{ backgroundColor: '#410704' }}>
+        {/* Heading with video background */}
+        <div className="relative w-full overflow-hidden" style={{ paddingTop: '5rem', paddingBottom: '5rem' }}>
+          {/* Background video */}
+          <video
+            src="/audio tour vid.mp4"
+            autoPlay
+            muted
+            loop
+            playsInline
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+          {/* Gradient overlay */}
+          <div
+            className="absolute inset-0"
+            style={{
+              background: 'linear-gradient(180deg, rgba(107, 74, 58, 0.8) 0%, rgba(65, 7, 4, 0.8) 100%)',
+            }}
+          />
+          <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-14 text-center">
+            <h2 className="text-amber-100 text-6xl md:text-7xl font-bold mb-2 flex items-center justify-center gap-4" style={{ fontFamily: 'Cinzel Decorative', fontWeight: 'bold' }}>
+              <img src="/Icons/ICONS/HEADPHONE.png" alt="Headphone" className="w-16 h-16" style={{ filter: 'brightness(0) saturate(100%) invert(80%) sepia(60%) hue-rotate(30deg) saturate(120%)' }} />
+              AUDIO TOUR
             </h2>
-          </Reveal>
+          </div>
+        </div>
 
+        {/* Content section */}
+        <div className="w-full py-10" style={{ backgroundColor: '#410704' }}>
+          <div className="max-w-7xl mx-auto px-6 lg:px-14">
+            <div className="text-center mb-10">
+              <p className="text-amber-50 text-lg italic max-w-2xl mx-auto uppercase">
+                Experience immersive audio guided tour covering architecture, history, and spiritual significance. Available in multiple languages with offline mode for remote monastery visits.
+              </p>
+            </div>
+
+            {/* Search Bar */}
+            <div className="mb-12 max-w-2xl mx-auto">
+              <div className="relative">
+                <svg className="absolute left-6 top-1/2 transform -translate-y-1/2 w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clipRule="evenodd" />
+                </svg>
+                <input
+                  type="text"
+                  placeholder="Search audio guides"
+                  className="w-full pl-16 pr-6 py-4 rounded-full text-amber-100 placeholder-amber-600 focus:outline-none focus:ring-2 focus:ring-amber-300"
+                  style={{ backgroundColor: 'rgba(217, 119, 6, 0.2)', border: '2px solid rgba(217, 119, 6, 0.3)', backdropFilter: 'blur(10px)' }}
+                />
+              </div>
+            </div>
+
+            {/* Audio Tour Card */}
+            <div className="max-w-4xl mx-auto rounded-3xl p-8" style={{ backgroundColor: 'rgba(217, 119, 6, 0.15)', border: '2px solid rgba(217, 119, 6, 0.3)', backdropFilter: 'blur(10px)' }}>
+            <audio 
+              ref={audioRef} 
+              src="/dubdi/WhatsApp Audio 2025-12-06 at 6.46.22 PM.mp4"
+              onTimeUpdate={(e) => {
+                const time = (e.target as HTMLAudioElement).currentTime;
+                setCurrentTime(time);
+                console.log('Time update:', time);
+              }}
+              onLoadedMetadata={(e) => {
+                const audio = e.target as HTMLAudioElement;
+                setDuration(audio.duration);
+                const minutes = Math.floor(audio.duration / 60);
+                const seconds = Math.floor(audio.duration % 60);
+                setAudioDuration(`${minutes}:${seconds.toString().padStart(2, '0')}`);
+                console.log('Audio loaded, duration:', audio.duration);
+              }}
+              onEnded={() => setIsPlaying(false)}
+            />
+            <div className="grid md:grid-cols-2 gap-8 items-center">
+              {/* Image */}
+              <div className="rounded-2xl overflow-hidden group cursor-pointer">
+                <img
+                  src="/dubdi/audio.png"
+                  alt="Dubdi Monastery"
+                  className="w-full h-full object-cover rounded-2xl transition-transform duration-300 ease-out group-hover:scale-110 group-hover:brightness-110"
+                />
+              </div>
+
+              {/* Audio Content */}
+              <div className="flex flex-col gap-6">
+                <p className="text-amber-50 text-lg italic leading-relaxed">
+                  Explore Sikkim's oldest monastery, the sacred Hermit's Cell built in 1701, nestled in serene forests with profound spiritual heritage and ancient Buddhist traditions.
+                </p>
+
+                {/* Player Controls */}
+                <div className="flex items-center justify-between gap-4">
+                  <button className="text-amber-100 hover:text-white transition">☰</button>
+                  <div 
+                    className="flex-1 h-1 bg-amber-900/30 rounded-full relative cursor-pointer group"
+                    onClick={handleProgressClick}
+                  >
+                    <div 
+                      className="h-full bg-gradient-to-r from-amber-400 to-amber-200 rounded-full relative transition-all"
+                      style={{ width: `${progress}%` }}
+                    >
+                      <div className="absolute right-0 top-1/2 -translate-y-1/2 w-3 h-3 bg-amber-100 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    </div>
+                  </div>
+                  <button 
+                    onClick={toggleLike}
+                    className="text-amber-100 hover:text-white transition hover:scale-110 active:scale-95"
+                  >
+                    {isLiked ? '❤️' : '♡'}
+                  </button>
+                </div>
+
+                {/* Playback Controls */}
+                <div className="flex items-center justify-center gap-6">
+                  <button 
+                    onMouseDown={fastRewind}
+                    onMouseUp={normalSpeed}
+                    onMouseLeave={normalSpeed}
+                    className="text-amber-100 hover:text-white transition text-2xl hover:scale-110 active:scale-95"
+                  >
+                    ⏮
+                  </button>
+                  <button onClick={skipBackward} className="text-amber-100 hover:text-white transition text-2xl hover:scale-110 active:scale-95">◀</button>
+                  <button 
+                    onClick={toggleAudio}
+                    className="w-16 h-16 rounded-full bg-gradient-to-b from-amber-100 to-amber-200 flex items-center justify-center text-2xl text-amber-900 hover:scale-110 active:scale-95 transition shadow-lg"
+                  >
+                    {isPlaying ? '⏸' : '▶'}
+                  </button>
+                  <button onClick={skipForward} className="text-amber-100 hover:text-white transition text-2xl hover:scale-110 active:scale-95">▶</button>
+                  <button 
+                    onMouseDown={fastForward}
+                    onMouseUp={normalSpeed}
+                    onMouseLeave={normalSpeed}
+                    className="text-amber-100 hover:text-white transition text-2xl hover:scale-110 active:scale-95"
+                  >
+                    ⏭
+                  </button>
+                </div>
+
+                {/* Duration and Download */}
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2 text-amber-100">
+                    <span className="text-xl">⏱</span>
+                    <span className="font-semibold">{audioDuration}</span>
+                  </div>
+                  <button className="text-amber-100 hover:text-white transition text-2xl">⬇</button>
+                </div>
+              </div>
+            </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* CULTURAL CALENDAR SECTION */}
+      <section
+        id="cultural-calendar"
+        className="relative w-full"
+        style={{ backgroundColor: '#410704' }}
+      >
+        {/* TOP BAR WITH VIDEO */}
+        <div className="relative w-screen h-56 md:h-72 lg:h-80 overflow-hidden flex items-center">
+          <video
+            src="/cultural calendar vid.mp4"
+            autoPlay
+            muted
+            loop
+            playsInline
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+
+          {/* Gradient overlay */}
+          <div
+            className="absolute inset-0"
+            style={{
+              background:
+                'linear-gradient(90deg, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.45) 35%, rgba(0,0,0,0.1) 100%)',
+            }}
+          />
+
+          {/* Center Title */}
+          <div className="relative z-10 w-full flex items-center justify-center">
+            <div className="flex items-center gap-3">
+              <h3
+                className="text-amber-100 text-3xl md:text-4xl font-semibold tracking-[0.25em] uppercase font-cinzel-decorative"
+              >
+                CULTURAL CALENDAR
+              </h3>
+            </div>
+          </div>
+        </div>
+
+        {/* CONTENT BELOW VIDEO */}
+        <div className="max-w-7xl mx-auto px-6 lg:px-14 py-20">
+          {/* TIMELINE STRIP */}
           <div className="relative" style={{ paddingTop: '150px', paddingBottom: '0px' }}>
             <div className="absolute left-0 right-0 h-1 transform -translate-y-1/2"
               style={{
@@ -631,8 +880,8 @@ export default function DubdiMonastery() {
             <div className="grid grid-cols-4 gap-0 relative" style={{ minHeight: '360px' }}>
               <div className="relative">
                 <Reveal delay={0.1}>
-                  <div className="absolute left-1/2 transform -translate-x-1/2 rounded-2xl bg-gradient-to-br from-yellow-300 to-yellow-200 border-4 border-yellow-400 p-4 w-44 min-h-[150px] shadow-lg"
-                    style={{ top: 'calc(50% - 160px)', zIndex:2 }}>
+                  <div className="absolute left-1/2 transform -translate-x-1/2 rounded-2xl bg-gradient-to-br from-yellow-300 to-yellow-200 border-4 border-yellow-400 p-4 w-44 shadow-lg"
+                    style={{ top: 'calc(50% - 180px)', zIndex:2 }}>
                     <p className="text-xs font-semibold text-amber-900 mb-1">February – March</p>
                     <p className="text-xs text-amber-900 mb-2">1st Tibetan Month</p>
                     <h3 className="text-lg font-bold text-amber-900">Losar</h3>
@@ -661,8 +910,8 @@ export default function DubdiMonastery() {
 
               <div className="relative">
                 <Reveal delay={0.3}>
-                  <div className="absolute left-1/2 transform -translate-x-1/2 rounded-2xl bg-gradient-to-br from-orange-500 to-orange-400 border-4 border-orange-600 p-4 w-44 min-h-[150px] shadow-lg"
-                    style={{ top: 'calc(50% - 160px)', zIndex:2 }}>
+                  <div className="absolute left-1/2 transform -translate-x-1/2 rounded-2xl bg-gradient-to-br from-orange-500 to-orange-400 border-4 border-orange-600 p-4 w-44 shadow-lg"
+                    style={{ top: 'calc(50% - 190px)', zIndex:2 }}>
                     <p className="text-xs font-semibold text-white mb-1">May – June</p>
                     <p className="text-xs text-white mb-2">4th Tibetan Month</p>
                     <h3 className="text-lg font-bold text-white">Saga Dawa</h3>
@@ -691,8 +940,9 @@ export default function DubdiMonastery() {
             </div>
           </div>
 
+          {/* FESTIVAL DESCRIPTIONS */}
           <Reveal delay={0.6}>
-            <div className="mt-32 space-y-8">
+            <div className="mt-2 space-y-8">
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <Reveal delay={0.7}>
                   <div className="rounded-2xl bg-white/5 backdrop-blur-sm border border-yellow-500/20 p-6 hover:border-yellow-400/40 transition-colors">
@@ -732,16 +982,16 @@ export default function DubdiMonastery() {
               </div>
 
               <Reveal delay={0.95}>
-                <div className="rounded-3xl bg-gradient-to-r from-orange-900/20 to-amber-900/20 backdrop-blur-md border border-amber-500/20 p-8">
-                  <p className="text-base text-amber-50 leading-relaxed font-light">
-                    As Sikkim's first monastery, Dubdi holds a special place in the cultural and spiritual calendar of the region. These festivals at Dubdi represent the living heritage of Tibetan Buddhism, connecting past and present through sacred traditions that have endured for over three centuries.
-                  </p>
-                </div>
-              </Reveal>
-            </div>
-          </Reveal>
-        </div>
-      </section>
+                  <div className="rounded-3xl bg-gradient-to-r from-orange-900/20 to-amber-900/20 backdrop-blur-md border border-amber-500/20 p-8">
+                    <p className="text-base text-amber-50 leading-relaxed font-light">
+                      As Sikkim's first monastery, Dubdi holds a special place in the cultural and spiritual calendar of the region. These festivals at Dubdi represent the living heritage of Tibetan Buddhism, connecting past and present through sacred traditions that have endured for over three centuries.
+                    </p>
+                  </div>
+                </Reveal>
+              </div>
+            </Reveal>
+          </div>
+        </section>
 
       <Footer />
     </main>
