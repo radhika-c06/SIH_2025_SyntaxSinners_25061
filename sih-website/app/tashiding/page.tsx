@@ -717,7 +717,7 @@ export default function TashidingMonastery() {
         <div className="w-full py-10" style={{ background: 'linear-gradient(180deg, #6b4a3a 0%, #410704 100%)' }}>
           <div className="max-w-7xl mx-auto px-6 lg:px-14 text-center">
             <h2 className="text-amber-100 text-6xl md:text-7xl font-bold mb-2 flex items-center justify-center gap-4" style={{ fontFamily: 'Cinzel' }}>
-              <img src="/Icons/ICONS/HEADPHONE.png" alt="Headphone" className="w-16 h-16" />
+              <img src="/Icons/ICONS/HEADPHONE.png" alt="Headphone" className="w-16 h-16" style={{ filter: 'brightness(0) saturate(100%) invert(80%) sepia(60%) hue-rotate(30deg) saturate(120%)' }} />
               AUDIO TOUR
             </h2>
           </div>
