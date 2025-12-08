@@ -1302,7 +1302,63 @@ export default function DubdiMonastery() {
         </div>
       </section>
 
+      {/* Booking Section */}
+      <section className="py-16 px-6 bg-gradient-to-b from-[#3b1212] to-[#2b0d0d] border-t border-amber-300/20">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-4xl font-cinzel-decorative text-amber-100 mb-12 text-center">
+            Experience Dubdi
+          </h2>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <BookingCard 
+              title="GUIDED TOUR" 
+              description="Book a certified tour guide" 
+              icon="🧑‍🏫"
+              href="/experiences/tour-guide-booking"
+            />
+            <BookingCard 
+              title="MEDITATION" 
+              description="Join meditation sessions" 
+              icon="🧘"
+              href="/experiences/meditation-booking"
+            />
+            <BookingCard 
+              title="ACCOMMODATION" 
+              description="Book your stay" 
+              icon="🏨"
+              href="/experiences/accommodations"
+            />
+            <BookingCard 
+              title="TRANSPORT" 
+              description="Arrange transport" 
+              icon="🚌"
+              href="/experiences/cabs-buses"
+            />
+          </div>
+        </div>
+      </section>
+
       <Footer />
     </main>
+  );
+}
+
+function BookingCard({ title, description, icon, href }: { title: string; description: string; icon: string; href: string }) {
+  return (
+    <a
+      href={href}
+      className="bg-[#4a1414] rounded-2xl p-6 pop-card hover:shadow-lg hover:shadow-amber-300/20 transition-all duration-300 flex flex-col group"
+    >
+      <div className="text-5xl mb-4 group-hover:scale-110 transition-transform">{icon}</div>
+      <h3 className="text-xl font-cinzel-decorative text-amber-50 mb-3">
+        {title}
+      </h3>
+      <p className="text-white/80 text-sm font-merriweather flex-grow">
+        {description}
+      </p>
+      <button className="mt-4 w-full py-2 bg-gradient-to-r from-amber-400 to-amber-300 text-black rounded-lg font-cinzel-decorative font-semibold hover:from-amber-300 hover:to-amber-200 transition-all">
+        Book Now
+      </button>
+    </a>
   );
 }

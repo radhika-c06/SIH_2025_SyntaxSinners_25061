@@ -63,7 +63,7 @@ export default function ExperiencesPage() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {options.map((opt) => {
-                const isClickable = opt.id === 'tour'
+                const isClickable = opt.id === 'tour' || opt.id === 'cabs' || opt.id === 'stay' || opt.id === 'meditate'
 
                 const content = (
                   <div>
@@ -111,7 +111,7 @@ export default function ExperiencesPage() {
                     </div>
 
                     {/* Buttons / actions aligned under text column */}
-                    {(opt.id === 'stay' || opt.id === 'tour') && (
+                    {opt.id === 'stay' && (
                       <div className="mt-4 ml-14">
                         <button className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-md font-poppins">Book now</button>
                       </div>
@@ -124,27 +124,15 @@ export default function ExperiencesPage() {
                     )}
 
                     {opt.id === 'meditate' && (
-                      <div className="mt-4 flex flex-wrap gap-3 ml-14">
-                        <button
-                          aria-label="Morning meditation time"
-                          className="px-4 py-1.5 rounded-full bg-white/6 border border-amber-300 text-amber-100 text-sm font-merriweather hover:bg-white/10 transition"
-                        >
-                          Morning: 6:00 AM
-                        </button>
-
-                        <button
-                          aria-label="Evening meditation time"
-                          className="px-4 py-1.5 rounded-full bg-white/6 border border-amber-300 text-amber-100 text-sm font-merriweather hover:bg-white/10 transition"
-                        >
-                          Evening: 5:00 PM
-                        </button>
+                      <div className="mt-4 ml-14">
+                        <button className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-md font-poppins">Book now</button>
                       </div>
                     )}
                   </div>
                 )
 
                 return isClickable ? (
-                  <Link key={opt.id} href="/experiences/tour-guide-booking" className="bg-[#4a1414] rounded-3xl p-6 pop-card shine-border hover:bg-[#5a1a1a] transition-colors cursor-pointer">
+                  <Link key={opt.id} href={opt.id === 'tour' ? "/experiences/tour-guide-booking" : opt.id === 'cabs' ? "/experiences/cabs-buses" : opt.id === 'meditate' ? "/experiences/meditation-booking" : "/experiences/accommodations"} className="bg-[#4a1414] rounded-3xl p-6 pop-card shine-border hover:bg-[#5a1a1a] transition-colors cursor-pointer">
                     {content}
                   </Link>
                 ) : (
