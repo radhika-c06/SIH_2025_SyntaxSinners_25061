@@ -1,12 +1,54 @@
 "use client";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import OCR from "@/components/OCR";
 
 export default function MediaContributionPage() {
+  const router = useRouter();
   const [selectedType, setSelectedType] = useState<"photo" | "video">("photo");
   const [showOCR, setShowOCR] = useState(false);
+  const [timeLeft, setTimeLeft] = useState(5 * 60); // 5 minutes in seconds
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    // Check if user is authenticated
+    if (typeof window !== "undefined") {
+      const isAuth = localStorage.getItem("mediaContributorAuth");
+      if (!isAuth) {
+        router.push("/media-contribution/login");
+        return;
+      }
+    }
+
+    // Timer logic
+    const timer = setInterval(() => {
+      setTimeLeft(prev => {
+        if (prev <= 1) {
+          // Session expired - logout and redirect to login
+          localStorage.removeItem("mediaContributorAuth");
+          localStorage.removeItem("mediaContributorExpiry");
+          router.push("/media-contribution/login");
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [router]);
+
+  const formatTime = (seconds: number) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs.toString().padStart(2, "0")}`;
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("mediaContributorAuth");
+    localStorage.removeItem("mediaContributorExpiry");
+    router.push("/media-contribution/login");
+  };
 
   const handleSubmit = () => {
     if (selectedType === "photo") {
@@ -34,9 +76,20 @@ export default function MediaContributionPage() {
             <img src="/logo web.png" alt="Logo" className="h-10 w-10 object-contain" />
             <span className="font-poppins text-xl">Sangha</span>
           </Link>
-          <Link href="/" className="text-sm hover:opacity-80">
-            ← Back to Home
-          </Link>
+          <div className="flex items-center gap-6">
+            <div className="flex items-center gap-2 bg-amber-600 px-4 py-2 rounded-lg">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/>
+              </svg>
+              <span className="font-poppins font-semibold text-white">Session: {formatTime(timeLeft)}</span>
+            </div>
+            <button
+              onClick={handleLogout}
+              className="text-sm px-4 py-2 bg-red-600 hover:bg-red-700 rounded transition"
+            >
+              Logout
+            </button>
+          </div>
         </div>
       </header>
 
