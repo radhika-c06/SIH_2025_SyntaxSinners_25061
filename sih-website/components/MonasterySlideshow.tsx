@@ -1,8 +1,20 @@
 "use client";
 import { useState, useRef, useEffect } from "react";
+import Link from "next/link"; 
+
+type Monastery = {
+  name: string;
+  location: string;
+  altitude: string;
+  founded: string;
+  description: string;
+  image: string;
+  href: string;   // 👈 important
+};
 
 
-const MONASTERIES = [
+
+const MONASTERIES: Monastery[] = [
   {
     name: "Tashiding Monastery",
     location: "West Sikkim",
@@ -11,15 +23,18 @@ const MONASTERIES = [
     description:
       "Revered as the 'Venerated Central Glory', Tashiding is vital to Sikkimese monasticism, its sublime mountain site and stupa are iconic. A single image is said to cleanse one's sins.",
     image: "/monasteries/tashiding.png",
+    href: "/tashiding",          // 👈 route: app/tashiding/page.tsx
   },
   {
-name: "Tsuk La Khang Monastery",
-location: "Gangtok, East Sikkim",
-altitude: "1,437m",
-founded: "1894 CE",
-description: "Tsuk La Khang Monastery, located in the heart of Gangtok, is the former royal chapel of the Chogyal dynasty and one of Sikkim’s most significant centres of Buddhist learning.",
-image: "/tsuk/tsuk.avif"
-},
+    name: "Tsuk La Khang Monastery",
+    location: "Gangtok, East Sikkim",
+    altitude: "1,437m",
+    founded: "1894 CE",
+    description:
+      "Tsuk La Khang Monastery, located in the heart of Gangtok, is the former royal chapel of the Chogyal dynasty and one of Sikkim’s most significant centres of Buddhist learning.",
+    image: "/tsuk/tsuk.avif",
+    href: "/tsuk",               // 👈 route: app/tsuk/page.tsx
+  },
   {
     name: "Dubdi Monastery",
     location: "Yuksom, West Sikkim",
@@ -28,6 +43,7 @@ image: "/tsuk/tsuk.avif"
     description:
       "The 'Hermit's Cell', Dubdi, is Sikkim's first monastery, its stone chapel marking the crowning of the kingdom's Buddhist order.",
     image: "/monasteries/dubdi.png",
+    href: "/dubdi",              // 👈 route: app/dubdi/page.tsx
   },
   {
     name: "Rumtek Monastery",
@@ -37,8 +53,10 @@ image: "/tsuk/tsuk.avif"
     description:
       "Grand and imposing, Rumtek is the Dharma Chakra Centre, stunning, alive with ritual, color, and living tradition.",
     image: "/monasteries/rumtek.jpg",
+    href: "/rumtek",             // 👈 route: app/rumtek/page.tsx
   },
 ];
+
 
 export default function MonasterySlideshow() {
   const [index, setIndex] = useState(0);
@@ -99,7 +117,12 @@ export default function MonasterySlideshow() {
               <div className="px-12 py-8 flex-1 flex flex-col justify-center h-full bg-[#e5e5e5]" style={{ minHeight: '100%' }}>
                 <div className="flex flex-col justify-center h-full">
                   <p className="text-xl font-merriweather text-black mb-8 leading-relaxed">{m.description}</p>
-                  <span className="inline-block bg-amber-400 text-black font-cinzel px-8 py-3 rounded-full text-lg self-start">Slide In</span>
+                  <Link
+  href={m.href}
+  className="inline-block bg-amber-400 text-black font-cinzel px-8 py-3 rounded-full text-lg self-start hover:bg-amber-500 transition-colors"
+>
+  Slide in
+</Link>
                 </div>
               </div>
               {/* Details Box */}

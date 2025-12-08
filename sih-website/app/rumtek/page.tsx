@@ -16,6 +16,7 @@ export default function RumtekMonastery() {
   const [isLiked, setIsLiked] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
+  const [viewMode, setViewMode] = useState<'3d' | 'panoramic'>('3d');
   const audioRef = useRef<HTMLAudioElement>(null);
 
   const scrollToSection = (id: string) => {
@@ -1430,17 +1431,92 @@ export default function RumtekMonastery() {
                   </div>
                 </div>
               </div>
+
+              {/* Vlogger Journeys Box */}
+              <div className="rounded-3xl p-6" style={{ backgroundColor: 'rgba(120, 53, 15, 0.5)', border: '2px solid rgba(217, 119, 6, 0.4)', backdropFilter: 'blur(10px)' }}>
+                <div className="flex items-start gap-4 mb-4">
+                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center flex-shrink-0">
+                    <span className="text-2xl">🎥</span>
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="text-xl font-semibold text-amber-50 mb-2 leading-tight" style={{ fontFamily: 'Chivo' }}>
+                      Explore Through Their Eyes: Virtual Tour Based on Vlogger Journeys
+                    </h3>
+                    <p className="text-base text-amber-200 leading-relaxed mb-4" style={{ fontFamily: 'Chivo' }}>
+                      Experience the monastery through authentic perspectives captured by travel vloggers. Navigate their documented paths and discover hidden details they've shared.
+                    </p>
+                    
+                    {/* Video Links */}
+                    <div className="space-y-2">
+                      <a 
+                        href="https://youtu.be/6h69QMv8msg?si=I5JPc1ngItffHx8V" 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-2 text-sm text-blue-400 hover:text-blue-300 transition-colors group"
+                        style={{ fontFamily: 'Chivo' }}
+                      >
+                        <span className="text-lg group-hover:scale-110 transition-transform">▶️</span>
+                        <span className="underline break-all">https://youtu.be/6h69QMv8msg?si=I5JPc1ngItffHx8V</span>
+                      </a>
+                      <a 
+                        href="https://www.youtube.com/watch?v=yWDTVaocpNg" 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-2 text-sm text-blue-400 hover:text-blue-300 transition-colors group"
+                        style={{ fontFamily: 'Chivo' }}
+                      >
+                        <span className="text-lg group-hover:scale-110 transition-transform">▶️</span>
+                        <span className="underline break-all">https://www.youtube.com/watch?v=yWDTVaocpNg</span>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
 
             {/* Right Side - Tour Preview */}
             <div className="space-y-6">
+              {/* View Mode Toggle */}
+              <div className="rounded-full p-1.5" style={{ backgroundColor: 'rgba(217, 119, 6, 0.2)', border: '2px solid rgba(217, 119, 6, 0.3)' }}>
+                <div className="flex gap-1">
+                  <button
+                    onClick={() => setViewMode('3d')}
+                    className={`flex-1 px-6 py-3 rounded-full font-semibold transition-all duration-300 ${
+                      viewMode === '3d'
+                        ? 'bg-gradient-to-r from-amber-500 to-amber-600 text-amber-900 shadow-lg'
+                        : 'text-amber-100 hover:text-amber-50'
+                    }`}
+                    style={{ fontFamily: 'Cinzel' }}
+                  >
+                    <span className="flex items-center justify-center gap-2">
+                      <span className="text-xl">🏛️</span>
+                      <span>3D Model</span>
+                    </span>
+                  </button>
+                  <button
+                    onClick={() => setViewMode('panoramic')}
+                    className={`flex-1 px-6 py-3 rounded-full font-semibold transition-all duration-300 ${
+                      viewMode === 'panoramic'
+                        ? 'bg-gradient-to-r from-amber-500 to-amber-600 text-amber-900 shadow-lg'
+                        : 'text-amber-100 hover:text-amber-50'
+                    }`}
+                    style={{ fontFamily: 'Cinzel' }}
+                  >
+                    <span className="flex items-center justify-center gap-2">
+                      <span className="text-xl">👁️</span>
+                      <span>Panoramic</span>
+                    </span>
+                  </button>
+                </div>
+              </div>
+
               {/* Start Tour Button */}
-              <button className="w-full py-6 rounded-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 transition-all duration-300 shadow-lg hover:shadow-xl flex items-center justify-center gap-3 group">
+              <button className="w-full py-6 rounded-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 transition-all duration-300 shadow-lg hover:shadow-xl flex items-center justify-center gap-3 group" style={{ fontFamily: 'Cinzel' }}>
                 <span className="text-3xl group-hover:scale-110 transition-transform">▶</span>
-                <span className="text-2xl font-bold text-amber-900">Start Tour</span>
+                <span className="text-2xl font-bold text-amber-900">Start {viewMode === '3d' ? '3D' : 'Panoramic'} Tour</span>
               </button>
 
-              {/* Preview Box */}
+              {/* Preview Box with Dynamic Content */}
               <div
                 className="rounded-3xl overflow-hidden"
                 style={{
@@ -1449,14 +1525,26 @@ export default function RumtekMonastery() {
                   backdropFilter: 'blur(10px)',
                 }}
               >
-                <div className="h-[28rem] bg-gradient-to-br from-amber-900 to-orange-900 flex items-center justify-center">
-                  <div className="text-center text-amber-100">
-                    <div className="text-6xl mb-4">🏛️</div>
-                    <p className="text-lg">Virtual Tour Preview of Rumtek Monastery</p>
-                    <p className="text-sm text-amber-200 mt-2">
-                      Soon, you&apos;ll be able to move through every corner of the monastery—from the main
-                      courtyard to the monks&apos; living quarters—in a seamless 360° environment.
-                    </p>
+                <div className="h-[28rem] bg-gradient-to-br from-amber-900 to-orange-900 flex items-center justify-center relative">
+                  {viewMode === '3d' ? (
+                    <div className="text-center text-amber-100">
+                      <div className="text-6xl mb-4">🏛️</div>
+                      <p className="text-lg font-semibold mb-2" style={{ fontFamily: 'Cinzel' }}>3D Model View</p>
+                      <p className="text-sm text-amber-200" style={{ fontFamily: 'Cinzel' }}>Interactive 3D monastery model</p>
+                    </div>
+                  ) : (
+                    <div className="text-center text-amber-100">
+                      <div className="text-6xl mb-4">👁️</div>
+                      <p className="text-lg font-semibold mb-2" style={{ fontFamily: 'Cinzel' }}>Panoramic View</p>
+                      <p className="text-sm text-amber-200" style={{ fontFamily: 'Cinzel' }}>360° immersive experience</p>
+                    </div>
+                  )}
+                  
+                  {/* Mode indicator badge */}
+                  <div className="absolute top-4 right-4 px-4 py-2 rounded-full bg-amber-900/80 backdrop-blur-sm border border-amber-500/30">
+                    <span className="text-xs font-semibold text-amber-100 uppercase" style={{ fontFamily: 'Cinzel' }}>
+                      {viewMode === '3d' ? '3D Model' : 'Panoramic 360°'}
+                    </span>
                   </div>
                 </div>
               </div>
