@@ -1027,8 +1027,8 @@ export default function TashidingMonastery() {
                 <h3 className="text-lg font-semibold text-amber-50 mb-4 uppercase" style={{ fontFamily: 'Cinzel' }}>Tour Features</h3>
                 <div className="space-y-3 flex-1 flex flex-col justify-center overflow-y-auto">
                   <div className="flex items-start gap-3 transition-all duration-300 hover:scale-105 cursor-pointer p-2 rounded-lg hover:bg-opacity-60" style={{ backgroundColor: 'rgba(217, 119, 6, 0.1)' }}>
-                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-orange-400 to-amber-500 flex items-center justify-center flex-shrink-0">
-                      <span className="text-lg">🎯</span>
+                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-orange-400 to-amber-500 flex items-center justify-center flex-shrink-0 p-2.5">
+                      <img src="/Icons/ICONS/LOCATION.png" alt="Interactive Navigation" className="w-full h-full object-contain" />
                     </div>
                     <div className="flex-1 min-w-0">
                       <h4 className="text-amber-100 font-semibold text-sm mb-0.5">Interactive Navigation</h4>
@@ -1036,8 +1036,8 @@ export default function TashidingMonastery() {
                     </div>
                   </div>
                   <div className="flex items-start gap-3 transition-all duration-300 hover:scale-105 cursor-pointer p-2 rounded-lg hover:bg-opacity-60" style={{ backgroundColor: 'rgba(217, 119, 6, 0.1)' }}>
-                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-amber-400 to-yellow-500 flex items-center justify-center flex-shrink-0">
-                      <span className="text-lg">🎧</span>
+                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-amber-400 to-yellow-500 flex items-center justify-center flex-shrink-0 p-2.5">
+                      <img src="/Icons/ICONS/HEADPHONE.png" alt="Audio Narration" className="w-full h-full object-contain" />
                     </div>
                     <div className="flex-1 min-w-0">
                       <h4 className="text-amber-100 font-semibold text-sm mb-0.5">Audio Narration</h4>
@@ -1045,8 +1045,20 @@ export default function TashidingMonastery() {
                     </div>
                   </div>
                   <div className="flex items-start gap-3 transition-all duration-300 hover:scale-105 cursor-pointer p-2 rounded-lg hover:bg-opacity-60" style={{ backgroundColor: 'rgba(217, 119, 6, 0.1)' }}>
-                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-yellow-400 to-orange-500 flex items-center justify-center flex-shrink-0">
-                      <span className="text-lg">📱</span>
+                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-yellow-400 to-orange-500 flex items-center justify-center flex-shrink-0 p-2">
+                      <svg viewBox="0 0 24 24" fill="none" className="w-full h-full">
+                        <path d="M17 2H7C5.89543 2 5 2.89543 5 4V20C5 21.1046 5.89543 22 7 22H17C18.1046 22 19 21.1046 19 20V4C19 2.89543 18.1046 2 17 2Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                        <path d="M7 6H17M7 18H17M10 19H14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                        <circle cx="8" cy="10" r="0.75" fill="currentColor"/>
+                        <circle cx="12" cy="10" r="0.75" fill="currentColor"/>
+                        <circle cx="16" cy="10" r="0.75" fill="currentColor"/>
+                        <circle cx="8" cy="13" r="0.75" fill="currentColor"/>
+                        <circle cx="12" cy="13" r="0.75" fill="currentColor"/>
+                        <circle cx="16" cy="13" r="0.75" fill="currentColor"/>
+                        <circle cx="8" cy="16" r="0.75" fill="currentColor"/>
+                        <circle cx="12" cy="16" r="0.75" fill="currentColor"/>
+                        <circle cx="16" cy="16" r="0.75" fill="currentColor"/>
+                      </svg>
                     </div>
                     <div className="flex-1 min-w-0">
                       <h4 className="text-amber-100 font-semibold text-sm mb-0.5">Mobile Friendly</h4>
@@ -1054,8 +1066,13 @@ export default function TashidingMonastery() {
                     </div>
                   </div>
                   <div className="flex items-start gap-3 transition-all duration-300 hover:scale-105 cursor-pointer p-2 rounded-lg hover:bg-opacity-60" style={{ backgroundColor: 'rgba(217, 119, 6, 0.1)' }}>
-                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-orange-300 to-amber-600 flex items-center justify-center flex-shrink-0">
-                      <span className="text-lg">🎨</span>
+                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-orange-300 to-amber-600 flex items-center justify-center flex-shrink-0 p-2">
+                      <svg viewBox="0 0 24 24" fill="none" className="w-full h-full">
+                        <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" strokeWidth="1.5" strokeDasharray="2 2"/>
+                        <path d="M3 14L8 9L12 13L21 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                        <circle cx="16" cy="8" r="2" fill="currentColor"/>
+                        <path d="M1 1L5 5M19 1L23 5M1 23L5 19M19 23L23 19" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                      </svg>
                     </div>
                     <div className="flex-1 min-w-0">
                       <h4 className="text-amber-100 font-semibold text-sm mb-0.5">High Resolution</h4>
@@ -1068,8 +1085,13 @@ export default function TashidingMonastery() {
               {/* Vlogger Journeys Box */}
               <div className="rounded-3xl p-6" style={{ backgroundColor: 'rgba(120, 53, 15, 0.5)', border: '2px solid rgba(217, 119, 6, 0.4)', backdropFilter: 'blur(10px)' }}>
                 <div className="flex items-start gap-4 mb-4">
-                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center flex-shrink-0">
-                    <span className="text-2xl">🎥</span>
+                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center flex-shrink-0 p-2.5">
+                    <svg viewBox="0 0 24 24" fill="currentColor" className="w-full h-full">
+                      <path d="M3 4C3 2.89543 3.89543 2 5 2H16C17.1046 2 18 2.89543 18 4V13C18 14.1046 17.1046 15 16 15H5C3.89543 15 3 14.1046 3 13V4Z" stroke="currentColor" strokeWidth="0.5"/>
+                      <path d="M18 6.5L22 4V13L18 10.5V6.5Z"/>
+                      <circle cx="6.5" cy="5.5" r="1" fill="white" opacity="0.8"/>
+                      <path d="M8.5 7L13 9.5L8.5 12V7Z" fill="white"/>
+                    </svg>
                   </div>
                   <div className="flex-1">
                     <h3 className="text-xl font-semibold text-amber-50 mb-2 leading-tight" style={{ fontFamily: 'Chivo' }}>
@@ -1132,7 +1154,11 @@ export default function TashidingMonastery() {
                     style={{ fontFamily: 'Cinzel' }}
                   >
                     <span className="flex items-center justify-center gap-2">
-                      <span className="text-xl">🏛️</span>
+                      <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
+                        <path d="M12 2L3 7V17L12 22L21 17V7L12 2Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+                        <path d="M12 12L3 7M12 12L21 7M12 12V22" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                        <path d="M7.5 9.5L12 12L16.5 9.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
                       <span>3D Model</span>
                     </span>
                   </button>
@@ -1146,7 +1172,12 @@ export default function TashidingMonastery() {
                     style={{ fontFamily: 'Cinzel' }}
                   >
                     <span className="flex items-center justify-center gap-2">
-                      <span className="text-xl">👁️</span>
+                      <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
+                        <ellipse cx="12" cy="6" rx="10" ry="3" stroke="currentColor" strokeWidth="1.5" fill="none"/>
+                        <path d="M2 6V18C2 19.6569 6.47715 21 12 21C17.5228 21 22 19.6569 22 18V6" stroke="currentColor" strokeWidth="1.5" fill="none"/>
+                        <circle cx="9" cy="11" r="1.5" fill="currentColor"/>
+                        <path d="M7 15L10 12L13 15L17 10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+                      </svg>
                       <span>Panoramic</span>
                     </span>
                   </button>
