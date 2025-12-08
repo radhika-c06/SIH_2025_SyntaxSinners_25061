@@ -101,7 +101,7 @@ export default function ExperiencesPage() {
                         )}
                       </div>
                       <div>
-                        <h3 className="text-xl text-amber-50 font-cinzel-decorative">{opt.title}</h3>
+                        <h3 className="text-xl text-amber-50 font-cinzel">{opt.title}</h3>
                         <p className="mt-3 text-sm text-white/80 max-w-md font-merriweather">{opt.desc}</p>
                       </div>
                     </div>
