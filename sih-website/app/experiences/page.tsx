@@ -63,7 +63,13 @@ export default function ExperiencesPage() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {options.map((opt) => {
-                const isClickable = opt.id === 'tour'
+                const isClickable = opt.id === 'tour' || opt.id === 'cabs' || opt.id === 'stay'
+                const getHref = () => {
+                  if (opt.id === 'tour') return '/experiences/tour-guide-booking'
+                  if (opt.id === 'cabs') return '/experiences/travel'
+                  if (opt.id === 'stay') return '/experiences/accommodations'
+                  return '#'
+                }
 
                 const content = (
                   <div>
@@ -144,7 +150,7 @@ export default function ExperiencesPage() {
                 )
 
                 return isClickable ? (
-                  <Link key={opt.id} href="/experiences/tour-guide-booking" className="bg-[#4a1414] rounded-3xl p-6 pop-card shine-border hover:bg-[#5a1a1a] transition-colors cursor-pointer">
+                  <Link key={opt.id} href={getHref()} className="bg-[#4a1414] rounded-3xl p-6 pop-card shine-border hover:bg-[#5a1a1a] transition-colors cursor-pointer">
                     {content}
                   </Link>
                 ) : (
