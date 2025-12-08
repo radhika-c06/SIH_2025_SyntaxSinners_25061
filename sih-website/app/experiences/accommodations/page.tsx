@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect } from "react"
 import Link from "next/link"
-import { useRouter } from "next/navigation"
 import DatePicker from "react-datepicker"
 import "react-datepicker/dist/react-datepicker.css"
 
@@ -102,7 +101,6 @@ function getRandomAccommodations(count: number = 4): Accommodation[] {
 }
 
 export default function AccommodationsPage() {
-  const router = useRouter()
   const [accommodations, setAccommodations] = useState<Accommodation[]>([])
   const [selectedAccommodation, setSelectedAccommodation] = useState<Accommodation | null>(null)
   const [showModal, setShowModal] = useState(false)
@@ -243,7 +241,7 @@ export default function AccommodationsPage() {
 
   return (
     <div className="min-h-screen py-16 px-6 bg-gradient-to-b from-[#2b0d0d] via-[#5a1f1f] to-[#3b1212] text-white">
-      <div className="max-w-6xl mx-auto">
+      <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-12">
           <div className="flex items-center justify-between mb-6">
@@ -260,6 +258,19 @@ export default function AccommodationsPage() {
           <p className="text-white/80 text-lg font-merriweather">
             Find nearby guesthouses and monastery stay options
           </p>
+        </div>
+
+        {/* Info Banner */}
+        <div className="bg-amber-300/10 border-2 border-amber-300/30 rounded-3xl p-6 mb-10">
+          <div className="flex items-start gap-4">
+            <span className="text-3xl flex-shrink-0">🏔️</span>
+            <div>
+              <h3 className="font-cinzel text-amber-100 text-xl mb-2">Stay Near Sacred Grounds</h3>
+              <p className="text-white/90 font-merriweather leading-relaxed">
+                Experience spiritual tranquility with comfortable stays ranging from traditional monastery rooms to cozy guesthouses. All listings keep you close to key monasteries with easy access and calm surroundings.
+              </p>
+            </div>
+          </div>
         </div>
 
         {/* Refresh Button */}
@@ -332,6 +343,44 @@ export default function AccommodationsPage() {
               </div>
             </div>
           ))}
+        </div>
+
+        {/* Tips Section */}
+        <div className="bg-yellow-400/15 border-2 border-yellow-400/40 rounded-3xl p-8 mb-12">
+          <div className="flex items-start gap-4">
+            <span className="text-4xl flex-shrink-0">💡</span>
+            <div>
+              <h3 className="font-cinzel text-amber-100 text-xl mb-2">Booking Tips</h3>
+              <ul className="space-y-2 text-white/90 font-merriweather leading-relaxed">
+                <li className="flex items-start gap-2">
+                  <span className="text-amber-300 mt-1">→</span>
+                  <span>Book early during festival seasons when monastery stays fill quickly.</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-amber-300 mt-1">→</span>
+                  <span>Most hosts offer authentic Sikkimese meals—ask about meal plans.</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-amber-300 mt-1">→</span>
+                  <span>Check for guided meditation or monastery visit slots when you book.</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-amber-300 mt-1">→</span>
+                  <span>Carry some cash; digital payments may be patchy in hill areas.</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        {/* CTA Footer */}
+        <div className="text-center">
+          <Link
+            href="/experiences"
+            className="inline-block px-8 py-3 bg-amber-400 hover:bg-amber-500 text-black font-cinzel font-bold rounded-lg transition-all shadow-lg hover:shadow-amber-300/50"
+          >
+            Explore More Experiences
+          </Link>
         </div>
       </div>
 
