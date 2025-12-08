@@ -480,8 +480,8 @@ export default function RumtekMonastery() {
           {[
             { label: 'Overview', target: 'overview' },
             { label: 'Digital Archive', target: 'digital-archive' },
-            { label: 'Audio Tour', target: 'audio-tour' },
             { label: 'Cultural Calendar', target: 'cultural-calendar' },
+            { label: 'Audio Tour', target: 'audio-tour' },
             { label: 'Virtual Tour', target: 'virtual-tour' },
           ].map((btn) => (
             <button
@@ -1253,7 +1253,7 @@ export default function RumtekMonastery() {
                     <div className="flex items-center gap-2 text-amber-100">
                       <span className="text-xl">⏱</span>
                       <span className="font-semibold">
-                        {Math.floor(currentTime / 60)}:{String(Math.floor(currentTime % 60)).padStart(2, '0')} / {audioDuration}
+                        {Math.floor(currentTime / 60)}:{String(Math.floor(currentTime % 60)).padStart(2, '0')}
                       </span>
                     </div>
                     <button className="text-amber-100 hover:text-white transition text-2xl">⬇</button>
@@ -1525,18 +1525,24 @@ export default function RumtekMonastery() {
                   backdropFilter: 'blur(10px)',
                 }}
               >
-                <div className="h-[28rem] bg-gradient-to-br from-amber-900 to-orange-900 flex items-center justify-center relative">
+                <div className="h-[28rem] relative overflow-hidden">
                   {viewMode === '3d' ? (
-                    <div className="text-center text-amber-100">
-                      <div className="text-6xl mb-4">🏛️</div>
-                      <p className="text-lg font-semibold mb-2" style={{ fontFamily: 'Cinzel' }}>3D Model View</p>
-                      <p className="text-sm text-amber-200" style={{ fontFamily: 'Cinzel' }}>Interactive 3D monastery model</p>
-                    </div>
+                    <video
+                      autoPlay
+                      loop
+                      muted
+                      playsInline
+                      className="w-full h-full object-cover"
+                    >
+                      <source src="/rumtek/WhatsApp Video 2025-12-08 at 7.14.23 AM.mp4" type="video/mp4" />
+                    </video>
                   ) : (
-                    <div className="text-center text-amber-100">
-                      <div className="text-6xl mb-4">👁️</div>
-                      <p className="text-lg font-semibold mb-2" style={{ fontFamily: 'Cinzel' }}>Panoramic View</p>
-                      <p className="text-sm text-amber-200" style={{ fontFamily: 'Cinzel' }}>360° immersive experience</p>
+                    <div className="w-full h-full bg-gradient-to-br from-amber-900 to-orange-900 flex items-center justify-center">
+                      <div className="text-center text-amber-100">
+                        <div className="text-6xl mb-4">👁️</div>
+                        <p className="text-lg font-semibold mb-2" style={{ fontFamily: 'Cinzel' }}>Panoramic View</p>
+                        <p className="text-sm text-amber-200" style={{ fontFamily: 'Cinzel' }}>360° immersive experience</p>
+                      </div>
                     </div>
                   )}
                   

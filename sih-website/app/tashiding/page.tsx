@@ -86,8 +86,8 @@ export default function TashidingMonastery() {
   const sidebarItems = [
     { id: 'overview', label: 'Overview' },
     { id: 'digital-archive', label: 'Digital Archive' },
-    { id: 'audio-tour', label: 'Audio Tour' },
     { id: 'cultural-calendar', label: 'Cultural Calendar' },
+    { id: 'audio-tour', label: 'Audio Tour' },
     { id: 'virtual-tour', label: 'Virtual Tour' },
   ];
 
@@ -368,9 +368,9 @@ export default function TashidingMonastery() {
           {[
             { label: 'Overview', target: 'overview' },
             { label: 'Digital Archive', target: 'digital-archive' },
+            { label: 'Cultural Calendar', target: 'cultural-calendar' },
             { label: 'Audio Tour', target: 'audio-tour' },
             { label: 'Virtual Tour', target: 'virtual-tour' },
-            { label: 'Cultural Calendar', target: 'cultural-calendar' },
           ].map((btn) => (
             <button
               key={btn.label}
@@ -989,7 +989,7 @@ export default function TashidingMonastery() {
                   <div className="flex items-center gap-2 text-amber-100">
                     <span className="text-xl">⏱</span>
                     <span className="font-semibold">
-                      {Math.floor(currentTime / 60)}:{String(Math.floor(currentTime % 60)).padStart(2, '0')} / {audioDuration}
+                      {Math.floor(currentTime / 60)}:{String(Math.floor(currentTime % 60)).padStart(2, '0')}
                     </span>
                   </div>
                   <button className="text-amber-100 hover:text-white transition text-2xl">⬇</button>

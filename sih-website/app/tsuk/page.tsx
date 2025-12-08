@@ -342,8 +342,8 @@ export default function TsukMonastery() {
           {[
             { label: 'Overview', target: 'overview' },
             { label: 'Digital Archive', target: 'digital-archive' },
-            { label: 'Audio Tour', target: 'audio-tour' },
             { label: 'Cultural Calendar', target: 'cultural-calendar' },
+            { label: 'Audio Tour', target: 'audio-tour' },
             { label: 'Virtual Tour', target: 'virtual-tour' },
           ].map((btn) => (
             <button
@@ -931,7 +931,7 @@ export default function TsukMonastery() {
                 {/* Image */}
                 <div className="rounded-2xl overflow-hidden group cursor-pointer">
                   <img
-                    src="/tsuk/tsuk5.avif"
+                    src="/tsuk/audiim.png"
                     alt="Tsuk Monastery"
                     className="w-full h-full object-cover rounded-2xl transition-transform duration-300 ease-out group-hover:scale-110 group-hover:brightness-110"
                   />
@@ -1010,7 +1010,7 @@ export default function TsukMonastery() {
                     <div className="flex items-center gap-2 text-amber-100">
                       <span className="text-xl">⏱</span>
                       <span className="font-semibold">
-                        {Math.floor(currentTime / 60)}:{String(Math.floor(currentTime % 60)).padStart(2, '0')} / {audioDuration}
+                        {Math.floor(currentTime / 60)}:{String(Math.floor(currentTime % 60)).padStart(2, '0')}
                       </span>
                     </div>
                     <button className="text-amber-100 hover:text-white transition text-2xl">⬇</button>
