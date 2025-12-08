@@ -168,7 +168,7 @@ export default function BookingSuccessPage() {
         <div className="text-center mt-12 pt-8 border-t border-amber-300/20">
           <p className="text-white/60 text-sm font-merriweather">
             Questions? Contact us at{" "}
-            <span className="text-amber-200 font-semibold">support@sihmonastery360.com</span>
+            <span className="text-amber-200 font-semibold">support@sihsangha.com</span>
           </p>
         </div>
       </div>
