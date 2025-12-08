@@ -1172,7 +1172,7 @@ export default function RumtekMonastery() {
                 {/* Image */}
                 <div className="rounded-2xl overflow-hidden group cursor-pointer">
                   <img
-                    src="/rumtek/golden stupa.jpg"
+                    src="/rumtek/aud.png"
                     alt="Rumtek Monastery"
                     className="w-full h-full object-cover rounded-2xl transition-transform duration-300 ease-out group-hover:scale-110 group-hover:brightness-110"
                   />

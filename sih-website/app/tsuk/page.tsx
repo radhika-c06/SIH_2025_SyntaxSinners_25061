@@ -641,7 +641,8 @@ export default function TsukMonastery() {
     <div className="relative z-10 w-full flex items-center justify-center">
       <div className="flex items-center gap-3">
         <h3
-          className="text-amber-100 text-3xl md:text-4xl font-semibold tracking-[0.25em] uppercase font-cinzel-decorative"
+          className="text-amber-100 text-3xl md:text-4xl font-semibold tracking-[0.25em] uppercase"
+          style={{ fontFamily: 'Cinzel Decorative' }}
         >
           CULTURAL CALENDAR
         </h3>
