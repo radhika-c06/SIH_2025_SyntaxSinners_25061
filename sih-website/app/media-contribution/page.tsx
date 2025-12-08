@@ -1,13 +1,19 @@
 "use client";
 import { useState, useRef } from "react";
 import Link from "next/link";
+import OCR from "@/components/OCR";
 
 export default function MediaContributionPage() {
   const [selectedType, setSelectedType] = useState<"photo" | "video">("photo");
+  const [showOCR, setShowOCR] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleSubmit = () => {
-    fileInputRef.current?.click();
+    if (selectedType === "photo") {
+      setShowOCR(true);
+    } else {
+      fileInputRef.current?.click();
+    }
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -206,14 +212,30 @@ export default function MediaContributionPage() {
         />
 
         {/* Submit Button */}
-        <div className="flex justify-center">
+        <div className="flex justify-center mb-12">
           <button 
             onClick={handleSubmit}
             className="px-12 py-4 bg-amber-600 hover:bg-amber-700 text-white text-lg rounded-lg font-semibold transition-colors shadow-lg"
           >
-            Submit Contribution
+            {selectedType === "photo" ? "Extract Text from Photo" : "Submit Video Contribution"}
           </button>
         </div>
+
+        {/* OCR Section - Only shows for photo contributions */}
+        {showOCR && selectedType === "photo" && (
+          <div className="mb-12">
+            <div className="bg-[rgba(41,24,10,0.8)] border border-amber-900/30 rounded-lg p-6 mb-6">
+              <h2 className="text-2xl font-semibold text-amber-200 mb-2">
+                OCR
+              </h2>
+              <p className="text-gray-300 mb-4">
+                Upload your photo to automatically extract any text visible in the image. 
+                Supports English, Hindi, Nepali, Bengali, and Tibetan languages.
+              </p>
+            </div>
+            <OCR />
+          </div>
+        )}
 
         {/* Additional Info */}
         <div className="mt-12 p-6 bg-[rgba(41,24,10,0.6)] border border-amber-900/30 rounded-lg">
