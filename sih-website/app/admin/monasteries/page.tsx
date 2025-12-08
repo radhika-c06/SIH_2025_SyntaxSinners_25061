@@ -1,11 +1,25 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import StatusBadge from '@/components/admin/StatusBadge';
 import { Monastery } from '@/types/admin';
 
-// Mock data
+interface MonasteryData {
+  _id: string;
+  name: string;
+  slug: string;
+  location: string;
+  altitude?: string;
+  founded: string;
+  shortDescription: string;
+  heroImageUrl: string;
+  isPublished: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+// Mock data (kept as fallback)
 const mockMonasteries: Monastery[] = [
   {
     id: '1',
@@ -125,13 +139,59 @@ const mockMonasteries: Monastery[] = [
 ];
 
 export default function MonasteriesPage() {
+  const [monasteries, setMonasteries] = useState<Monastery[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<'All' | 'Published' | 'Draft'>('All');
   const [currentPage, setCurrentPage] = useState(1);
+  const [loading, setLoading] = useState(true);
   const itemsPerPage = 10;
 
+  // Fetch monasteries from API
+  useEffect(() => {
+    const fetchMonasteries = async () => {
+      try {
+        const response = await fetch('/api/monasteries?admin=true');
+        const data = await response.json();
+        if (data.success && data.data.monasteries) {
+          // Convert API data to Monastery type
+          const converted = data.data.monasteries.map((m: MonasteryData) => ({
+            id: m._id,
+            name: m.name,
+            slug: m.slug,
+            location: m.location,
+            altitude: m.altitude || '',
+            founded: m.founded,
+            shortDescription: m.shortDescription,
+            heroImage: m.heroImageUrl,
+            gallery: [],
+            sections: {
+              overview: '',
+              history: '',
+              architecture: '',
+              rituals: '',
+              bestVisitTime: '',
+              travelInfo: '',
+              digitalArchive: '',
+            },
+            status: m.isPublished ? 'Published' : 'Draft',
+            lastUpdated: new Date(m.updatedAt).toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' }),
+            createdAt: new Date(m.createdAt).toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' }),
+          }));
+          setMonasteries(converted);
+        }
+      } catch (error) {
+        console.error('Failed to fetch monasteries:', error);
+        // Fallback to mock data on error
+        setMonasteries(mockMonasteries);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchMonasteries();
+  }, []);
+
   // Filter monasteries
-  const filteredMonasteries = mockMonasteries.filter((monastery) => {
+  const filteredMonasteries = monasteries.filter((monastery) => {
     const matchesSearch = monastery.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       monastery.location.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesStatus = statusFilter === 'All' || monastery.status === statusFilter;
@@ -219,7 +279,7 @@ export default function MonasteriesPage() {
 
         {/* Results count */}
         <div className="mt-4 text-sm text-amber-200" style={{ fontFamily: 'Poppins' }}>
-          Showing {paginatedMonasteries.length} of {filteredMonasteries.length} monasteries
+          {loading ? 'Loading monasteries...' : `Showing ${paginatedMonasteries.length} of ${filteredMonasteries.length} monasteries`}
         </div>
       </div>
 
