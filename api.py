@@ -2,6 +2,13 @@ from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from chatbot import SikkimMonasteryChatbot
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+
+GEMINI_KEY = os.getenv("GEMINI_API_KEY")
+
 
 app = FastAPI()
 
@@ -14,7 +21,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-bot = SikkimMonasteryChatbot()
+bot = SikkimMonasteryChatbot(gemini_api_key=GEMINI_KEY)
 
 class ChatRequest(BaseModel):
     message: str
