@@ -1,6 +1,7 @@
 "use client"
 
 import React, { useState } from "react"
+import Link from "next/link"
 
 const monasteries = [
   { id: "tashiding", name: "Tashiding" },
@@ -61,8 +62,9 @@ export default function ExperiencesPage() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {options.map((opt) => (
-                <div key={opt.id} className="bg-[#4a1414] rounded-3xl p-6 pop-card shine-border">
+              {options.map((opt) => {
+                const isClickable = opt.id === 'tour'
+                const content = (
                   <div className="flex items-start gap-4">
                     <div className="w-10 h-10 bg-amber-300 rounded-lg flex-shrink-0 flex items-center justify-center overflow-hidden" aria-hidden>
                       {opt.id === 'stay' && (
@@ -86,8 +88,18 @@ export default function ExperiencesPage() {
                       <p className="mt-3 text-sm text-white/80 max-w-md font-merriweather">{opt.desc}</p>
                     </div>
                   </div>
-                </div>
-              ))}
+                )
+                
+                return isClickable ? (
+                  <Link key={opt.id} href="/experiences/tour-guide-booking" className="bg-[#4a1414] rounded-3xl p-6 pop-card shine-border hover:bg-[#5a1a1a] transition-colors cursor-pointer">
+                    {content}
+                  </Link>
+                ) : (
+                  <div key={opt.id} className="bg-[#4a1414] rounded-3xl p-6 pop-card shine-border">
+                    {content}
+                  </div>
+                )
+              })}
             </div>
           </main>
         </div>
