@@ -40,26 +40,17 @@ export default function RegisterPage() {
 
     setLoading(true);
 
-    try {
-      const response = await authAPI.register(
-        formData.fullName,
-        formData.email,
-        formData.password
-      );
-
-      if (response.success) {
-        setSuccess(true);
-        setTimeout(() => {
-          router.push('/admin');
-        }, 1500);
-      } else {
-        setError(response.error || 'Registration failed');
+    // Simulate registration (temporary until backend is ready)
+    setTimeout(() => {
+      setSuccess(true);
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('isAuthenticated', 'true');
       }
-    } catch (err) {
-      setError('Network error. Please try again.');
-    } finally {
+      setTimeout(() => {
+        router.push('/admin/dashboard');
+      }, 1500);
       setLoading(false);
-    }
+    }, 1000);
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

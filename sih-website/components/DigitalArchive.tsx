@@ -422,7 +422,7 @@ export default function DigitalArchivePage() {
       <footer className="border-t" style={{ borderColor: "#E8E2D6" }}>
         <div className="mx-auto max-w-7xl px-4 md:px-8 lg:px-12 py-6 flex flex-wrap items-center justify-between gap-4">
           <div className="text-sm" style={{ color: "#2F3A3D" }}>
-            © Monastery360 · AI‑preserved Heritage · Sikkim
+            © Sangha · AI‑preserved Heritage · Sikkim
           </div>
           <div className="flex items-center gap-3 text-sm">
             <span className="inline-flex items-center gap-2"><Sparkles className="h-4 w-4" style={{ color: "#2A6F6C" }} /> OCR Accuracy ≥ 98%*</span>

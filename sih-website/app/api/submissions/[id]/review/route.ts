@@ -11,13 +11,14 @@ import { getAuthenticatedAdmin, requireSuperAdmin } from '@/lib/auth/getAuthenti
 import { Types } from 'mongoose';
 
 interface RouteParams {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
-export async function PATCH(request: NextRequest, { params }: RouteParams) {
+export async function PATCH(request: NextRequest, context: RouteParams) {
   try {
+    const { id } = await context.params;
     // Authenticate admin
     const admin = await getAuthenticatedAdmin(request);
 
@@ -36,7 +37,7 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
     }
 
     // Validate MongoDB ID
-    if (!Types.ObjectId.isValid(params.id)) {
+    if (!Types.ObjectId.isValid(id)) {
       return NextResponse.json(
         {
           success: false,
@@ -49,7 +50,7 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
     await connectDB();
 
     // Find submission
-    const submission = await ContributorSubmission.findById(params.id);
+    const submission = await ContributorSubmission.findById(id);
     if (!submission) {
       return NextResponse.json(
         {

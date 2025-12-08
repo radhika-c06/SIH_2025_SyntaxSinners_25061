@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 
 export default function SettingsPage() {
   const [settings, setSettings] = useState({
-    siteTitle: 'Monastery360',
+    siteTitle: 'Sangha',
     siteTagline: 'Explore the Sacred Monasteries of Sikkim',
     logoUrl: '/logo.png',
     primaryColor: '#d97706',
@@ -31,7 +31,7 @@ export default function SettingsPage() {
           Settings
         </h1>
         <p className="text-amber-200" style={{ fontFamily: 'Poppins' }}>
-          Configure your Monastery360 admin dashboard
+          Configure your Sangha admin dashboard
         </p>
       </div>
 
