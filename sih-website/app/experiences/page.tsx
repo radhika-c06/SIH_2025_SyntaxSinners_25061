@@ -64,7 +64,15 @@ export default function ExperiencesPage() {
               {options.map((opt) => (
                 <div key={opt.id} className="bg-[#4a1414] rounded-3xl p-6 pop-card shine-border">
                   <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 bg-amber-300 rounded-lg flex-shrink-0" aria-hidden />
+                    <div className="w-10 h-10 bg-amber-300 rounded-lg flex-shrink-0 flex items-center justify-center overflow-hidden" aria-hidden>
+                      {opt.id === 'stay' && (
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-6 h-6 text-black" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden>
+                          <rect x="1.5" y="8" width="21" height="6" rx="1.5" stroke="currentColor" fill="none" />
+                          <rect x="1.5" y="5" width="6" height="4" rx="1" stroke="currentColor" fill="none" />
+                          <path d="M1.5 14v3M22.5 14v3" stroke="currentColor" />
+                        </svg>
+                      )}
+                    </div>
                     <div>
                       <h3 className="text-xl text-amber-50 font-cinzel-decorative">{opt.title}</h3>
                       <p className="mt-3 text-sm text-white/80 max-w-md font-merriweather">{opt.desc}</p>
