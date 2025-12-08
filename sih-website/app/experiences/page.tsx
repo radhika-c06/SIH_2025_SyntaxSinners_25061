@@ -45,7 +45,7 @@ export default function ExperiencesPage() {
                         : "bg-white/5 hover:bg-white/10 text-white/90"
                     }`}
                   >
-                    <div className="font-medium">{m.name}</div>
+                    <div className="font-cinzel font-bold">{m.name}</div>
                   </button>
                 ))}
               </div>
@@ -105,11 +105,35 @@ export default function ExperiencesPage() {
                         <p className="mt-3 text-sm text-white/80 max-w-md font-merriweather">{opt.desc}</p>
                       </div>
                     </div>
-                    {(opt.id === 'stay' || opt.id === 'tour') && (
-                      <div className="mt-4">
-                        <button className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-md font-poppins">Book now</button>
-                      </div>
-                    )}
+                      {(opt.id === 'stay' || opt.id === 'tour') && (
+                        <div className="mt-4 ml-14">
+                          <button className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-md font-poppins">Book now</button>
+                        </div>
+                      )}
+
+                      {opt.id === 'cabs' && (
+                        <div className="mt-4 ml-14">
+                          <button className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-md font-poppins">Check now</button>
+                        </div>
+                      )}
+
+                      {opt.id === 'meditate' && (
+                        <div className="mt-4 flex flex-wrap gap-3 ml-14">
+                          <button
+                            aria-label="Morning meditation time"
+                            className="px-4 py-1.5 rounded-full bg-white/6 border border-amber-300 text-amber-100 text-sm font-merriweather hover:bg-white/10 transition"
+                          >
+                            Morning: 6:00 AM
+                          </button>
+
+                          <button
+                            aria-label="Evening meditation time"
+                            className="px-4 py-1.5 rounded-full bg-white/6 border border-amber-300 text-amber-100 text-sm font-merriweather hover:bg-white/10 transition"
+                          >
+                            Evening: 5:00 PM
+                          </button>
+                        </div>
+                      )}
                   </div>
                 )
               })}
