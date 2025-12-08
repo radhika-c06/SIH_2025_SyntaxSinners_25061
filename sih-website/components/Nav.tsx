@@ -59,7 +59,7 @@ export default function Nav() {
               {contributionsOpen && (
                 <div className="absolute top-full left-0 mt-2 bg-[#0c3b44] border border-white/20 rounded-md shadow-lg py-2 min-w-[200px]">
                   <Link 
-                    href="/media-contribution" 
+                    href="/media-contribution/login" 
                     className="block px-4 py-2 hover:bg-white/10"
                     onClick={() => setContributionsOpen(false)}
                   >
