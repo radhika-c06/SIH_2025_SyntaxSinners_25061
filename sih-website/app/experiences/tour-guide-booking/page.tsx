@@ -3,6 +3,8 @@
 import React, { useState, useEffect } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
+import DatePicker from "react-datepicker"
+import "react-datepicker/dist/react-datepicker.css"
 
 const BACKEND_URL = "http://localhost:5000"
 
@@ -105,41 +107,57 @@ export default function TourGuideBookingPage() {
   const [guides, setGuides] = useState<TourGuide[]>([])
   const [selectedGuide, setSelectedGuide] = useState<TourGuide | null>(null)
   const [showModal, setShowModal] = useState(false)
-  const [bookingDate, setBookingDate] = useState("")
+  const [bookingDate, setBookingDate] = useState<Date | null>(null)
   const [bookingTime, setBookingTime] = useState("")
-  const [showPaymentStep, setShowPaymentStep] = useState(false)
+  const [currentStep, setCurrentStep] = useState<'datetime' | 'payment' | 'confirm'>('datetime')
   const [isProcessing, setIsProcessing] = useState(false)
+  const [bookingConfirmed, setBookingConfirmed] = useState(false)
+  const [showQRCode, setShowQRCode] = useState(false)
 
   const UPI_ID = "anshjayara.edu@okaxis"
   const PAYEE_NAME = "Ansh Jayara"
 
+  // Date restrictions
+  const MIN_DATE = new Date(2025, 11, 8) // December 8, 2025 (month is 0-indexed)
+  const MAX_DATE = new Date(2026, 6, 31) // July 31, 2026
+
+  // Available time slots (7 AM to 3 PM)
+  const TIME_SLOTS = [
+    { value: "07:00", label: "7:00 AM" },
+    { value: "10:00", label: "10:00 AM" },
+    { value: "12:00", label: "12:00 PM" },
+    { value: "15:00", label: "3:00 PM" }
+  ]
+
   const buildUpiLink = () => {
     if (!selectedGuide || !bookingDate || !bookingTime) return null
 
+    const formattedDate = bookingDate.toLocaleDateString('en-GB')
     const intent = new URL("upi://pay")
     intent.searchParams.set("pa", UPI_ID)
     intent.searchParams.set("pn", PAYEE_NAME)
     intent.searchParams.set("am", `${selectedGuide.price}`)
     intent.searchParams.set("cu", "INR")
-    intent.searchParams.set("tn", `Guide: ${selectedGuide.name} on ${bookingDate} ${bookingTime}`)
+    intent.searchParams.set("tn", `Guide: ${selectedGuide.name} on ${formattedDate} ${bookingTime}`)
     return intent.toString()
   }
 
-  const initiatePayment = async () => {
+  const handlePaymentDone = async () => {
     if (!selectedGuide || !bookingDate || !bookingTime) {
-      alert("Please select date and time before proceeding to payment.")
+      alert("Please select date and time before proceeding.")
       return
     }
 
     setIsProcessing(true)
     try {
+      const formattedDate = bookingDate.toISOString().split('T')[0]
       const response = await fetch(`${BACKEND_URL}/api/create-order`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           guideName: selectedGuide.name,
           guideId: selectedGuide.id,
-          date: bookingDate,
+          date: formattedDate,
           time: bookingTime,
           amount: selectedGuide.price,
           userName: "User",
@@ -149,8 +167,8 @@ export default function TourGuideBookingPage() {
 
       const data = await response.json()
       if (data.success && data.bookingId) {
-        // Redirect directly to booking success page
-        router.push(`/booking-success?bookingId=${data.bookingId}`)
+        setBookingConfirmed(true)
+        setCurrentStep('confirm')
       } else {
         alert("Failed to create booking. Please try again.")
       }
@@ -172,9 +190,11 @@ export default function TourGuideBookingPage() {
 
   const handleBooking = (guide: TourGuide) => {
     setSelectedGuide(guide)
-    setBookingDate("")
+    setBookingDate(null)
     setBookingTime("")
-    setShowPaymentStep(false)
+    setCurrentStep('datetime')
+    setBookingConfirmed(false)
+      setShowQRCode(false)
     setShowModal(true)
   }
 
@@ -316,11 +336,19 @@ export default function TourGuideBookingPage() {
                 <label className="block text-amber-200 text-sm font-poppins mb-2">
                   Date
                 </label>
-                <input
-                  type="date"
-                  value={bookingDate}
-                  onChange={(e) => setBookingDate(e.target.value)}
+                <DatePicker
+                  selected={bookingDate}
+                  onChange={(date: Date | null) => setBookingDate(date)}
+                  minDate={MIN_DATE}
+                  maxDate={MAX_DATE}
+                  dateFormat="dd-MM-yyyy"
+                  placeholderText="dd-mm-yyyy"
+                  showYearDropdown
+                  yearDropdownItemNumber={2}
+                  scrollableYearDropdown={false}
                   className="w-full px-4 py-2 bg-white/10 border border-amber-300/30 rounded-lg text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-amber-300/50 font-poppins"
+                  wrapperClassName="w-full"
+                  calendarClassName="custom-datepicker"
                 />
               </div>
 
@@ -328,12 +356,20 @@ export default function TourGuideBookingPage() {
                 <label className="block text-amber-200 text-sm font-poppins mb-2">
                   Time
                 </label>
-                <input
-                  type="time"
+                <select
                   value={bookingTime}
                   onChange={(e) => setBookingTime(e.target.value)}
                   className="w-full px-4 py-2 bg-white/10 border border-amber-300/30 rounded-lg text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-amber-300/50 font-poppins"
-                />
+                >
+                  <option value="" disabled className="bg-[#3b1212] text-white/50">
+                    --:--
+                  </option>
+                  {TIME_SLOTS.map((slot) => (
+                    <option key={slot.value} value={slot.value} className="bg-[#3b1212] text-white">
+                      {slot.label}
+                    </option>
+                  ))}
+                </select>
               </div>
 
               <div className="pt-2 border-t border-amber-300/20">
@@ -346,7 +382,8 @@ export default function TourGuideBookingPage() {
               </div>
             </div>
 
-            {!showPaymentStep && (
+            {/* Step 1: Date & Time Selection */}
+            {currentStep === 'datetime' && (
               <div className="flex gap-3 mt-2">
                 <button
                   onClick={() => setShowModal(false)}
@@ -355,7 +392,13 @@ export default function TourGuideBookingPage() {
                   Cancel
                 </button>
                 <button
-                  onClick={() => setShowPaymentStep(true)}
+                  onClick={() => {
+                    if (!bookingDate || !bookingTime) {
+                      alert("Please select both date and time")
+                      return
+                    }
+                    setCurrentStep('payment')
+                  }}
                   className="flex-1 py-2 bg-gradient-to-r from-amber-500 to-amber-300 text-black rounded-lg font-cinzel-decorative font-semibold hover:from-amber-400 hover:to-amber-200 transition-all"
                 >
                   Proceed to payment
@@ -363,60 +406,129 @@ export default function TourGuideBookingPage() {
               </div>
             )}
 
-            {showPaymentStep && (
-              <div className="mt-6 space-y-4">
-                <div className="pt-3 border-t border-amber-300/20 space-y-2">
-                  <p className="text-sm text-amber-100 font-cinzel-decorative">Step 1: Pay via Google Pay</p>
-                  <div className="flex items-center justify-between gap-3 text-sm text-white/80 font-poppins bg-white/5 px-3 py-2 rounded-lg border border-amber-300/20">
-                    <span className="text-amber-200 font-semibold">Payee:</span>
-                    <span className="truncate">{PAYEE_NAME}</span>
-                  </div>
-                  <div className="flex items-center justify-between gap-3 text-sm text-white/80 font-poppins bg-white/5 px-3 py-2 rounded-lg border border-amber-300/20">
-                    <span className="text-amber-200 font-semibold">UPI ID:</span>
-                    <span className="truncate">{UPI_ID}</span>
-                  </div>
-                  <p className="text-xs text-white/60 font-merriweather">Tap the button below to open Google Pay / UPI. If it doesn&#39;t open (desktop/unsupported), scan the QR or copy the payment link/UPI ID and pay manually.</p>
-                  <button
-                    onClick={openGPayLink}
-                    className="w-full py-2 bg-amber-400 text-black rounded-lg font-cinzel-decorative font-semibold hover:bg-amber-300 transition-all"
-                  >
-                    Pay with Google Pay
-                  </button>
-                  <button
-                    onClick={copyUpiLink}
-                    className="w-full py-2 bg-transparent text-amber-200 border border-amber-300/50 rounded-lg font-poppins hover:bg-white/5 transition-all"
-                  >
-                    Copy payment link
-                  </button>
-                  {upiLink && (
-                    <div className="mt-2 space-y-2 text-center">
-                      <p className="text-xs text-white/70 font-poppins">Or scan QR in your UPI app</p>
-                      <div className="mx-auto bg-white/5 border border-amber-300/30 rounded-xl p-3 w-fit">
-                        <img
-                          src={`https://api.qrserver.com/v1/create-qr-code/?size=280x280&data=${encodeURIComponent(upiLink)}`}
-                          alt="UPI QR"
-                          className="h-64 w-64 object-contain"
-                        />
+            {/* Step 2: Payment Details */}
+            {currentStep === 'payment' && (
+              <>
+                {!showQRCode ? (
+                  <div className="mt-6 space-y-4">
+                    <div className="pt-3 border-t border-amber-300/20 space-y-3">
+                      <p className="text-lg text-amber-100 font-cinzel-decorative text-center">Payment Details</p>
+                      
+                      <div className="space-y-2">
+                        <div className="flex items-center justify-between gap-3 text-sm text-white/80 font-poppins bg-white/5 px-4 py-3 rounded-lg border border-amber-300/20">
+                          <span className="text-amber-200 font-semibold">UPI ID:</span>
+                          <span className="truncate">{UPI_ID}</span>
+                        </div>
+                        <div className="flex items-center justify-between gap-3 text-sm text-white/80 font-poppins bg-white/5 px-4 py-3 rounded-lg border border-amber-300/20">
+                          <span className="text-amber-200 font-semibold">Payee:</span>
+                          <span className="truncate">{PAYEE_NAME}</span>
+                        </div>
                       </div>
+
+                      <p className="text-xs text-white/60 font-merriweather text-center">Tap the button below to open Google Pay / UPI.</p>
+                      
+                      <button
+                        onClick={() => {
+                          openGPayLink()
+                          setShowQRCode(true)
+                        }}
+                        className="w-full py-3 bg-gradient-to-r from-amber-500 to-amber-300 text-black rounded-lg font-cinzel-decorative font-semibold hover:from-amber-400 hover:to-amber-200 transition-all text-lg"
+                      >
+                        PAY WITH GOOGLE PAY
+                      </button>
                     </div>
-                  )}
+
+                    <div className="flex gap-3 pt-4 border-t border-amber-300/20">
+                      <button
+                        onClick={() => setCurrentStep('datetime')}
+                        className="flex-1 py-2 border border-amber-300/50 text-amber-200 rounded-lg font-poppins hover:bg-white/5 transition-all"
+                      >
+                        Back
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="mt-6 space-y-4">
+                    <div className="pt-3 border-t border-amber-300/20 space-y-3">
+                      <p className="text-lg text-amber-100 font-cinzel-decorative text-center">Complete Your Payment</p>
+                      
+                      <button
+                        onClick={copyUpiLink}
+                        className="w-full py-2 bg-transparent text-amber-200 border border-amber-300/50 rounded-lg font-poppins hover:bg-white/5 transition-all"
+                      >
+                        Copy payment link
+                      </button>
+                      
+                      {upiLink && (
+                        <div className="mt-2 space-y-2 text-center">
+                          <p className="text-sm text-white/70 font-poppins">Or scan QR in your UPI app</p>
+                          <div className="mx-auto bg-white/5 border border-amber-300/30 rounded-xl p-3 w-fit">
+                            <img
+                              src={`https://api.qrserver.com/v1/create-qr-code/?size=280x280&data=${encodeURIComponent(upiLink)}`}
+                              alt="UPI QR"
+                              className="h-64 w-64 object-contain"
+                            />
+                          </div>
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="flex gap-3 pt-4 border-t border-amber-300/20">
+                      <button
+                        onClick={() => setShowQRCode(false)}
+                        className="flex-1 py-2 border border-amber-300/50 text-amber-200 rounded-lg font-poppins hover:bg-white/5 transition-all"
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        onClick={handlePaymentDone}
+                        disabled={isProcessing}
+                        className="flex-1 py-3 bg-gradient-to-r from-amber-500 to-amber-300 text-black rounded-lg font-cinzel-decorative font-semibold hover:from-amber-400 hover:to-amber-200 transition-all disabled:opacity-50"
+                      >
+                        {isProcessing ? "Processing..." : "PROCEED TO PAYMENT"}
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </>
+            )}
+
+            {/* Step 3: Confirmation */}
+            {currentStep === 'confirm' && bookingConfirmed && (
+              <div className="mt-6 space-y-4">
+                <div className="text-center space-y-4">
+                  <div className="mx-auto w-20 h-20 bg-green-500/20 rounded-full flex items-center justify-center border-2 border-green-400">
+                    <svg className="w-12 h-12 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                  </div>
+                  <h3 className="text-2xl font-cinzel-decorative text-amber-100">Booking Confirmed!</h3>
+                  <p className="text-white/80 font-merriweather">Your tour has been successfully booked.</p>
+                  
+                  <div className="bg-white/5 border border-amber-300/30 rounded-lg p-4 space-y-2 text-left">
+                    <p className="text-sm text-white/80 font-poppins">
+                      <span className="text-amber-200 font-semibold">Guide:</span> {selectedGuide?.name}
+                    </p>
+                    <p className="text-sm text-white/80 font-poppins">
+                      <span className="text-amber-200 font-semibold">Date:</span> {bookingDate?.toLocaleDateString('en-GB')}
+                    </p>
+                    <p className="text-sm text-white/80 font-poppins">
+                      <span className="text-amber-200 font-semibold">Time:</span> {TIME_SLOTS.find(slot => slot.value === bookingTime)?.label}
+                    </p>
+                    <p className="text-sm text-white/80 font-poppins">
+                      <span className="text-amber-200 font-semibold">Price:</span> ₹{selectedGuide?.price}
+                    </p>
+                  </div>
+                  
+                  <p className="text-xs text-white/60 font-merriweather">A confirmation email will be sent to you shortly.</p>
                 </div>
 
-                <div className="flex gap-3">
-                  <button
-                    onClick={() => setShowModal(false)}
-                    className="flex-1 py-2 border border-amber-300/50 text-amber-200 rounded-lg font-poppins hover:bg-white/5 transition-all"
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    onClick={initiatePayment}
-                    disabled={isProcessing}
-                    className="flex-1 py-2 bg-gradient-to-r from-amber-500 to-amber-300 text-black rounded-lg font-cinzel-decorative font-semibold hover:from-amber-400 hover:to-amber-200 transition-all disabled:opacity-50"
-                  >
-                    {isProcessing ? "Processing..." : "Proceed to Payment"}
-                  </button>
-                </div>
+                <button
+                  onClick={() => setShowModal(false)}
+                  className="w-full py-3 bg-gradient-to-r from-amber-500 to-amber-300 text-black rounded-lg font-cinzel-decorative font-semibold hover:from-amber-400 hover:to-amber-200 transition-all"
+                >
+                  Close
+                </button>
               </div>
             )}
           </div>
