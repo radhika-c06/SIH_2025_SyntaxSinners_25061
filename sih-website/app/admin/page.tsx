@@ -12,11 +12,8 @@ export default function LoginPage() {
 
   useEffect(() => {
     setIsMounted(true);
-    // Check if user is already authenticated
-    const authStatus = localStorage.getItem('isAuthenticated');
-    if (authStatus === 'true') {
-      router.push('/admin/dashboard');
-    }
+    // Only check authentication, don't auto-redirect
+    // This allows users to see the login page
   }, [router]);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
