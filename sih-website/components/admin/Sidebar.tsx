@@ -114,7 +114,7 @@ export default function Sidebar({ mobileOpen, onMobileClose }: SidebarProps) {
               </svg>
             </div>
             <span className="text-xl font-bold text-amber-100" style={{ fontFamily: 'Poppins' }}>
-              Monastery360
+              Sangha
             </span>
           </Link>
         </div>

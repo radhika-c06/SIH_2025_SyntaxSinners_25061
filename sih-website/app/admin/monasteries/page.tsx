@@ -147,11 +147,11 @@ export default function MonasteriesPage() {
     <div className="space-y-6">
       {/* Page Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div>
-          <h1 className="text-3xl font-bold text-white mb-2" style={{ fontFamily: 'Poppins' }}>
+        <div className="text-center flex-1">
+          <h1 className="text-5xl font-extrabold text-white mb-2" style={{ fontFamily: 'Poppins' }}>
             Monasteries
           </h1>
-          <p className="text-amber-200" style={{ fontFamily: 'Poppins' }}>
+          <p className="text-xl font-bold text-amber-200" style={{ fontFamily: 'Poppins' }}>
             Manage all monastery listings
           </p>
         </div>
@@ -171,8 +171,8 @@ export default function MonasteriesPage() {
       <div
         className="rounded-2xl p-6 backdrop-blur-sm"
         style={{
-          background: 'rgba(217, 119, 6, 0.1)',
-          border: '1px solid rgba(217, 119, 6, 0.2)',
+          background: 'rgba(41, 24, 10, 0.8)',
+          border: '1px solid rgba(217, 119, 6, 0.3)',
         }}
       >
         <div className="flex flex-col lg:flex-row gap-4">
@@ -184,7 +184,7 @@ export default function MonasteriesPage() {
                 placeholder="Search by name or location..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full px-4 py-3 pl-12 rounded-lg bg-amber-900/30 border border-amber-500/30 text-amber-100 placeholder-amber-300/50 focus:outline-none focus:border-amber-500/50 transition"
+                className="w-full px-4 py-3 pl-12 rounded-lg bg-amber-950/60 border border-amber-500/30 text-white placeholder-amber-300/50 focus:outline-none focus:border-amber-500/50 transition"
                 style={{ fontFamily: 'Poppins' }}
               />
               <svg
@@ -227,8 +227,8 @@ export default function MonasteriesPage() {
       <div
         className="rounded-2xl overflow-hidden backdrop-blur-sm"
         style={{
-          background: 'rgba(217, 119, 6, 0.1)',
-          border: '1px solid rgba(217, 119, 6, 0.2)',
+          background: 'rgba(41, 24, 10, 0.8)',
+          border: '1px solid rgba(217, 119, 6, 0.3)',
         }}
       >
         <div className="overflow-x-auto">
@@ -274,7 +274,7 @@ export default function MonasteriesPage() {
                       </div>
                     </div>
                   </td>
-                  <td className="px-6 py-4 text-amber-200" style={{ fontFamily: 'Poppins' }}>
+                  <td className="px-6 py-4 text-white" style={{ fontFamily: 'Poppins' }}>
                     {monastery.location}
                   </td>
                   <td className="px-6 py-4">

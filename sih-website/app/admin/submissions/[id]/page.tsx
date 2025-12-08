@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
+import Link from 'next/link';
 import StatusBadge from '@/components/admin/StatusBadge';
 
 // Mock data
@@ -246,13 +247,14 @@ export default function SubmissionDetailPage() {
                 </div>
               )}
 
-              {mockSubmission.status === 'Approved' && (
+              {/* Show link to monastery if approved */}
+              {mockSubmission.status !== 'Pending' && (
                 <Link
                   href="/admin/monasteries"
-                  className="block w-full px-4 py-3 rounded-lg bg-amber-500 hover:bg-amber-600 text-amber-900 font-bold text-center transition"
+                  className="block w-full px-4 py-3 rounded-lg bg-amber-500 hover:bg-amber-600 text-amber-900 font-bold text-center transition mt-4"
                   style={{ fontFamily: 'Poppins' }}
                 >
-                  View Linked Monastery
+                  View All Monasteries
                 </Link>
               )}
             </div>

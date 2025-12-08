@@ -16,9 +16,9 @@ import { getAuthenticatedAdmin } from '@/lib/auth/getAuthenticatedAdmin';
 import { Types } from 'mongoose';
 
 interface RouteParams {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
 async function findMonastery(idOrSlug: string) {
@@ -32,11 +32,12 @@ async function findMonastery(idOrSlug: string) {
   return await Monastery.findOne({ slug: idOrSlug });
 }
 
-export async function GET(request: NextRequest, { params }: RouteParams) {
+export async function GET(request: NextRequest, context: RouteParams) {
   try {
     await connectDB();
+    const { id } = await context.params;
 
-    const monastery = await findMonastery(params.id);
+    const monastery = await findMonastery(id);
 
     if (!monastery) {
       return NextResponse.json(
@@ -81,8 +82,9 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
   }
 }
 
-export async function PATCH(request: NextRequest, { params }: RouteParams) {
+export async function PATCH(request: NextRequest, context: RouteParams) {
   try {
+    const { id } = await context.params;
     // Authenticate admin
     const admin = await getAuthenticatedAdmin(request);
 
@@ -102,7 +104,7 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
 
     await connectDB();
 
-    const monastery = await findMonastery(params.id);
+    const monastery = await findMonastery(id);
 
     if (!monastery) {
       return NextResponse.json(
@@ -166,14 +168,15 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
   }
 }
 
-export async function DELETE(request: NextRequest, { params }: RouteParams) {
+export async function DELETE(request: NextRequest, context: RouteParams) {
   try {
+    const { id } = await context.params;
     // Authenticate admin
     const admin = await getAuthenticatedAdmin(request);
 
     await connectDB();
 
-    const monastery = await findMonastery(params.id);
+    const monastery = await findMonastery(id);
 
     if (!monastery) {
       return NextResponse.json(
