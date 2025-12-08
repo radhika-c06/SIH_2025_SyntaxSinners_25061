@@ -194,6 +194,49 @@ export default function TashidingMonastery() {
     { src: '/tashiding/tash-6.png', alt: 'Tashiding 3' },
   ];
 
+    const panoramicShots = [
+  {
+    id: 'p1',
+    title: 'Approach to Tashiding Monastery',
+    note: 'Hilltop road and valley view',
+    url: 'https://maps.app.goo.gl/GVnM9bfDhz2ckP4m9',              // opens in new tab
+    embedUrl: 'https://www.google.com/maps/embed?pb=<iframe src="https://www.google.com/maps/embed?pb=!4v1765166574121!6m8!1m7!1sCAoSFkNJSE0wb2dLRUlDQWdJQ0V6b09UVnc.!2m2!1d27.3080960299431!2d88.29783391014004!3f260!4f10!5f0.7820865974627469" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>',   // from "Embed a map"
+  },
+  {
+    id: 'p2',
+    title: 'Monastery Courtyard View',
+    note: 'Prayer flags and chortens',
+    url: 'https://maps.app.goo.gl/4uMyY25gvWW7NJFt5',
+    embedUrl: 'https://www.google.com/maps/embed?pb=PASTE_HERE',
+  },
+  {
+    id: 'p3',
+    title: 'Main Shrine Surroundings',
+    note: '360° around the central complex',
+    url: 'https://maps.app.goo.gl/7VS6TvYXtVm53LQPA',
+    embedUrl: 'https://www.google.com/maps/embed?pb=PASTE_HERE',
+  },
+  {
+    id: 'p4',
+    title: 'Ridge Walkway Panoramic',
+    note: 'Mountain and forest panorama',
+    url: 'https://maps.app.goo.gl/nasHp1wQJYK9BDTi8',
+    embedUrl: 'https://www.google.com/maps/embed?pb=PASTE_HERE',
+  },
+  {
+    id: 'p5',
+    title: 'Distant View of Tashiding',
+    note: 'Monastery in the landscape',
+    url: 'https://maps.app.goo.gl/78iJua4uEMYzAsSf8',
+    embedUrl: 'https://www.google.com/maps/embed?pb=PASTE_HERE',
+  },
+];
+
+
+  const [activePanorama, setActivePanorama] = useState(panoramicShots[0]);
+
+
+
   useEffect(() => {
     const interval = setInterval(() => {
       setActiveIndex((prev) => (prev + 1) % images.length);
@@ -1160,34 +1203,151 @@ export default function TashidingMonastery() {
               </button>
 
               {/* Preview Box with Dynamic Content */}
-              <div className="rounded-3xl overflow-hidden" style={{ backgroundColor: 'rgba(217, 119, 6, 0.15)', border: '2px solid rgba(217, 119, 6, 0.3)', backdropFilter: 'blur(10px)' }}>
-                <div className="h-[28rem] bg-gradient-to-br from-amber-900 to-orange-900 flex items-center justify-center relative">
+              
+                            {/* Preview Box with Dynamic Content */}
+              <div
+                className="rounded-3xl overflow-hidden"
+                style={{
+                  backgroundColor: 'rgba(217, 119, 6, 0.15)',
+                  border: '2px solid rgba(217, 119, 6, 0.3)',
+                  backdropFilter: 'blur(10px)',
+                }}
+              >
+                {/* TOP AREA: MODE PREVIEW / EMBED */}
+                <div className="h-[20rem] bg-gradient-to-br from-amber-900 to-orange-900 relative px-6 py-4 flex items-center justify-center">
                   {viewMode === '3d' ? (
                     <div className="text-center text-amber-100">
                       <div className="text-6xl mb-4">🏛️</div>
-                      <p className="text-lg font-semibold mb-2" style={{ fontFamily: 'Cinzel' }}>3D Model View</p>
-                      <p className="text-sm text-amber-200" style={{ fontFamily: 'Cinzel' }}>Interactive 3D monastery model</p>
+                      <p
+                        className="text-lg font-semibold mb-2"
+                        style={{ fontFamily: 'Cinzel' }}
+                      >
+                        3D Model View
+                      </p>
+                      <p
+                        className="text-sm text-amber-200"
+                        style={{ fontFamily: 'Cinzel' }}
+                      >
+                        Interactive 3D monastery model
+                      </p>
                     </div>
                   ) : (
-                    <div className="text-center text-amber-100">
-                      <div className="text-6xl mb-4">👁️</div>
-                      <p className="text-lg font-semibold mb-2" style={{ fontFamily: 'Cinzel' }}>Panoramic View</p>
-                      <p className="text-sm text-amber-200" style={{ fontFamily: 'Cinzel' }}>360° immersive experience</p>
+                    <div className="w-full h-full flex flex-col md:flex-row items-stretch gap-4">
+                      {/* EMBEDDED MAP / STREET VIEW */}
+                      <div className="flex-1 rounded-2xl overflow-hidden border border-amber-500/40 bg-black/40">
+                        <iframe
+  src={activePanorama.embedUrl}
+  title={activePanorama.title}
+  className="w-full h-full border-0"
+  loading="lazy"
+  allowFullScreen
+  referrerPolicy="no-referrer-when-downgrade"
+/>
+
+                      </div>
+
+                      {/* TEXT DESCRIPTION OF CURRENT SHOT */}
+                      <div className="w-full md:w-64 flex flex-col justify-center text-left text-amber-100">
+                        <div className="text-5xl mb-3 text-center md:text-left">👁️</div>
+                        <p
+                          className="text-sm font-semibold mb-1 uppercase"
+                          style={{ fontFamily: 'Cinzel' }}
+                        >
+                          Panoramic View
+                        </p>
+                        <p
+                          className="text-base font-semibold mb-1"
+                          style={{ fontFamily: 'Cinzel' }}
+                        >
+                          {activePanorama.title}
+                        </p>
+                        {activePanorama.note && (
+                          <p className="text-sm text-amber-200 mb-3">
+                            {activePanorama.note}
+                          </p>
+                        )}
+                        <a
+                          href={activePanorama.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1 text-xs text-amber-200 underline"
+                        >
+                          View directly on Google Maps ↗
+                        </a>
+                      </div>
                     </div>
                   )}
-                  
+
                   {/* Mode indicator badge */}
                   <div className="absolute top-4 right-4 px-4 py-2 rounded-full bg-amber-900/80 backdrop-blur-sm border border-amber-500/30">
-                    <span className="text-xs font-semibold text-amber-100 uppercase" style={{ fontFamily: 'Cinzel' }}>
+                    <span
+                      className="text-xs font-semibold text-amber-100 uppercase"
+                      style={{ fontFamily: 'Cinzel' }}
+                    >
                       {viewMode === '3d' ? '3D Model' : 'Panoramic 360°'}
                     </span>
                   </div>
                 </div>
-              </div>
 
+                {/* BOTTOM AREA: PANORAMIC SHOTS GRID */}
+                {viewMode === 'panoramic' && (
+                  <div className="border-top border-amber-500/20 bg-black/20 px-6 py-5">
+                    <h4
+                      className="text-sm md:text-base font-semibold text-amber-100 mb-3 flex items-center gap-2 uppercase"
+                      style={{ fontFamily: 'Cinzel' }}
+                    >
+                      <span className="text-lg">📍</span>
+                      Panoramic Shots from Google Maps
+                    </h4>
+
+                    <div className="grid sm:grid-cols-2 gap-4">
+                      {panoramicShots.map((shot) => (
+                        <div
+                          key={shot.id}
+                          onClick={() => setActivePanorama(shot)}
+                          className="group rounded-2xl overflow-hidden border border-amber-500/30 bg-black/30 hover:border-amber-300/70 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl cursor-pointer"
+                        >
+                          {/* Faux preview header */}
+                          <div className="aspect-video w-full flex items-center justify-center bg-gradient-to-br from-amber-900/60 to-orange-900/60">
+                            <div className="flex flex-col items-center gap-1">
+                              <span className="text-3xl group-hover:scale-110 transition-transform">
+                                👁️
+                              </span>
+                              <span className="text-[11px] uppercase tracking-wide text-amber-100/90">
+                                Open panoramic view
+                              </span>
+                            </div>
+                          </div>
+
+                          {/* Text area */}
+                          <div className="px-4 py-3 bg-black/40">
+                            <p className="text-xs font-semibold text-amber-100 mb-1 line-clamp-1">
+                              {shot.title}
+                            </p>
+                            {shot.note && (
+                              <p className="text-[11px] text-amber-200/90 line-clamp-2">
+                                {shot.note}
+                              </p>
+                            )}
+                            <a
+                              href={shot.url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="mt-2 inline-flex items-center gap-1 text-[10px] text-amber-300/70 group-hover:text-amber-200 underline"
+                            >
+                              <span>View on Google Maps</span>
+                              <span className="text-xs">↗</span>
+                            </a>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
-        </div>
+        </div>    
       </section>
 
       <Footer />
