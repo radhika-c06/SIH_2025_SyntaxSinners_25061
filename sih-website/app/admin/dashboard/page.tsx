@@ -1,4 +1,7 @@
-import React from 'react';
+'use client';
+
+import React, { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import StatsCard from '@/components/admin/StatsCard';
 import StatusBadge from '@/components/admin/StatusBadge';
 import Link from 'next/link';
@@ -51,6 +54,17 @@ const recentActivity: ActivityItem[] = [
 ];
 
 export default function DashboardPage() {
+  const router = useRouter();
+
+  useEffect(() => {
+    // Check authentication on page load
+    const isAuthenticated = localStorage.getItem('isAuthenticated');
+    if (isAuthenticated !== 'true') {
+      // Not authenticated, redirect to login
+      router.push('/admin');
+    }
+  }, [router]);
+
   return (
     <div className="space-y-8">
       {/* Page Header */}

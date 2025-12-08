@@ -28,8 +28,8 @@ export async function POST(request: NextRequest) {
     // Connect to DB
     await connectDB();
 
-    // Find admin by email
-    const admin = await AdminUser.findOne({ email: email.toLowerCase() });
+    // Find admin by email and explicitly select passwordHash
+    const admin = await AdminUser.findOne({ email: email.toLowerCase() }).select('+passwordHash');
     if (!admin) {
       return NextResponse.json(
         {
