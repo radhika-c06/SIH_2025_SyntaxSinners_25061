@@ -384,7 +384,7 @@ def main():
     API_PROVIDER = "groq"  # Change this to your preferred provider
     
     # Add your API key here
-    api_key = ""  # Add your API key
+    api_key = " "  # Add your API key
     
     if not api_key:
         print("API key is required to run the chatbot!")
