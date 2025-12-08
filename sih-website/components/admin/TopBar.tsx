@@ -45,7 +45,7 @@ export default function TopBar({ onMenuClick }: TopBarProps) {
               Admin User
             </p>
             <p className="text-xs text-amber-300/70" style={{ fontFamily: 'Poppins' }}>
-              admin@monastery360.com
+              admin@sangha.com
             </p>
           </div>
           <div className="w-10 h-10 rounded-full bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center text-amber-900 font-bold">

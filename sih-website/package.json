@@ -3,19 +3,26 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
-    "build": "next build --turbopack",
+    "dev": "next dev",
+    "build": "next build",
     "start": "next start",
     "lint": "eslint"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
+    "@prisma/client": "^5.22.0",
+    "bcryptjs": "^3.0.3",
     "framer-motion": "^12.23.16",
     "gsap": "^3.13.0",
+    "i18next": "^25.7.2",
+    "jsonwebtoken": "^9.0.3",
+    "mongoose": "^9.0.1",
     "next": "^15.5.7",
+    "prisma": "^5.22.0",
     "react": "^19.2.1",
     "react-dom": "^19.2.1",
     "react-hook-form": "^7.68.0",
+    "react-i18next": "^16.4.0",
     "swiper": "^11.2.10",
     "zod": "^4.1.13"
   },

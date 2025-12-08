@@ -31,7 +31,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
 
 export const metadata: Metadata = {
-  title: "SIH Monastery360",
+  title: "SIH Sangha",
   description: "Minimal, immersive gallery",
 };
 

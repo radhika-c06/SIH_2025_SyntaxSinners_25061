@@ -1,10 +1,17 @@
 "use client";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export default function GlitterCursorTrail() {
   const trailRef = useRef<HTMLDivElement>(null);
+  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!isMounted) return;
+
     function createGlitter(x: number, y: number) {
       const glitter = document.createElement("div");
       glitter.style.position = "fixed";
@@ -35,7 +42,7 @@ export default function GlitterCursorTrail() {
     }
     window.addEventListener("mousemove", onMove);
     return () => window.removeEventListener("mousemove", onMove);
-  }, []);
+  }, [isMounted]);
 
-  return <div ref={trailRef} />;
+  return isMounted ? <div ref={trailRef} /> : null;
 }

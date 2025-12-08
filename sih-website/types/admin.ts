@@ -59,3 +59,43 @@ export interface ActivityItem {
   target: string;
   timestamp: string;
 }
+
+// Dashboard API Response Types
+export interface DashboardStats {
+  totalMonasteries: number;
+  pendingSubmissions: number;
+  publishedMonasteries: number;
+  contributors: number;
+  totalSubmissions: number;
+}
+
+export interface DashboardActivity {
+  id: string;
+  action: string;
+  user: string;
+  target: string;
+  timestamp: Date | string;
+  type: 'submission' | 'monastery' | 'approval';
+}
+
+export interface DashboardChartData {
+  month: string;
+  approved: number;
+  pending: number;
+  rejected: number;
+}
+
+export interface DashboardContributor {
+  id: string;
+  name: string;
+  email: string;
+  submissions: number;
+  approved: number;
+  pendingReview: number;
+}
+
+export interface ApiResponse<T> {
+  success: boolean;
+  data?: T;
+  error?: string;
+}
