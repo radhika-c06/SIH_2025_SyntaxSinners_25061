@@ -63,8 +63,13 @@ export default function ExperiencesPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {options.map((opt) => (
                 <div key={opt.id} className="bg-[#4a1414] rounded-3xl p-6 pop-card shine-border">
-                  <h3 className="text-xl text-amber-50 font-cinzel-decorative">{opt.title}</h3>
-                  <p className="mt-3 text-sm text-white/80 max-w-md font-merriweather">{opt.desc}</p>
+                  <div className="flex items-start gap-4">
+                    <div className="w-10 h-10 bg-amber-300 rounded-lg flex-shrink-0" aria-hidden />
+                    <div>
+                      <h3 className="text-xl text-amber-50 font-cinzel-decorative">{opt.title}</h3>
+                      <p className="mt-3 text-sm text-white/80 max-w-md font-merriweather">{opt.desc}</p>
+                    </div>
+                  </div>
                 </div>
               ))}
             </div>
