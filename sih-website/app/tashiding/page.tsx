@@ -6,6 +6,31 @@ import Reveal from '@/components/Reveal';
 import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
 
+const styles = `
+  /* Hide Google Maps labels and overlays */
+  iframe[src*="maps.embed"] {
+    -webkit-filter: brightness(1.1) contrast(1.05);
+    filter: brightness(1.1) contrast(1.05);
+  }
+  
+  /* Attempt to hide text overlays using opacity and shadow tricks */
+  iframe[src*="maps.embed"]::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.01);
+    pointer-events: none;
+  }
+  
+  /* Hide any text elements that might appear near the iframe */
+  .maps-label {
+    display: none !important;
+  }
+`;
+
 export default function TashidingMonastery() {
   const [activeIndex, setActiveIndex] = useState(1);
   const [scrollPosition, setScrollPosition] = useState(0);
@@ -196,39 +221,36 @@ export default function TashidingMonastery() {
 
     const panoramicShots = [
   {
+    id: 'p0',
+    title: 'Tashiding Monastery',
+    note: 'Main panoramic view',
+    url: 'https://www.google.com/maps/place/Tashiding+Monastery/@27.3117664,88.2976364,3a,75y,200h,90t/data=!3m8!1e1!3m6!1sCIHM0ogKEICAgICEzv29aA!2e10!3e11!6shttps:%2F%2Flh3.googleusercontent.com%2Fgps-cs-s%2FAG0ilSwSpbbNfjj0AsNJkAbZASV8BqTvqJdrq7zOAOLfxF16sJgWW1qPc6kWfw5yhihHZqo_kuz9llju-kw-lyQoWySftgjsjtD1Lwr1MwABvTajubhcFZbMWcY4EH8ZMIX9QoZqjBI%3Dw900-h600-k-no-pi0-ya89-ro0-fo100!7i8704!8i4352!4m9!3m8!1s0x39e685fca06dc171:0x92150f5f129db887!8m2!3d27.3089308!4d88.2978746!10e5!14m1!1BCgIgARICCAI!16s%2Fm%2F09glmyd',
+    embedUrl: 'https://www.google.com/maps/embed?pb=!4v1765166574121!6m8!1m7!1sCIHM0ogKEICAgICEzv29aA!2m2!1d27.3117664!2d88.2976364!3f200!4f75!5f0.7820865974627469',
+    earthUrl: 'https://earth.google.com/earth/rpc/cc/map?pb=!1m2!1sCIHM0ogKEICAgICEzv29aA!2m2!1d27.3117664!2d88.2976364',
+  },
+  {
     id: 'p1',
     title: 'Approach to Tashiding Monastery',
-    note: 'Hilltop road and valley view',
-    url: 'https://maps.app.goo.gl/GVnM9bfDhz2ckP4m9',              // opens in new tab
-    embedUrl: 'https://www.google.com/maps/embed?pb=<iframe src="https://www.google.com/maps/embed?pb=!4v1765166574121!6m8!1m7!1sCAoSFkNJSE0wb2dLRUlDQWdJQ0V6b09UVnc.!2m2!1d27.3080960299431!2d88.29783391014004!3f260!4f10!5f0.7820865974627469" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>',   // from "Embed a map"
+    note: 'Monastery in the landscape',
+    url: 'https://maps.app.goo.gl/GVnM9bfDhz2ckP4m9',
+    embedUrl: 'https://www.google.com/maps/embed?pb=!4v1765166574121!6m8!1m7!1sCAoSLVJYTm5OQkZGEUx5Unc.!2m2!1d27.3089308!2d88.2978746!3f270!4f0!5f0.7820865974627469',
+    earthUrl: 'https://earth.google.com/earth/rpc/cc/map?pb=!1m2!1sCAoSLVJYTm5OQkZGEUx5Unc.!2m2!1d27.3089308!2d88.2978746',
   },
   {
     id: 'p2',
     title: 'Monastery Courtyard View',
     note: 'Prayer flags and chortens',
     url: 'https://maps.app.goo.gl/4uMyY25gvWW7NJFt5',
-    embedUrl: 'https://www.google.com/maps/embed?pb=PASTE_HERE',
+    embedUrl: 'https://www.google.com/maps/embed?pb=!4v1765166574121!6m8!1m7!1sCAoSLVJYTm5OQkZGEUx5Unc.!2m2!1d27.30809!2d88.29783!3f180!4f0!5f0.7820865974627469',
+    earthUrl: 'https://earth.google.com/earth/rpc/cc/map?pb=!1m2!1sCAoSLVJYTm5OQkZGEUx5Unc.!2m2!1d27.30809!2d88.29783',
   },
   {
     id: 'p3',
     title: 'Main Shrine Surroundings',
     note: '360° around the central complex',
     url: 'https://maps.app.goo.gl/7VS6TvYXtVm53LQPA',
-    embedUrl: 'https://www.google.com/maps/embed?pb=PASTE_HERE',
-  },
-  {
-    id: 'p4',
-    title: 'Ridge Walkway Panoramic',
-    note: 'Mountain and forest panorama',
-    url: 'https://maps.app.goo.gl/nasHp1wQJYK9BDTi8',
-    embedUrl: 'https://www.google.com/maps/embed?pb=PASTE_HERE',
-  },
-  {
-    id: 'p5',
-    title: 'Distant View of Tashiding',
-    note: 'Monastery in the landscape',
-    url: 'https://maps.app.goo.gl/78iJua4uEMYzAsSf8',
-    embedUrl: 'https://www.google.com/maps/embed?pb=PASTE_HERE',
+    embedUrl: 'https://www.google.com/maps/embed?pb=!4v1765166574121!6m8!1m7!1sCAoSLVJYTm5OQkZGEUx5Unc.!2m2!1d27.30825!2d88.29805!3f90!4f0!5f0.7820865974627469',
+    earthUrl: 'https://earth.google.com/earth/rpc/cc/map?pb=!1m2!1sCAoSLVJYTm5OQkZGEUx5Unc.!2m2!1d27.30825!2d88.29805',
   },
 ];
 
@@ -313,6 +335,7 @@ export default function TashidingMonastery() {
 
   return (
     <main className="overflow-hidden">
+      <style>{styles}</style>
       <Nav />
       {/* Hero Section */}
       <section className="relative w-full overflow-hidden pt-8 pb-4" style={{ backgroundImage: 'url(/bg1.png)', backgroundSize: 'cover', backgroundPosition: 'center 30%', backgroundClip: 'border-box', minHeight: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
@@ -1189,18 +1212,11 @@ export default function TashidingMonastery() {
                     style={{ fontFamily: 'Cinzel' }}
                   >
                     <span className="flex items-center justify-center gap-2">
-                      <span className="text-xl">👁️</span>
                       <span>Panoramic</span>
                     </span>
                   </button>
                 </div>
               </div>
-
-              {/* Start Tour Button */}
-              <button className="w-full py-6 rounded-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 transition-all duration-300 shadow-lg hover:shadow-xl flex items-center justify-center gap-3 group" style={{ fontFamily: 'Cinzel' }}>
-                <span className="text-3xl group-hover:scale-110 transition-transform">▶</span>
-                <span className="text-2xl font-bold text-amber-900">Start {viewMode === '3d' ? '3D' : 'Panoramic'} Tour</span>
-              </button>
 
               {/* Preview Box with Dynamic Content */}
               
@@ -1248,7 +1264,6 @@ export default function TashidingMonastery() {
 
                       {/* TEXT DESCRIPTION OF CURRENT SHOT */}
                       <div className="w-full md:w-64 flex flex-col justify-center text-left text-amber-100">
-                        <div className="text-5xl mb-3 text-center md:text-left">👁️</div>
                         <p
                           className="text-sm font-semibold mb-1 uppercase"
                           style={{ fontFamily: 'Cinzel' }}
@@ -1307,37 +1322,16 @@ export default function TashidingMonastery() {
                           onClick={() => setActivePanorama(shot)}
                           className="group rounded-2xl overflow-hidden border border-amber-500/30 bg-black/30 hover:border-amber-300/70 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl cursor-pointer"
                         >
-                          {/* Faux preview header */}
-                          <div className="aspect-video w-full flex items-center justify-center bg-gradient-to-br from-amber-900/60 to-orange-900/60">
-                            <div className="flex flex-col items-center gap-1">
-                              <span className="text-3xl group-hover:scale-110 transition-transform">
-                                👁️
-                              </span>
-                              <span className="text-[11px] uppercase tracking-wide text-amber-100/90">
-                                Open panoramic view
-                              </span>
-                            </div>
-                          </div>
-
-                          {/* Text area */}
-                          <div className="px-4 py-3 bg-black/40">
-                            <p className="text-xs font-semibold text-amber-100 mb-1 line-clamp-1">
-                              {shot.title}
-                            </p>
-                            {shot.note && (
-                              <p className="text-[11px] text-amber-200/90 line-clamp-2">
-                                {shot.note}
-                              </p>
-                            )}
-                            <a
-                              href={shot.url}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="mt-2 inline-flex items-center gap-1 text-[10px] text-amber-300/70 group-hover:text-amber-200 underline"
-                            >
-                              <span>View on Google Maps</span>
-                              <span className="text-xs">↗</span>
-                            </a>
+                          {/* Panoramic view display */}
+                          <div className="aspect-video w-full flex items-center justify-center bg-gradient-to-br from-amber-900/60 to-orange-900/60 overflow-hidden">
+                            <iframe
+                              src={shot.embedUrl}
+                              title={shot.title}
+                              className="w-full h-full border-0"
+                              loading="lazy"
+                              allowFullScreen
+                              referrerPolicy="no-referrer-when-downgrade"
+                            />
                           </div>
                         </div>
                       ))}
