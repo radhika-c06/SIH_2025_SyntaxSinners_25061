@@ -29,6 +29,17 @@ export async function apiCall<T = any>(
       },
     });
 
+    // Check if response is JSON
+    const contentType = response.headers.get('content-type');
+    if (!contentType || !contentType.includes('application/json')) {
+      const text = await response.text();
+      console.error('Non-JSON response:', text.substring(0, 200));
+      return {
+        success: false,
+        error: 'Server returned invalid response format',
+      };
+    }
+
     const data = await response.json();
 
     if (!response.ok) {
@@ -40,6 +51,7 @@ export async function apiCall<T = any>(
 
     return data as ApiResponse<T>;
   } catch (error) {
+    console.error('API call error:', error);
     return {
       success: false,
       error: error instanceof Error ? error.message : 'Network error',

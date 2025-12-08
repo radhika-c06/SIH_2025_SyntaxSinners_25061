@@ -73,64 +73,107 @@ export default function DashboardPage() {
           Dashboard
         </h1>
         <p className="text-amber-200" style={{ fontFamily: 'Poppins' }}>
-          Welcome back! Here's what's happening with Monastery360.
+          Welcome back! Here's your Sangha admin overview.
         </p>
       </div>
 
-      {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <StatsCard
-          title="Total Monasteries"
-          value={stats.totalMonasteries}
-          icon={
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-            </svg>
-          }
-          change="+2 this month"
-          changeType="positive"
-        />
-
-        <StatsCard
-          title="Pending Submissions"
-          value={stats.pendingSubmissions}
-          icon={
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-          }
-          change="Needs review"
-          changeType="neutral"
-        />
-
-        <StatsCard
-          title="Published Monasteries"
-          value={stats.publishedMonasteries}
-          icon={
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-          }
-          change="83% published"
-          changeType="positive"
-        />
-
-        <StatsCard
-          title="Contributors"
-          value={stats.contributors}
-          icon={
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
-            </svg>
-          }
-          change="+5 this week"
-          changeType="positive"
-        />
+      {/* Quick Actions */}
+      <div
+        className="rounded-2xl p-6 backdrop-blur-sm"
+        style={{
+          background: 'rgba(217, 119, 6, 0.1)',
+          border: '1px solid rgba(217, 119, 6, 0.2)',
+        }}
+      >
+        <h2 className="text-xl font-bold text-white mb-6" style={{ fontFamily: 'Poppins' }}>
+          Quick Actions
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
+          <Link
+            href="/admin/monasteries/new"
+            className="block w-full px-4 py-3 rounded-lg bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-amber-900 font-semibold text-center transition shadow-lg hover:shadow-xl"
+            style={{ fontFamily: 'Poppins' }}
+          >
+            + Add New Monastery
+          </Link>
+          <Link
+            href="/admin/submissions"
+            className="block w-full px-4 py-3 rounded-lg bg-amber-900/30 hover:bg-amber-900/50 text-amber-100 font-semibold text-center transition border border-amber-500/30"
+            style={{ fontFamily: 'Poppins' }}
+          >
+            Review Pending Submissions
+          </Link>
+          <Link
+            href="/admin/monasteries"
+            className="block w-full px-4 py-3 rounded-lg bg-amber-900/30 hover:bg-amber-900/50 text-amber-100 font-semibold text-center transition border border-amber-500/30"
+            style={{ fontFamily: 'Poppins' }}
+          >
+            View All Monasteries
+          </Link>
+          <Link
+            href="/admin/contributors"
+            className="block w-full px-4 py-3 rounded-lg bg-amber-900/30 hover:bg-amber-900/50 text-amber-100 font-semibold text-center transition border border-amber-500/30"
+            style={{ fontFamily: 'Poppins' }}
+          >
+            Manage Contributors
+          </Link>
+        </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+        {/* Stats Cards - Vertical */}
+        <div className="space-y-6">
+          <StatsCard
+            title="Total Monasteries"
+            value={stats.totalMonasteries}
+            icon={
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+              </svg>
+            }
+            change="+2 this month"
+            changeType="positive"
+          />
+
+          <StatsCard
+            title="Pending Submissions"
+            value={stats.pendingSubmissions}
+            icon={
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            }
+            change="Needs review"
+            changeType="neutral"
+          />
+
+          <StatsCard
+            title="Published Monasteries"
+            value={stats.publishedMonasteries}
+            icon={
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            }
+            change="83% published"
+            changeType="positive"
+          />
+
+          <StatsCard
+            title="Contributors"
+            value={stats.contributors}
+            icon={
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+              </svg>
+            }
+            change="+5 this week"
+            changeType="positive"
+          />
+        </div>
+
         {/* Recent Activity */}
-        <div className="lg:col-span-2">
+        <div className="lg:col-span-3">
           <div
             className="rounded-2xl p-6 backdrop-blur-sm"
             style={{
@@ -190,51 +233,8 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        {/* Quick Actions */}
+        {/* System Status */}
         <div>
-          <div
-            className="rounded-2xl p-6 backdrop-blur-sm"
-            style={{
-              background: 'rgba(217, 119, 6, 0.1)',
-              border: '1px solid rgba(217, 119, 6, 0.2)',
-            }}
-          >
-            <h2 className="text-xl font-bold text-white mb-6" style={{ fontFamily: 'Poppins' }}>
-              Quick Actions
-            </h2>
-            <div className="space-y-3">
-              <Link
-                href="/admin/monasteries/new"
-                className="block w-full px-4 py-3 rounded-lg bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-amber-900 font-semibold text-center transition shadow-lg hover:shadow-xl"
-                style={{ fontFamily: 'Poppins' }}
-              >
-                + Add New Monastery
-              </Link>
-              <Link
-                href="/admin/submissions"
-                className="block w-full px-4 py-3 rounded-lg bg-amber-900/30 hover:bg-amber-900/50 text-amber-100 font-semibold text-center transition border border-amber-500/30"
-                style={{ fontFamily: 'Poppins' }}
-              >
-                Review Pending Submissions
-              </Link>
-              <Link
-                href="/admin/monasteries"
-                className="block w-full px-4 py-3 rounded-lg bg-amber-900/30 hover:bg-amber-900/50 text-amber-100 font-semibold text-center transition border border-amber-500/30"
-                style={{ fontFamily: 'Poppins' }}
-              >
-                View All Monasteries
-              </Link>
-              <Link
-                href="/admin/contributors"
-                className="block w-full px-4 py-3 rounded-lg bg-amber-900/30 hover:bg-amber-900/50 text-amber-100 font-semibold text-center transition border border-amber-500/30"
-                style={{ fontFamily: 'Poppins' }}
-              >
-                Manage Contributors
-              </Link>
-            </div>
-          </div>
-
-          {/* System Status */}
           <div
             className="rounded-2xl p-6 backdrop-blur-sm mt-6"
             style={{
@@ -245,20 +245,20 @@ export default function DashboardPage() {
             <h2 className="text-xl font-bold text-white mb-4" style={{ fontFamily: 'Poppins' }}>
               System Status
             </h2>
-            <div className="space-y-3">
-              <div className="flex items-center justify-between">
+            <div className="grid grid-cols-3 gap-6">
+              <div className="flex flex-col items-center gap-2">
                 <span className="text-amber-300/70 text-sm" style={{ fontFamily: 'Poppins' }}>
                   API Status
                 </span>
                 <StatusBadge status="Published" size="sm" />
               </div>
-              <div className="flex items-center justify-between">
+              <div className="flex flex-col items-center gap-2">
                 <span className="text-amber-300/70 text-sm" style={{ fontFamily: 'Poppins' }}>
                   Database
                 </span>
                 <StatusBadge status="Published" size="sm" />
               </div>
-              <div className="flex items-center justify-between">
+              <div className="flex flex-col items-center gap-2">
                 <span className="text-amber-300/70 text-sm" style={{ fontFamily: 'Poppins' }}>
                   Storage
                 </span>
