@@ -1161,18 +1161,26 @@ export default function TashidingMonastery() {
 
               {/* Preview Box with Dynamic Content */}
               <div className="rounded-3xl overflow-hidden" style={{ backgroundColor: 'rgba(217, 119, 6, 0.15)', border: '2px solid rgba(217, 119, 6, 0.3)', backdropFilter: 'blur(10px)' }}>
-                <div className="h-[28rem] bg-gradient-to-br from-amber-900 to-orange-900 flex items-center justify-center relative">
+                <div className="h-[28rem] relative">
                   {viewMode === '3d' ? (
-                    <div className="text-center text-amber-100">
-                      <div className="text-6xl mb-4">🏛️</div>
-                      <p className="text-lg font-semibold mb-2" style={{ fontFamily: 'Cinzel' }}>3D Model View</p>
-                      <p className="text-sm text-amber-200" style={{ fontFamily: 'Cinzel' }}>Interactive 3D monastery model</p>
-                    </div>
+                    <video
+                      autoPlay
+                      loop
+                      muted
+                      playsInline
+                      preload="auto"
+                      className="w-full h-full object-cover"
+                      style={{ filter: 'contrast(1.1) saturate(1.15) brightness(1.05)' }}
+                    >
+                      <source src="/tashiding/tashiding 3d.mp4" type="video/mp4" />
+                    </video>
                   ) : (
-                    <div className="text-center text-amber-100">
-                      <div className="text-6xl mb-4">👁️</div>
-                      <p className="text-lg font-semibold mb-2" style={{ fontFamily: 'Cinzel' }}>Panoramic View</p>
-                      <p className="text-sm text-amber-200" style={{ fontFamily: 'Cinzel' }}>360° immersive experience</p>
+                    <div className="h-full bg-gradient-to-br from-amber-900 to-orange-900 flex items-center justify-center">
+                      <div className="text-center text-amber-100">
+                        <div className="text-6xl mb-4">👁️</div>
+                        <p className="text-lg font-semibold mb-2" style={{ fontFamily: 'Cinzel' }}>Panoramic View</p>
+                        <p className="text-sm text-amber-200" style={{ fontFamily: 'Cinzel' }}>360° immersive experience</p>
+                      </div>
                     </div>
                   )}
                   
