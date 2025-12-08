@@ -10,18 +10,19 @@ import { getAuthenticatedAdmin } from '@/lib/auth/getAuthenticatedAdmin';
 import { Types } from 'mongoose';
 
 interface RouteParams {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
-export async function GET(request: NextRequest, { params }: RouteParams) {
+export async function GET(request: NextRequest, context: RouteParams) {
   try {
+    const { id } = await context.params;
     // Authenticate admin
     const admin = await getAuthenticatedAdmin(request);
 
     // Validate MongoDB ID
-    if (!Types.ObjectId.isValid(params.id)) {
+    if (!Types.ObjectId.isValid(id)) {
       return NextResponse.json(
         {
           success: false,
@@ -34,7 +35,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
     await connectDB();
 
     // Fetch submission
-    const submission = await ContributorSubmission.findById(params.id).populate(
+    const submission = await ContributorSubmission.findById(id).populate(
       'linkedMonasteryId',
       'name slug'
     );

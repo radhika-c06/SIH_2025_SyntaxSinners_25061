@@ -10,7 +10,7 @@ const mockSubmission = {
   monasteryName: 'Pemayangtse Monastery',
   contributorName: 'Rajesh Kumar',
   contributorEmail: 'rajesh.k@email.com',
-  status: 'Pending' as const,
+  status: 'Pending' as 'Pending' | 'Approved' | 'Rejected',
   submittedOn: '2024-12-05',
   rawContent: {
     basicInfo: {
