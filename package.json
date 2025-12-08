@@ -2,6 +2,9 @@
   "dependencies": {
     "@studio-freight/lenis": "^1.0.42",
     "bcryptjs": "^3.0.3",
-    "gsap": "^3.13.0"
+    "gsap": "^3.13.0",
+    "i18next": "^25.7.2",
+    "next-i18next": "^15.4.3",
+    "react-i18next": "^16.4.0"
   }
 }
