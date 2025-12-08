@@ -13,6 +13,7 @@ export default function TashidingMonastery() {
   const [openDialog, setOpenDialog] = useState(false);
   const [activeItem, setActiveItem] = useState<any | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [audioDuration, setAudioDuration] = useState('0:00');
   const [isLiked, setIsLiked] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
@@ -34,10 +35,11 @@ export default function TashidingMonastery() {
     if (audioRef.current) {
       if (isPlaying) {
         audioRef.current.pause();
+        setIsPlaying(false);
       } else {
         audioRef.current.play();
+        setIsPlaying(true);
       }
-      setIsPlaying(!isPlaying);
     }
   };
 
@@ -84,9 +86,9 @@ export default function TashidingMonastery() {
   const sidebarItems = [
     { id: 'overview', label: 'Overview' },
     { id: 'digital-archive', label: 'Digital Archive' },
+    { id: 'cultural-calendar', label: 'Cultural Calendar' },
     { id: 'audio-tour', label: 'Audio Tour' },
     { id: 'virtual-tour', label: 'Virtual Tour' },
-    { id: 'cultural-calendar', label: 'Cultural Calendar' },
   ];
 
   const tashidingArchiveItems = [
@@ -252,6 +254,24 @@ export default function TashidingMonastery() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    const updateProgress = () => {
+      setCurrentTime(audio.currentTime);
+      setDuration(audio.duration || 0);
+    };
+
+    const interval = setInterval(() => {
+      if (audio && !audio.paused) {
+        updateProgress();
+      }
+    }, 100);
+
+    return () => clearInterval(interval);
+  }, [isPlaying]);
+
   const goToSlide = (index: number) => {
     setActiveIndex(index);
   };
@@ -391,9 +411,9 @@ export default function TashidingMonastery() {
           {[
             { label: 'Overview', target: 'overview' },
             { label: 'Digital Archive', target: 'digital-archive' },
+            { label: 'Cultural Calendar', target: 'cultural-calendar' },
             { label: 'Audio Tour', target: 'audio-tour' },
             { label: 'Virtual Tour', target: 'virtual-tour' },
-            { label: 'Cultural Calendar', target: 'cultural-calendar' },
           ].map((btn) => (
             <button
               key={btn.label}
@@ -911,6 +931,26 @@ export default function TashidingMonastery() {
 
             {/* Audio Tour Card */}
             <div className="max-w-4xl mx-auto rounded-3xl p-8" style={{ backgroundColor: 'rgba(217, 119, 6, 0.15)', border: '2px solid rgba(217, 119, 6, 0.3)', backdropFilter: 'blur(10px)' }}>
+            <audio 
+              ref={audioRef} 
+              src="/tashiding audio.mp4"
+              preload="metadata"
+              onTimeUpdate={(e) => {
+                const time = (e.target as HTMLAudioElement).currentTime;
+                setCurrentTime(time);
+                console.log('Time update:', time);
+              }}
+              onLoadedMetadata={(e) => {
+                const dur = (e.target as HTMLAudioElement).duration;
+                setDuration(dur);
+                const minutes = Math.floor(dur / 60);
+                const seconds = Math.floor(dur % 60);
+                setAudioDuration(`${minutes}:${seconds.toString().padStart(2, '0')}`);
+              }}
+              onEnded={() => {
+                setIsPlaying(false);
+              }}
+            />
             <div className="grid md:grid-cols-2 gap-8 items-center">
               {/* Image */}
               <div className="rounded-2xl overflow-hidden group cursor-pointer">
@@ -930,15 +970,6 @@ export default function TashidingMonastery() {
                 {/* Player Controls */}
                 <div className="flex items-center justify-between gap-4">
                   <button className="text-amber-100 hover:text-white transition">☰</button>
-                  <div 
-                    className="flex-1 h-1 bg-gray-600 rounded cursor-pointer relative"
-                    onClick={handleProgressClick}
-                  >
-                    <div 
-                      className="h-full bg-gradient-to-r from-amber-400 to-amber-200 rounded"
-                      style={{ width: `${progress}%` }}
-                    ></div>
-                  </div>
                   <button 
                     onClick={toggleLike}
                     className={`transition ${isLiked ? 'text-red-500' : 'text-amber-100 hover:text-white'}`}
@@ -947,13 +978,20 @@ export default function TashidingMonastery() {
                   </button>
                 </div>
 
-                {/* Audio Element */}
-                <audio 
-                  ref={audioRef} 
-                  src="/tashiding audio.mp4"
-                  onTimeUpdate={(e) => setCurrentTime(e.currentTarget.currentTime)}
-                  onLoadedMetadata={(e) => setDuration(e.currentTarget.duration)}
-                />
+                {/* Progress Bar */}
+                <div className="relative w-full mb-4">
+                  <div 
+                    className="w-full h-2 bg-amber-900/30 rounded-full cursor-pointer group"
+                    onClick={handleProgressClick}
+                  >
+                    <div 
+                      className="h-full bg-gradient-to-r from-amber-400 to-amber-200 rounded-full relative"
+                      style={{ width: `${duration > 0 ? (currentTime / duration) * 100 : 0}%`, transition: 'width 0.1s linear' }}
+                    >
+                      <div className="absolute right-0 top-1/2 -translate-y-1/2 w-3 h-3 bg-amber-100 rounded-full" />
+                    </div>
+                  </div>
+                </div>
 
                 {/* Playback Controls */}
                 <div className="flex items-center justify-center gap-6">
@@ -994,7 +1032,7 @@ export default function TashidingMonastery() {
                   <div className="flex items-center gap-2 text-amber-100">
                     <span className="text-xl">⏱</span>
                     <span className="font-semibold">
-                      {Math.floor(currentTime / 60)}:{String(Math.floor(currentTime % 60)).padStart(2, '0')} / {Math.floor(duration / 60)}:{String(Math.floor(duration % 60)).padStart(2, '0')}
+                      {Math.floor(currentTime / 60)}:{String(Math.floor(currentTime % 60)).padStart(2, '0')}
                     </span>
                   </div>
                   <button className="text-amber-100 hover:text-white transition text-2xl">⬇</button>
