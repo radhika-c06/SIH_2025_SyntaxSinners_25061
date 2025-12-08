@@ -9,12 +9,15 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@hookform/resolvers": "^5.2.2",
     "framer-motion": "^12.23.16",
     "gsap": "^3.13.0",
     "next": "^15.5.7",
     "react": "^19.2.1",
     "react-dom": "^19.2.1",
-    "swiper": "^11.2.10"
+    "react-hook-form": "^7.68.0",
+    "swiper": "^11.2.10",
+    "zod": "^4.1.13"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
