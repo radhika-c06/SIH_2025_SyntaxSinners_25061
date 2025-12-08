@@ -61,7 +61,8 @@ export default function ExperiencesPage() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {options.map((opt) => (
+              {options.map((opt) => {
+                return (
                   <div key={opt.id} className="bg-[#4a1414] rounded-3xl p-6 pop-card shine-border">
                     <div className="flex items-start gap-4">
                       <div className="w-10 h-10 bg-amber-300 rounded-lg flex-shrink-0 flex items-center justify-center overflow-hidden" aria-hidden>
@@ -110,8 +111,8 @@ export default function ExperiencesPage() {
                       </div>
                     )}
                   </div>
-                </div>
-              ))}
+                )
+              })}
             </div>
           </main>
         </div>
