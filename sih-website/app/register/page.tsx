@@ -6,6 +6,7 @@ import { authAPI } from '@/lib/api';
 
 export default function RegisterPage() {
   const router = useRouter();
+  const [isMounted, setIsMounted] = useState(false);
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
@@ -16,6 +17,10 @@ export default function RegisterPage() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+
+  React.useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -71,23 +76,25 @@ export default function RegisterPage() {
             backgroundSize: '400px auto',
           }}
         />
-        {/* Animated particles */}
-        <div className="absolute inset-0 opacity-20">
-          {[...Array(50)].map((_, i) => (
-            <div
-              key={i}
-              className="absolute bg-amber-400 rounded-full animate-pulse"
-              style={{
-                width: Math.random() * 3 + 1 + 'px',
-                height: Math.random() * 3 + 1 + 'px',
-                top: Math.random() * 100 + '%',
-                left: Math.random() * 100 + '%',
-                animationDelay: Math.random() * 3 + 's',
-                animationDuration: Math.random() * 3 + 2 + 's',
-              }}
-            />
-          ))}
-        </div>
+        {/* Animated particles - only render after mount to avoid hydration mismatch */}
+        {isMounted && (
+          <div className="absolute inset-0 opacity-20">
+            {[...Array(50)].map((_, i) => (
+              <div
+                key={i}
+                className="absolute bg-amber-400 rounded-full animate-pulse"
+                style={{
+                  width: Math.random() * 3 + 1 + 'px',
+                  height: Math.random() * 3 + 1 + 'px',
+                  top: Math.random() * 100 + '%',
+                  left: Math.random() * 100 + '%',
+                  animationDelay: Math.random() * 3 + 's',
+                  animationDuration: Math.random() * 3 + 2 + 's',
+                }}
+              />
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Content */}
