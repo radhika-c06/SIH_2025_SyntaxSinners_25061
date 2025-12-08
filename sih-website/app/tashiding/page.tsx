@@ -13,6 +13,7 @@ export default function TashidingMonastery() {
   const [openDialog, setOpenDialog] = useState(false);
   const [activeItem, setActiveItem] = useState<any | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [audioDuration, setAudioDuration] = useState('0:00');
   const [isLiked, setIsLiked] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
@@ -34,10 +35,11 @@ export default function TashidingMonastery() {
     if (audioRef.current) {
       if (isPlaying) {
         audioRef.current.pause();
+        setIsPlaying(false);
       } else {
         audioRef.current.play();
+        setIsPlaying(true);
       }
-      setIsPlaying(!isPlaying);
     }
   };
 
@@ -84,9 +86,9 @@ export default function TashidingMonastery() {
   const sidebarItems = [
     { id: 'overview', label: 'Overview' },
     { id: 'digital-archive', label: 'Digital Archive' },
+    { id: 'cultural-calendar', label: 'Cultural Calendar' },
     { id: 'audio-tour', label: 'Audio Tour' },
     { id: 'virtual-tour', label: 'Virtual Tour' },
-    { id: 'cultural-calendar', label: 'Cultural Calendar' },
   ];
 
   const tashidingArchiveItems = [
@@ -194,6 +196,49 @@ export default function TashidingMonastery() {
     { src: '/tashiding/tash-6.png', alt: 'Tashiding 3' },
   ];
 
+    const panoramicShots = [
+  {
+    id: 'p1',
+    title: 'Approach to Tashiding Monastery',
+    note: 'Hilltop road and valley view',
+    url: 'https://maps.app.goo.gl/GVnM9bfDhz2ckP4m9',              // opens in new tab
+    embedUrl: 'https://www.google.com/maps/embed?pb=<iframe src="https://www.google.com/maps/embed?pb=!4v1765166574121!6m8!1m7!1sCAoSFkNJSE0wb2dLRUlDQWdJQ0V6b09UVnc.!2m2!1d27.3080960299431!2d88.29783391014004!3f260!4f10!5f0.7820865974627469" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>',   // from "Embed a map"
+  },
+  {
+    id: 'p2',
+    title: 'Monastery Courtyard View',
+    note: 'Prayer flags and chortens',
+    url: 'https://maps.app.goo.gl/4uMyY25gvWW7NJFt5',
+    embedUrl: 'https://www.google.com/maps/embed?pb=PASTE_HERE',
+  },
+  {
+    id: 'p3',
+    title: 'Main Shrine Surroundings',
+    note: '360° around the central complex',
+    url: 'https://maps.app.goo.gl/7VS6TvYXtVm53LQPA',
+    embedUrl: 'https://www.google.com/maps/embed?pb=PASTE_HERE',
+  },
+  {
+    id: 'p4',
+    title: 'Ridge Walkway Panoramic',
+    note: 'Mountain and forest panorama',
+    url: 'https://maps.app.goo.gl/nasHp1wQJYK9BDTi8',
+    embedUrl: 'https://www.google.com/maps/embed?pb=PASTE_HERE',
+  },
+  {
+    id: 'p5',
+    title: 'Distant View of Tashiding',
+    note: 'Monastery in the landscape',
+    url: 'https://maps.app.goo.gl/78iJua4uEMYzAsSf8',
+    embedUrl: 'https://www.google.com/maps/embed?pb=PASTE_HERE',
+  },
+];
+
+
+  const [activePanorama, setActivePanorama] = useState(panoramicShots[0]);
+
+
+
   useEffect(() => {
     const interval = setInterval(() => {
       setActiveIndex((prev) => (prev + 1) % images.length);
@@ -208,6 +253,24 @@ export default function TashidingMonastery() {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    const updateProgress = () => {
+      setCurrentTime(audio.currentTime);
+      setDuration(audio.duration || 0);
+    };
+
+    const interval = setInterval(() => {
+      if (audio && !audio.paused) {
+        updateProgress();
+      }
+    }, 100);
+
+    return () => clearInterval(interval);
+  }, [isPlaying]);
 
   const goToSlide = (index: number) => {
     setActiveIndex(index);
@@ -348,9 +411,9 @@ export default function TashidingMonastery() {
           {[
             { label: 'Overview', target: 'overview' },
             { label: 'Digital Archive', target: 'digital-archive' },
+            { label: 'Cultural Calendar', target: 'cultural-calendar' },
             { label: 'Audio Tour', target: 'audio-tour' },
             { label: 'Virtual Tour', target: 'virtual-tour' },
-            { label: 'Cultural Calendar', target: 'cultural-calendar' },
           ].map((btn) => (
             <button
               key={btn.label}
@@ -868,6 +931,26 @@ export default function TashidingMonastery() {
 
             {/* Audio Tour Card */}
             <div className="max-w-4xl mx-auto rounded-3xl p-8" style={{ backgroundColor: 'rgba(217, 119, 6, 0.15)', border: '2px solid rgba(217, 119, 6, 0.3)', backdropFilter: 'blur(10px)' }}>
+            <audio 
+              ref={audioRef} 
+              src="/tashiding audio.mp4"
+              preload="metadata"
+              onTimeUpdate={(e) => {
+                const time = (e.target as HTMLAudioElement).currentTime;
+                setCurrentTime(time);
+                console.log('Time update:', time);
+              }}
+              onLoadedMetadata={(e) => {
+                const dur = (e.target as HTMLAudioElement).duration;
+                setDuration(dur);
+                const minutes = Math.floor(dur / 60);
+                const seconds = Math.floor(dur % 60);
+                setAudioDuration(`${minutes}:${seconds.toString().padStart(2, '0')}`);
+              }}
+              onEnded={() => {
+                setIsPlaying(false);
+              }}
+            />
             <div className="grid md:grid-cols-2 gap-8 items-center">
               {/* Image */}
               <div className="rounded-2xl overflow-hidden group cursor-pointer">
@@ -887,15 +970,6 @@ export default function TashidingMonastery() {
                 {/* Player Controls */}
                 <div className="flex items-center justify-between gap-4">
                   <button className="text-amber-100 hover:text-white transition">☰</button>
-                  <div 
-                    className="flex-1 h-1 bg-gray-600 rounded cursor-pointer relative"
-                    onClick={handleProgressClick}
-                  >
-                    <div 
-                      className="h-full bg-gradient-to-r from-amber-400 to-amber-200 rounded"
-                      style={{ width: `${progress}%` }}
-                    ></div>
-                  </div>
                   <button 
                     onClick={toggleLike}
                     className={`transition ${isLiked ? 'text-red-500' : 'text-amber-100 hover:text-white'}`}
@@ -904,13 +978,20 @@ export default function TashidingMonastery() {
                   </button>
                 </div>
 
-                {/* Audio Element */}
-                <audio 
-                  ref={audioRef} 
-                  src="/tashiding audio.mp4"
-                  onTimeUpdate={(e) => setCurrentTime(e.currentTarget.currentTime)}
-                  onLoadedMetadata={(e) => setDuration(e.currentTarget.duration)}
-                />
+                {/* Progress Bar */}
+                <div className="relative w-full mb-4">
+                  <div 
+                    className="w-full h-2 bg-amber-900/30 rounded-full cursor-pointer group"
+                    onClick={handleProgressClick}
+                  >
+                    <div 
+                      className="h-full bg-gradient-to-r from-amber-400 to-amber-200 rounded-full relative"
+                      style={{ width: `${duration > 0 ? (currentTime / duration) * 100 : 0}%`, transition: 'width 0.1s linear' }}
+                    >
+                      <div className="absolute right-0 top-1/2 -translate-y-1/2 w-3 h-3 bg-amber-100 rounded-full" />
+                    </div>
+                  </div>
+                </div>
 
                 {/* Playback Controls */}
                 <div className="flex items-center justify-center gap-6">
@@ -951,7 +1032,7 @@ export default function TashidingMonastery() {
                   <div className="flex items-center gap-2 text-amber-100">
                     <span className="text-xl">⏱</span>
                     <span className="font-semibold">
-                      {Math.floor(currentTime / 60)}:{String(Math.floor(currentTime % 60)).padStart(2, '0')} / {Math.floor(duration / 60)}:{String(Math.floor(duration % 60)).padStart(2, '0')}
+                      {Math.floor(currentTime / 60)}:{String(Math.floor(currentTime % 60)).padStart(2, '0')}
                     </span>
                   </div>
                   <button className="text-amber-100 hover:text-white transition text-2xl">⬇</button>
@@ -1191,8 +1272,16 @@ export default function TashidingMonastery() {
               </button>
 
               {/* Preview Box with Dynamic Content */}
-              <div className="rounded-3xl overflow-hidden" style={{ backgroundColor: 'rgba(217, 119, 6, 0.15)', border: '2px solid rgba(217, 119, 6, 0.3)', backdropFilter: 'blur(10px)' }}>
-                <div className="h-[28rem] relative">
+              <div
+                className="rounded-3xl overflow-hidden"
+                style={{
+                  backgroundColor: 'rgba(217, 119, 6, 0.15)',
+                  border: '2px solid rgba(217, 119, 6, 0.3)',
+                  backdropFilter: 'blur(10px)',
+                }}
+              >
+                {/* TOP AREA: MODE PREVIEW / EMBED */}
+                <div className="h-[20rem] bg-gradient-to-br from-amber-900 to-orange-900 relative px-6 py-4 flex items-center justify-center">
                   {viewMode === '3d' ? (
                     <video
                       autoPlay
@@ -1200,33 +1289,127 @@ export default function TashidingMonastery() {
                       muted
                       playsInline
                       preload="auto"
-                      className="w-full h-full object-cover"
-                      style={{ filter: 'contrast(1.1) saturate(1.15) brightness(1.05)' }}
+                      className="w-full h-full object-cover rounded-2xl"
+                      style={{ filter: 'contrast(1.15) saturate(1.2) brightness(1.08) sharpness(1.1)' }}
                     >
                       <source src="/tashiding/tashiding 3d.mp4" type="video/mp4" />
                     </video>
                   ) : (
-                    <div className="h-full bg-gradient-to-br from-amber-900 to-orange-900 flex items-center justify-center">
-                      <div className="text-center text-amber-100">
-                        <div className="text-6xl mb-4">👁️</div>
-                        <p className="text-lg font-semibold mb-2" style={{ fontFamily: 'Cinzel' }}>Panoramic View</p>
-                        <p className="text-sm text-amber-200" style={{ fontFamily: 'Cinzel' }}>360° immersive experience</p>
+                    <div className="w-full h-full flex flex-col md:flex-row items-stretch gap-4">
+                      {/* EMBEDDED MAP / STREET VIEW */}
+                      <div className="flex-1 rounded-2xl overflow-hidden border border-amber-500/40 bg-black/40">
+                        <iframe
+                          src={activePanorama.embedUrl}
+                          title={activePanorama.title}
+                          className="w-full h-full border-0"
+                          loading="lazy"
+                          allowFullScreen
+                          referrerPolicy="no-referrer-when-downgrade"
+                        />
+                      </div>
+
+                      {/* TEXT DESCRIPTION OF CURRENT SHOT */}
+                      <div className="w-full md:w-64 flex flex-col justify-center text-left text-amber-100">
+                        <div className="text-5xl mb-3 text-center md:text-left">👁️</div>
+                        <p
+                          className="text-sm font-semibold mb-1 uppercase"
+                          style={{ fontFamily: 'Cinzel' }}
+                        >
+                          Panoramic View
+                        </p>
+                        <p
+                          className="text-base font-semibold mb-1"
+                          style={{ fontFamily: 'Cinzel' }}
+                        >
+                          {activePanorama.title}
+                        </p>
+                        {activePanorama.note && (
+                          <p className="text-sm text-amber-200 mb-3">
+                            {activePanorama.note}
+                          </p>
+                        )}
+                        <a
+                          href={activePanorama.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1 text-xs text-amber-200 underline"
+                        >
+                          View directly on Google Maps ↗
+                        </a>
                       </div>
                     </div>
                   )}
-                  
+
                   {/* Mode indicator badge */}
                   <div className="absolute top-4 right-4 px-4 py-2 rounded-full bg-amber-900/80 backdrop-blur-sm border border-amber-500/30">
-                    <span className="text-xs font-semibold text-amber-100 uppercase" style={{ fontFamily: 'Cinzel' }}>
+                    <span
+                      className="text-xs font-semibold text-amber-100 uppercase"
+                      style={{ fontFamily: 'Cinzel' }}
+                    >
                       {viewMode === '3d' ? '3D Model' : 'Panoramic 360°'}
                     </span>
                   </div>
                 </div>
-              </div>
 
+                {/* BOTTOM AREA: PANORAMIC SHOTS GRID */}
+                {viewMode === 'panoramic' && (
+                  <div className="border-top border-amber-500/20 bg-black/20 px-6 py-5">
+                    <h4
+                      className="text-sm md:text-base font-semibold text-amber-100 mb-3 flex items-center gap-2 uppercase"
+                      style={{ fontFamily: 'Cinzel' }}
+                    >
+                      <span className="text-lg">📍</span>
+                      Panoramic Shots from Google Maps
+                    </h4>
+
+                    <div className="grid sm:grid-cols-2 gap-4">
+                      {panoramicShots.map((shot) => (
+                        <div
+                          key={shot.id}
+                          onClick={() => setActivePanorama(shot)}
+                          className="group rounded-2xl overflow-hidden border border-amber-500/30 bg-black/30 hover:border-amber-300/70 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl cursor-pointer"
+                        >
+                          {/* Faux preview header */}
+                          <div className="aspect-video w-full flex items-center justify-center bg-gradient-to-br from-amber-900/60 to-orange-900/60">
+                            <div className="flex flex-col items-center gap-1">
+                              <span className="text-3xl group-hover:scale-110 transition-transform">
+                                👁️
+                              </span>
+                              <span className="text-[11px] uppercase tracking-wide text-amber-100/90">
+                                Open panoramic view
+                              </span>
+                            </div>
+                          </div>
+
+                          {/* Text area */}
+                          <div className="px-4 py-3 bg-black/40">
+                            <p className="text-xs font-semibold text-amber-100 mb-1 line-clamp-1">
+                              {shot.title}
+                            </p>
+                            {shot.note && (
+                              <p className="text-[11px] text-amber-200/90 line-clamp-2">
+                                {shot.note}
+                              </p>
+                            )}
+                            <a
+                              href={shot.url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="mt-2 inline-flex items-center gap-1 text-[10px] text-amber-300/70 group-hover:text-amber-200 underline"
+                            >
+                              <span>View on Google Maps</span>
+                              <span className="text-xs">↗</span>
+                            </a>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
-        </div>
+        </div>    
       </section>
 
       <Footer />
