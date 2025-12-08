@@ -782,6 +782,7 @@ export default function DubdiMonastery() {
             <audio 
               ref={audioRef} 
               src="/dubdi/WhatsApp Audio 2025-12-06 at 6.46.22 PM.mp4"
+              preload="metadata"
               onTimeUpdate={(e) => {
                 const time = (e.target as HTMLAudioElement).currentTime;
                 setCurrentTime(time);
@@ -867,7 +868,9 @@ export default function DubdiMonastery() {
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2 text-amber-100">
                     <span className="text-xl">⏱</span>
-                    <span className="font-semibold">{audioDuration}</span>
+                    <span className="font-semibold">
+                      {Math.floor(currentTime / 60)}:{String(Math.floor(currentTime % 60)).padStart(2, '0')} / {audioDuration}
+                    </span>
                   </div>
                   <button className="text-amber-100 hover:text-white transition text-2xl">⬇</button>
                 </div>

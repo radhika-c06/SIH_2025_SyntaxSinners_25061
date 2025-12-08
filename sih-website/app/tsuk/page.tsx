@@ -909,6 +909,7 @@ export default function TsukMonastery() {
               <audio
                 ref={audioRef}
                 src="/tsuk/tsuk audio guide.wav"
+                preload="metadata"
                 onTimeUpdate={(e) => {
                   const time = (e.target as HTMLAudioElement).currentTime;
                   setCurrentTime(time);
@@ -1008,10 +1009,7 @@ export default function TsukMonastery() {
                     <div className="flex items-center gap-2 text-amber-100">
                       <span className="text-xl">⏱</span>
                       <span className="font-semibold">
-                        {Math.floor(currentTime / 60)}:
-                        {String(Math.floor(currentTime % 60)).padStart(2, '0')} /{' '}
-                        {Math.floor(duration / 60)}:
-                        {String(Math.floor(duration % 60)).padStart(2, '0')}
+                        {Math.floor(currentTime / 60)}:{String(Math.floor(currentTime % 60)).padStart(2, '0')} / {audioDuration}
                       </span>
                     </div>
                     <button className="text-amber-100 hover:text-white transition text-2xl">⬇</button>
