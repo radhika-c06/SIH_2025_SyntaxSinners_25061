@@ -12,6 +12,7 @@ export default function RumtekMonastery() {
 
   // AUDIO PLAYER STATE (same pattern as Tashiding)
   const [isPlaying, setIsPlaying] = useState(false);
+  const [audioDuration, setAudioDuration] = useState('0:00');
   const [isLiked, setIsLiked] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
@@ -41,6 +42,24 @@ export default function RumtekMonastery() {
     }, 5000);
     return () => clearInterval(interval);
   }, [images.length]);
+
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    const updateProgress = () => {
+      setCurrentTime(audio.currentTime);
+      setDuration(audio.duration || 0);
+    };
+
+    const interval = setInterval(() => {
+      if (audio && !audio.paused) {
+        updateProgress();
+      }
+    }, 100);
+
+    return () => clearInterval(interval);
+  }, [isPlaying]);
 
   const goToSlide = (index: number) => {
     setActiveIndex(index);
@@ -298,10 +317,11 @@ export default function RumtekMonastery() {
     if (!audioRef.current) return;
     if (isPlaying) {
       audioRef.current.pause();
+      setIsPlaying(false);
     } else {
       audioRef.current.play();
+      setIsPlaying(true);
     }
-    setIsPlaying(!isPlaying);
   };
 
   const skipForward = () => {
@@ -460,9 +480,9 @@ export default function RumtekMonastery() {
           {[
             { label: 'Overview', target: 'overview' },
             { label: 'Digital Archive', target: 'digital-archive' },
+            { label: 'Cultural Calendar', target: 'cultural-calendar' },
             { label: 'Audio Tour', target: 'audio-tour' },
             { label: 'Virtual Tour', target: 'virtual-tour' },
-            { label: 'Cultural Calendar', target: 'cultural-calendar' },
           ].map((btn) => (
             <button
               key={btn.label}
@@ -1129,6 +1149,25 @@ export default function RumtekMonastery() {
                 backdropFilter: 'blur(10px)',
               }}
             >
+              <audio
+                ref={audioRef}
+                src="/rumtek audio.mp4"
+                preload="metadata"
+                onTimeUpdate={(e) => {
+                  const time = (e.target as HTMLAudioElement).currentTime;
+                  setCurrentTime(time);
+                }}
+                onLoadedMetadata={(e) => {
+                  const dur = (e.target as HTMLAudioElement).duration;
+                  setDuration(dur);
+                  const minutes = Math.floor(dur / 60);
+                  const seconds = Math.floor(dur % 60);
+                  setAudioDuration(`${minutes}:${seconds.toString().padStart(2, '0')}`);
+                }}
+                onEnded={() => {
+                  setIsPlaying(false);
+                }}
+              />
               <div className="grid md:grid-cols-2 gap-8 items-center">
                 {/* Image */}
                 <div className="rounded-2xl overflow-hidden group cursor-pointer">
@@ -1150,15 +1189,6 @@ export default function RumtekMonastery() {
                   {/* Player Controls */}
                   <div className="flex items-center justify-between gap-4">
                     <button className="text-amber-100 hover:text-white transition">☰</button>
-                    <div
-                      className="flex-1 h-1 bg-gray-600 rounded cursor-pointer relative"
-                      onClick={handleProgressClick}
-                    >
-                      <div
-                        className="h-full bg-gradient-to-r from-amber-400 to-amber-200 rounded"
-                        style={{ width: `${progress}%` }}
-                      ></div>
-                    </div>
                     <button
                       onClick={toggleLike}
                       className={`transition ${
@@ -1169,13 +1199,20 @@ export default function RumtekMonastery() {
                     </button>
                   </div>
 
-                  {/* Audio Element */}
-                  <audio
-                    ref={audioRef}
-                    src="/rumtek audio.mp4"
-                    onTimeUpdate={(e) => setCurrentTime(e.currentTarget.currentTime)}
-                    onLoadedMetadata={(e) => setDuration(e.currentTarget.duration)}
-                  />
+                  {/* Progress Bar */}
+                  <div className="relative w-full mb-4">
+                    <div 
+                      className="w-full h-2 bg-amber-900/30 rounded-full cursor-pointer group"
+                      onClick={handleProgressClick}
+                    >
+                      <div 
+                        className="h-full bg-gradient-to-r from-amber-400 to-amber-200 rounded-full relative"
+                        style={{ width: `${duration > 0 ? (currentTime / duration) * 100 : 0}%`, transition: 'width 0.1s linear' }}
+                      >
+                        <div className="absolute right-0 top-1/2 -translate-y-1/2 w-3 h-3 bg-amber-100 rounded-full" />
+                      </div>
+                    </div>
+                  </div>
 
                   {/* Playback Controls */}
                   <div className="flex items-center justify-center gap-6">
@@ -1216,10 +1253,7 @@ export default function RumtekMonastery() {
                     <div className="flex items-center gap-2 text-amber-100">
                       <span className="text-xl">⏱</span>
                       <span className="font-semibold">
-                        {Math.floor(currentTime / 60)}:
-                        {String(Math.floor(currentTime % 60)).padStart(2, '0')} /{' '}
-                        {Math.floor(duration / 60)}:
-                        {String(Math.floor(duration % 60)).padStart(2, '0')}
+                        {Math.floor(currentTime / 60)}:{String(Math.floor(currentTime % 60)).padStart(2, '0')}
                       </span>
                     </div>
                     <button className="text-amber-100 hover:text-white transition text-2xl">⬇</button>
@@ -1335,8 +1369,8 @@ export default function RumtekMonastery() {
                     className="flex items-start gap-3 transition-all duration-300 hover:scale-105 cursor-pointer p-2 rounded-lg hover:bg-opacity-60"
                     style={{ backgroundColor: 'rgba(217, 119, 6, 0.1)' }}
                   >
-                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-orange-400 to-amber-500 flex items-center justify-center flex-shrink-0">
-                      <span className="text-lg">🎯</span>
+                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-orange-400 to-amber-500 flex items-center justify-center flex-shrink-0 p-2.5">
+                      <img src="/Icons/ICONS/LOCATION.png" alt="Interactive Navigation" className="w-full h-full object-contain" />
                     </div>
                     <div className="flex-1 min-w-0">
                       <h4 className="text-amber-100 font-semibold text-sm mb-0.5">
@@ -1351,8 +1385,8 @@ export default function RumtekMonastery() {
                     className="flex items-start gap-3 transition-all duration-300 hover:scale-105 cursor-pointer p-2 rounded-lg hover:bg-opacity-60"
                     style={{ backgroundColor: 'rgba(217, 119, 6, 0.1)' }}
                   >
-                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-amber-400 to-yellow-500 flex items-center justify-center flex-shrink-0">
-                      <span className="text-lg">🎧</span>
+                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-amber-400 to-yellow-500 flex items-center justify-center flex-shrink-0 p-2.5">
+                      <img src="/Icons/ICONS/HEADPHONE.png" alt="Audio Narration" className="w-full h-full object-contain" />
                     </div>
                     <div className="flex-1 min-w-0">
                       <h4 className="text-amber-100 font-semibold text-sm mb-0.5">
@@ -1367,8 +1401,20 @@ export default function RumtekMonastery() {
                     className="flex items-start gap-3 transition-all duration-300 hover:scale-105 cursor-pointer p-2 rounded-lg hover:bg-opacity-60"
                     style={{ backgroundColor: 'rgba(217, 119, 6, 0.1)' }}
                   >
-                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-yellow-400 to-orange-500 flex items-center justify-center flex-shrink-0">
-                      <span className="text-lg">📱</span>
+                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-yellow-400 to-orange-500 flex items-center justify-center flex-shrink-0 p-2">
+                      <svg viewBox="0 0 24 24" fill="none" className="w-full h-full">
+                        <path d="M17 2H7C5.89543 2 5 2.89543 5 4V20C5 21.1046 5.89543 22 7 22H17C18.1046 22 19 21.1046 19 20V4C19 2.89543 18.1046 2 17 2Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                        <path d="M7 6H17M7 18H17M10 19H14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                        <circle cx="8" cy="10" r="0.75" fill="currentColor"/>
+                        <circle cx="12" cy="10" r="0.75" fill="currentColor"/>
+                        <circle cx="16" cy="10" r="0.75" fill="currentColor"/>
+                        <circle cx="8" cy="13" r="0.75" fill="currentColor"/>
+                        <circle cx="12" cy="13" r="0.75" fill="currentColor"/>
+                        <circle cx="16" cy="13" r="0.75" fill="currentColor"/>
+                        <circle cx="8" cy="16" r="0.75" fill="currentColor"/>
+                        <circle cx="12" cy="16" r="0.75" fill="currentColor"/>
+                        <circle cx="16" cy="16" r="0.75" fill="currentColor"/>
+                      </svg>
                     </div>
                     <div className="flex-1 min-w-0">
                       <h4 className="text-amber-100 font-semibold text-sm mb-0.5">
@@ -1383,8 +1429,13 @@ export default function RumtekMonastery() {
                     className="flex items-start gap-3 transition-all duration-300 hover:scale-105 cursor-pointer p-2 rounded-lg hover:bg-opacity-60"
                     style={{ backgroundColor: 'rgba(217, 119, 6, 0.1)' }}
                   >
-                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-orange-300 to-amber-600 flex items-center justify-center flex-shrink-0">
-                      <span className="text-lg">🎨</span>
+                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-orange-300 to-amber-600 flex items-center justify-center flex-shrink-0 p-2">
+                      <svg viewBox="0 0 24 24" fill="none" className="w-full h-full">
+                        <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" strokeWidth="1.5" strokeDasharray="2 2"/>
+                        <path d="M3 14L8 9L12 13L21 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                        <circle cx="16" cy="8" r="2" fill="currentColor"/>
+                        <path d="M1 1L5 5M19 1L23 5M1 23L5 19M19 23L23 19" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                      </svg>
                     </div>
                     <div className="flex-1 min-w-0">
                       <h4 className="text-amber-100 font-semibold text-sm mb-0.5">
@@ -1401,8 +1452,13 @@ export default function RumtekMonastery() {
               {/* Vlogger Journeys Box */}
               <div className="rounded-3xl p-6" style={{ backgroundColor: 'rgba(120, 53, 15, 0.5)', border: '2px solid rgba(217, 119, 6, 0.4)', backdropFilter: 'blur(10px)' }}>
                 <div className="flex items-start gap-4 mb-4">
-                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center flex-shrink-0">
-                    <span className="text-2xl">🎥</span>
+                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center flex-shrink-0 p-2.5">
+                    <svg viewBox="0 0 24 24" fill="currentColor" className="w-full h-full">
+                      <path d="M3 4C3 2.89543 3.89543 2 5 2H16C17.1046 2 18 2.89543 18 4V13C18 14.1046 17.1046 15 16 15H5C3.89543 15 3 14.1046 3 13V4Z" stroke="currentColor" strokeWidth="0.5"/>
+                      <path d="M18 6.5L22 4V13L18 10.5V6.5Z"/>
+                      <circle cx="6.5" cy="5.5" r="1" fill="white" opacity="0.8"/>
+                      <path d="M8.5 7L13 9.5L8.5 12V7Z" fill="white"/>
+                    </svg>
                   </div>
                   <div className="flex-1">
                     <h3 className="text-xl font-semibold text-amber-50 mb-2 leading-tight" style={{ fontFamily: 'Chivo' }}>
@@ -1455,7 +1511,11 @@ export default function RumtekMonastery() {
                     style={{ fontFamily: 'Cinzel' }}
                   >
                     <span className="flex items-center justify-center gap-2">
-                      <span className="text-xl">🏛️</span>
+                      <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
+                        <path d="M12 2L3 7V17L12 22L21 17V7L12 2Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+                        <path d="M12 12L3 7M12 12L21 7M12 12V22" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                        <path d="M7.5 9.5L12 12L16.5 9.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
                       <span>3D Model</span>
                     </span>
                   </button>
@@ -1469,7 +1529,12 @@ export default function RumtekMonastery() {
                     style={{ fontFamily: 'Cinzel' }}
                   >
                     <span className="flex items-center justify-center gap-2">
-                      <span className="text-xl">👁️</span>
+                      <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
+                        <ellipse cx="12" cy="6" rx="10" ry="3" stroke="currentColor" strokeWidth="1.5" fill="none"/>
+                        <path d="M2 6V18C2 19.6569 6.47715 21 12 21C17.5228 21 22 19.6569 22 18V6" stroke="currentColor" strokeWidth="1.5" fill="none"/>
+                        <circle cx="9" cy="11" r="1.5" fill="currentColor"/>
+                        <path d="M7 15L10 12L13 15L17 10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+                      </svg>
                       <span>Panoramic</span>
                     </span>
                   </button>
@@ -1491,18 +1556,24 @@ export default function RumtekMonastery() {
                   backdropFilter: 'blur(10px)',
                 }}
               >
-                <div className="h-[28rem] bg-gradient-to-br from-amber-900 to-orange-900 flex items-center justify-center relative">
+                <div className="h-[28rem] relative overflow-hidden">
                   {viewMode === '3d' ? (
-                    <div className="text-center text-amber-100">
-                      <div className="text-6xl mb-4">🏛️</div>
-                      <p className="text-lg font-semibold mb-2" style={{ fontFamily: 'Cinzel' }}>3D Model View</p>
-                      <p className="text-sm text-amber-200" style={{ fontFamily: 'Cinzel' }}>Interactive 3D monastery model</p>
-                    </div>
+                    <video
+                      autoPlay
+                      loop
+                      muted
+                      playsInline
+                      className="w-full h-full object-cover"
+                    >
+                      <source src="/rumtek/WhatsApp Video 2025-12-08 at 7.14.23 AM.mp4" type="video/mp4" />
+                    </video>
                   ) : (
-                    <div className="text-center text-amber-100">
-                      <div className="text-6xl mb-4">👁️</div>
-                      <p className="text-lg font-semibold mb-2" style={{ fontFamily: 'Cinzel' }}>Panoramic View</p>
-                      <p className="text-sm text-amber-200" style={{ fontFamily: 'Cinzel' }}>360° immersive experience</p>
+                    <div className="w-full h-full bg-gradient-to-br from-amber-900 to-orange-900 flex items-center justify-center">
+                      <div className="text-center text-amber-100">
+                        <div className="text-6xl mb-4">👁️</div>
+                        <p className="text-lg font-semibold mb-2" style={{ fontFamily: 'Cinzel' }}>Panoramic View</p>
+                        <p className="text-sm text-amber-200" style={{ fontFamily: 'Cinzel' }}>360° immersive experience</p>
+                      </div>
                     </div>
                   )}
                   
