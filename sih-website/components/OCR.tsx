@@ -2,13 +2,42 @@
 import { useState } from "react";
 import Tesseract from "tesseract.js";
 
+interface OCRMetadata {
+  title: string;
+  language: string;
+  capturedOn: string;
+  location: string;
+  monasteryName: string;
+  description: string;
+  tags: string[];
+  rawText: string;
+  cleanedText: string;
+}
+
 export default function OCR() {
   const [image, setImage] = useState<string | null>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [text, setText] = useState<string>("");
+  const [rawText, setRawText] = useState<string>("");
+  const [cleanedText, setCleanedText] = useState<string>("");
   const [isLoading, setIsLoading] = useState(false);
   const [progress, setProgress] = useState(0);
-  const [selectedLanguages, setSelectedLanguages] = useState<string[]>(['eng', 'hin', 'nep', 'bod']);
+  const [selectedLanguages, setSelectedLanguages] = useState<string[]>(['eng']);
+  const [showMetadataForm, setShowMetadataForm] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  
+  // Metadata fields
+  const [metadata, setMetadata] = useState<OCRMetadata>({
+    title: '',
+    language: 'English',
+    capturedOn: new Date().toISOString().split('T')[0],
+    location: '',
+    monasteryName: '',
+    description: '',
+    tags: [],
+    rawText: '',
+    cleanedText: ''
+  });
+  const [tagInput, setTagInput] = useState('');
   
   const languageOptions = [
     { code: 'eng', name: 'English' },
@@ -36,6 +65,127 @@ export default function OCR() {
       setImage(event.target?.result as string);
     };
     reader.readAsDataURL(file);
+  };
+
+  // Clean OCR text with advanced corrections
+  const cleanOCRText = (text: string): string => {
+    let cleaned = text;
+    
+    // Remove extra whitespace and normalize line breaks
+    cleaned = cleaned.replace(/\r\n/g, '\n');
+    cleaned = cleaned.replace(/\s+/g, ' ');
+    cleaned = cleaned.replace(/\n\s*\n/g, '\n');
+    cleaned = cleaned.trim();
+    
+    // Fix common OCR character mistakes
+    const charCorrections: { [key: string]: string } = {
+      '0': 'O',  // Zero to letter O
+      'l': 'I',  // lowercase L to capital I (in certain contexts)
+      '1': 'I',  // Number 1 to letter I (in certain contexts)
+      '5': 'S',  // Number 5 to letter S (in certain contexts)
+      '8': 'B',  // Number 8 to letter B (in certain contexts)
+      '|': 'I',  // Pipe to letter I
+      '!': 'I',  // Exclamation to letter I (in certain contexts)
+      '@': 'a',  // At symbol to letter a
+    };
+    
+    // Fix common word-level OCR mistakes
+    const wordCorrections: { [key: string]: string } = {
+      // Monastery related
+      'Monastry': 'Monastery',
+      'monastry': 'monastery',
+      'Monastary': 'Monastery',
+      'monastary': 'monastery',
+      'Monestry': 'Monastery',
+      'monestry': 'monastery',
+      
+      // Time/Century
+      'sentury': 'century',
+      'centure': 'century',
+      'Sentury': 'Century',
+      'Centure': 'Century',
+      
+      // Building related
+      'buiIt': 'built',
+      'bullt': 'built',
+      'constructd': 'constructed',
+      'establishd': 'established',
+      
+      // Common words
+      'teh': 'the',
+      'Teh': 'The',
+      'adn': 'and',
+      'Adn': 'And',
+      'hte': 'the',
+      'taht': 'that',
+      'thsi': 'this',
+      'tihis': 'this',
+      'thier': 'their',
+      'recieve': 'receive',
+      
+      // Location related
+      'Sikkm': 'Sikkim',
+      'sikkm': 'sikkim',
+      'Nepai': 'Nepal',
+      'nepai': 'nepal',
+      'Bhutam': 'Bhutan',
+      'bhutam': 'bhutan',
+      
+      // Buddhist/Religious terms
+      'Budha': 'Buddha',
+      'budha': 'buddha',
+      'Budhist': 'Buddhist',
+      'budhist': 'buddhist',
+      'Dharrna': 'Dharma',
+      'dharrna': 'dharma',
+      'Stupa': 'Stupa',
+      'stupa': 'stupa',
+    };
+    
+    // Apply word-level corrections
+    Object.entries(wordCorrections).forEach(([wrong, correct]) => {
+      const regex = new RegExp(`\\b${wrong}\\b`, 'g');
+      cleaned = cleaned.replace(regex, correct);
+    });
+    
+    // Remove obvious OCR garbage characters
+    cleaned = cleaned.replace(/[|~`^°º•※]/g, '');
+    cleaned = cleaned.replace(/[▪▫■□●○◆◇]/g, '');
+    
+    // Fix multiple punctuation marks
+    cleaned = cleaned.replace(/\.{2,}/g, '.');
+    cleaned = cleaned.replace(/,{2,}/g, ',');
+    cleaned = cleaned.replace(/!{2,}/g, '!');
+    cleaned = cleaned.replace(/\?{2,}/g, '?');
+    
+    // Fix spacing around punctuation
+    cleaned = cleaned.replace(/\s+([.,!?;:])/g, '$1');
+    cleaned = cleaned.replace(/([.,!?;:])\s*/g, '$1 ');
+    
+    // Fix smart quotes and apostrophes
+    cleaned = cleaned.replace(/['']/g, "'");
+    cleaned = cleaned.replace(/[""]/g, '"');
+    
+    // Capitalize first letter of sentences
+    cleaned = cleaned.replace(/(^|\.\s+)([a-z])/g, (match, p1, p2) => p1 + p2.toUpperCase());
+    
+    // Fix common date patterns (e.g., "17 th century" -> "17th century")
+    cleaned = cleaned.replace(/(\d+)\s+(st|nd|rd|th)\b/gi, '$1$2');
+    
+    // Fix spacing around hyphens in dates/ranges
+    cleaned = cleaned.replace(/(\d+)\s*-\s*(\d+)/g, '$1-$2');
+    
+    // Remove standalone single characters that are likely OCR errors (except valid ones like 'a', 'I')
+    cleaned = cleaned.replace(/\b[^aAiI\d\s]\b/g, '');
+    
+    // Fix common Devanagari/Tibetan OCR issues (if present)
+    // Remove zero-width spaces and invisible characters
+    cleaned = cleaned.replace(/[\u200B-\u200D\uFEFF]/g, '');
+    
+    // Final cleanup
+    cleaned = cleaned.replace(/\s+/g, ' ').trim();
+    
+    return cleaned;
   };
 
   const preprocessImage = (file: File): Promise<string> => {
@@ -91,7 +241,8 @@ export default function OCR() {
 
     // Start OCR
     setIsLoading(true);
-    setText("");
+    setRawText("");
+    setCleanedText("");
     setProgress(0);
 
     try {
@@ -103,15 +254,24 @@ export default function OCR() {
       
       // Use createWorker with selected languages (including Tibetan)
       console.log("Loading languages:", selectedLanguages);
-      const worker = await Tesseract.createWorker(selectedLanguages, 1, {
+      const langString = selectedLanguages.join('+');
+      
+      const worker = await Tesseract.createWorker(langString, 1, {
         logger: (m) => {
           console.log("OCR Progress:", m);
           if (m.status === "recognizing text") {
-            setProgress(Math.round(m.progress * 100));
-          } else if (m.status === "loading tesseract core" || m.status === "initializing tesseract" || m.status === "loading language traineddata") {
-            setProgress(Math.round(m.progress * 50)); // First 50% for loading
+            setProgress(50 + Math.round(m.progress * 50));
+          } else if (m.status === "loading tesseract core") {
+            setProgress(Math.round(m.progress * 20));
+          } else if (m.status === "initializing tesseract") {
+            setProgress(20 + Math.round(m.progress * 10));
+          } else if (m.status === "loading language traineddata") {
+            setProgress(30 + Math.round(m.progress * 20));
           }
         },
+        workerPath: 'https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/worker.min.js',
+        langPath: 'https://tessdata.projectnaptha.com/4.0.0',
+        corePath: 'https://cdn.jsdelivr.net/npm/tesseract.js-core@5/tesseract-core.wasm.js',
       });
 
       // Set parameters optimized for artistic/painted text
@@ -139,16 +299,83 @@ export default function OCR() {
       await worker.terminate();
       
       if (finalText) {
-        setText(finalText);
+        setRawText(finalText);
+        const cleaned = cleanOCRText(finalText);
+        setCleanedText(cleaned);
+        setMetadata(prev => ({ ...prev, rawText: finalText, cleanedText: cleaned }));
+        setShowMetadataForm(true);
       } else {
-        setText("No text found in the image. This image may contain artistic or stylized text that is difficult to recognize. For best results:\n\n• Use images with clear, printed text\n• Ensure good lighting and contrast\n• Avoid heavily stylized fonts\n• Try photographing text straight-on");
+        setRawText("No text found in the image. This image may contain artistic or stylized text that is difficult to recognize. For best results:\n\n• Use images with clear, printed text\n• Ensure good lighting and contrast\n• Avoid heavily stylized fonts\n• Try photographing text straight-on");
+        setCleanedText("");
       }
     } catch (error) {
       console.error("OCR Error:", error);
-      setText(`Error extracting text: ${error instanceof Error ? error.message : 'Unknown error'}. Please try again.`);
+      setRawText(`Error extracting text: ${error instanceof Error ? error.message : 'Unknown error'}. Please try again.`);
     } finally {
       setIsLoading(false);
       setProgress(0);
+    }
+  };
+
+  const handleAddTag = () => {
+    if (tagInput.trim() && !metadata.tags.includes(tagInput.trim())) {
+      setMetadata(prev => ({
+        ...prev,
+        tags: [...prev.tags, tagInput.trim()]
+      }));
+      setTagInput('');
+    }
+  };
+
+  const handleRemoveTag = (tagToRemove: string) => {
+    setMetadata(prev => ({
+      ...prev,
+      tags: prev.tags.filter(tag => tag !== tagToRemove)
+    }));
+  };
+
+  const handleSaveOCRData = async () => {
+    setIsSaving(true);
+    try {
+      const response = await fetch('/api/ocr/save', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          ...metadata,
+          imageData: image,
+        }),
+      });
+
+      if (response.ok) {
+        alert('OCR data saved successfully!');
+        // Reset form
+        setShowMetadataForm(false);
+        setImage(null);
+        setSelectedFile(null);
+        setRawText('');
+        setCleanedText('');
+        setMetadata({
+          title: '',
+          language: 'English',
+          capturedOn: new Date().toISOString().split('T')[0],
+          location: '',
+          monasteryName: '',
+          description: '',
+          tags: [],
+          rawText: '',
+          cleanedText: ''
+        });
+      } else {
+        const error = await response.json();
+        alert(`Error saving data: ${error.error || 'Unknown error'}`);
+      }
+    } catch (error) {
+      console.error('Save error:', error);
+      alert('Failed to save OCR data. Please try again.');
+    } finally {
+      setIsSaving(false);
     }
   };
 
@@ -267,21 +494,222 @@ export default function OCR() {
         </div>
       )}
 
-      {/* Extracted Text */}
-      {text && !isLoading && (
+      {/* Raw OCR Text */}
+      {rawText && !isLoading && (
         <div className="bg-[rgba(41,24,10,0.8)] border border-amber-900/30 rounded-lg p-6">
-          <h3 className="text-xl font-semibold text-amber-200 mb-4">
-            OCR
+          <h3 className="text-xl font-semibold text-amber-200 mb-4 flex items-center gap-2">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+              <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/>
+            </svg>
+            Raw OCR Output
           </h3>
-          <pre className="bg-gray-900/50 border border-amber-900/30 rounded-lg p-4 text-gray-200 whitespace-pre-wrap font-mono text-sm max-h-96 overflow-y-auto">
-            {text}
+          <pre className="bg-gray-900/50 border border-amber-900/30 rounded-lg p-4 text-gray-200 whitespace-pre-wrap font-mono text-sm max-h-64 overflow-y-auto">
+            {rawText}
           </pre>
-          <button
-            onClick={() => navigator.clipboard.writeText(text)}
-            className="mt-4 px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white rounded-lg font-semibold transition-colors"
-          >
-            Copy Text
-          </button>
+        </div>
+      )}
+
+      {/* Cleaned Text */}
+      {cleanedText && !isLoading && (
+        <div className="bg-[rgba(41,24,10,0.8)] border border-amber-900/30 rounded-lg p-6">
+          <h3 className="text-xl font-semibold text-amber-200 mb-4 flex items-center gap-2">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+              <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+            </svg>
+            Cleaned Text
+          </h3>
+          <div className="bg-gray-900/50 border border-amber-900/30 rounded-lg p-4">
+            <textarea
+              value={cleanedText}
+              onChange={(e) => {
+                setCleanedText(e.target.value);
+                setMetadata(prev => ({ ...prev, cleanedText: e.target.value }));
+              }}
+              className="w-full bg-transparent text-gray-200 whitespace-pre-wrap font-sans text-sm min-h-32 outline-none resize-y"
+              placeholder="Edit cleaned text here..."
+            />
+          </div>
+          <p className="text-gray-400 text-xs mt-2">
+            💡 You can edit the cleaned text to fix any remaining errors
+          </p>
+        </div>
+      )}
+
+      {/* Metadata Form */}
+      {showMetadataForm && !isLoading && (
+        <div className="bg-[rgba(41,24,10,0.8)] border border-amber-900/30 rounded-lg p-6">
+          <h3 className="text-xl font-semibold text-amber-200 mb-4 flex items-center gap-2">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+              <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
+            </svg>
+            Add Metadata for Archiving
+          </h3>
+          
+          <div className="space-y-4">
+            {/* Title */}
+            <div>
+              <label className="block text-amber-200 text-sm font-semibold mb-2">
+                Title *
+              </label>
+              <input
+                type="text"
+                value={metadata.title}
+                onChange={(e) => setMetadata(prev => ({ ...prev, title: e.target.value }))}
+                className="w-full bg-gray-900/50 border border-amber-900/30 rounded-lg px-4 py-2 text-gray-200 outline-none focus:border-amber-500"
+                placeholder="e.g., Tashiding Monastery Board"
+              />
+            </div>
+
+            {/* Language */}
+            <div>
+              <label className="block text-amber-200 text-sm font-semibold mb-2">
+                Language *
+              </label>
+              <select
+                value={metadata.language}
+                onChange={(e) => setMetadata(prev => ({ ...prev, language: e.target.value }))}
+                className="w-full bg-gray-900/50 border border-amber-900/30 rounded-lg px-4 py-2 text-gray-200 outline-none focus:border-amber-500"
+              >
+                <option value="English">English</option>
+                <option value="Hindi">Hindi</option>
+                <option value="Nepali">Nepali</option>
+                <option value="Bengali">Bengali</option>
+                <option value="Tibetan">Tibetan</option>
+              </select>
+            </div>
+
+            {/* Date */}
+            <div>
+              <label className="block text-amber-200 text-sm font-semibold mb-2 flex items-center gap-2">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="white">
+                  <path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"/>
+                </svg>
+                Date Captured *
+              </label>
+              <input
+                type="date"
+                value={metadata.capturedOn}
+                onChange={(e) => setMetadata(prev => ({ ...prev, capturedOn: e.target.value }))}
+                className="w-full bg-gray-900/50 border border-amber-900/30 rounded-lg px-4 py-2 text-gray-200 outline-none focus:border-amber-500"
+              />
+            </div>
+
+            {/* Location */}
+            <div>
+              <label className="block text-amber-200 text-sm font-semibold mb-2 flex items-center gap-2">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="white">
+                  <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                </svg>
+                Location *
+              </label>
+              <input
+                type="text"
+                value={metadata.location}
+                onChange={(e) => setMetadata(prev => ({ ...prev, location: e.target.value }))}
+                className="w-full bg-gray-900/50 border border-amber-900/30 rounded-lg px-4 py-2 text-gray-200 outline-none focus:border-amber-500"
+                placeholder="e.g., West Sikkim"
+              />
+            </div>
+
+            {/* Monastery Name */}
+            <div>
+              <label className="block text-amber-200 text-sm font-semibold mb-2 flex items-center gap-2">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="white">
+                  <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/>
+                </svg>
+                Monastery/Source *
+              </label>
+              <input
+                type="text"
+                value={metadata.monasteryName}
+                onChange={(e) => setMetadata(prev => ({ ...prev, monasteryName: e.target.value }))}
+                className="w-full bg-gray-900/50 border border-amber-900/30 rounded-lg px-4 py-2 text-gray-200 outline-none focus:border-amber-500"
+                placeholder="e.g., Tashiding Monastery"
+              />
+            </div>
+
+            {/* Description */}
+            <div>
+              <label className="block text-amber-200 text-sm font-semibold mb-2 flex items-center gap-2">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="white">
+                  <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/>
+                </svg>
+                Description
+              </label>
+              <textarea
+                value={metadata.description}
+                onChange={(e) => setMetadata(prev => ({ ...prev, description: e.target.value }))}
+                className="w-full bg-gray-900/50 border border-amber-900/30 rounded-lg px-4 py-2 text-gray-200 outline-none focus:border-amber-500 resize-y"
+                rows={3}
+                placeholder="Describe what this text is about..."
+              />
+            </div>
+
+            {/* Tags */}
+            <div>
+              <label className="block text-amber-200 text-sm font-semibold mb-2 flex items-center gap-2">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="white">
+                  <path d="M21.41 11.58l-9-9C12.05 2.22 11.55 2 11 2H4c-1.1 0-2 .9-2 2v7c0 .55.22 1.05.59 1.42l9 9c.36.36.86.58 1.41.58.55 0 1.05-.22 1.41-.59l7-7c.37-.36.59-.86.59-1.41 0-.55-.23-1.06-.59-1.42zM5.5 7C4.67 7 4 6.33 4 5.5S4.67 4 5.5 4 7 4.67 7 5.5 6.33 7 5.5 7z"/>
+                </svg>
+                Tags
+              </label>
+              <div className="flex gap-2 mb-2">
+                <input
+                  type="text"
+                  value={tagInput}
+                  onChange={(e) => setTagInput(e.target.value)}
+                  onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddTag())}
+                  className="flex-1 bg-gray-900/50 border border-amber-900/30 rounded-lg px-4 py-2 text-gray-200 outline-none focus:border-amber-500"
+                  placeholder="Add tag and press Enter"
+                />
+                <button
+                  onClick={handleAddTag}
+                  className="px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white rounded-lg font-semibold transition-colors"
+                >
+                  Add
+                </button>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {metadata.tags.map((tag, index) => (
+                  <span
+                    key={index}
+                    className="inline-flex items-center gap-2 px-3 py-1 bg-amber-600/30 border border-amber-600 rounded-full text-amber-200 text-sm"
+                  >
+                    {tag}
+                    <button
+                      onClick={() => handleRemoveTag(tag)}
+                      className="hover:text-white"
+                    >
+                      ×
+                    </button>
+                  </span>
+                ))}
+              </div>
+              <p className="text-gray-400 text-xs mt-2">
+                Suggested: monastery, sikkim, heritage, history, buddhist, etc.
+              </p>
+            </div>
+
+            {/* Submit Button */}
+            <button
+              onClick={handleSaveOCRData}
+              disabled={isSaving || !metadata.title || !metadata.location || !metadata.monasteryName}
+              className="w-full px-6 py-3 bg-amber-600 hover:bg-amber-700 disabled:bg-gray-600 disabled:cursor-not-allowed text-white rounded-lg font-semibold transition-colors"
+            >
+              <span className="flex items-center justify-center gap-2">
+                {isSaving ? (
+                  'Saving...'
+                ) : (
+                  <>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+                      <path d="M17 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H5V5h10v4z"/>
+                    </svg>
+                    Save OCR Data to Archive
+                  </>
+                )}
+              </span>
+            </button>
+          </div>
         </div>
       )}
     </div>

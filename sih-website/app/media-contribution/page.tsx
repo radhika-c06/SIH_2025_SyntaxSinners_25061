@@ -45,7 +45,7 @@ export default function MediaContributionPage() {
         {/* Introduction Section */}
         <div className="mb-12">
           <div className="flex items-center gap-3 mb-4">
-            <div className="bg-amber-500 p-3 rounded-lg">
+            <div className="p-3 rounded-lg">
               <svg width="32" height="32" viewBox="0 0 24 24" fill="white">
                 <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/>
               </svg>
@@ -76,9 +76,7 @@ export default function MediaContributionPage() {
               }`}
             >
               <div className="flex flex-col items-center justify-center h-full p-6">
-                <div className={`p-4 rounded-lg mb-4 ${
-                  selectedType === "photo" ? "bg-amber-600" : "bg-amber-600/60"
-                }`}>
+                <div className="mb-4">
                   <svg width="48" height="48" viewBox="0 0 24 24" fill="white">
                     <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/>
                   </svg>
@@ -98,9 +96,7 @@ export default function MediaContributionPage() {
               }`}
             >
               <div className="flex flex-col items-center justify-center h-full p-6">
-                <div className={`p-4 rounded-lg mb-4 ${
-                  selectedType === "video" ? "bg-amber-600" : "bg-amber-600/60"
-                }`}>
+                <div className="mb-4">
                   <svg width="48" height="48" viewBox="0 0 24 24" fill="white">
                     <path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/>
                   </svg>
