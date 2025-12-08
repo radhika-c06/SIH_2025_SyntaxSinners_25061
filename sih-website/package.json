@@ -9,8 +9,11 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "bcryptjs": "^3.0.3",
     "framer-motion": "^12.23.16",
     "gsap": "^3.13.0",
+    "jsonwebtoken": "^9.0.3",
+    "mongoose": "^9.0.1",
     "next": "^15.5.7",
     "react": "^19.2.1",
     "react-dom": "^19.2.1",
