@@ -72,6 +72,14 @@ export default function ExperiencesPage() {
                           <path d="M1.5 14v3M22.5 14v3" stroke="currentColor" />
                         </svg>
                       )}
+                      {opt.id === 'cabs' && (
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-6 h-6 text-black" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden>
+                          <path d="M3 11.5h1.5l1.2-3.2A2 2 0 0 1 7.6 6h8.8a2 2 0 0 1 1.9 2.3L19.5 11.5H21" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+                          <rect x="3" y="11.5" width="18" height="3.8" rx="1" stroke="currentColor" fill="none" />
+                          <circle cx="7" cy="17.2" r="1" stroke="currentColor" fill="none" />
+                          <circle cx="17" cy="17.2" r="1" stroke="currentColor" fill="none" />
+                        </svg>
+                      )}
                     </div>
                     <div>
                       <h3 className="text-xl text-amber-50 font-cinzel-decorative">{opt.title}</h3>
