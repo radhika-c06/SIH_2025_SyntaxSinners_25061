@@ -27,6 +27,11 @@ export default function NewMonasteryPage() {
     status: 'Draft' as 'Draft' | 'Published',
   });
 
+  const [showConfirmation, setShowConfirmation] = useState(false);
+  const [confirmationStatus, setConfirmationStatus] = useState<'Draft' | 'Published'>('Draft');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
   const generateSlug = (name: string) => {
     return name
       .toLowerCase()
@@ -65,10 +70,68 @@ export default function NewMonasteryPage() {
     });
   };
 
-  const handleSave = (status: 'Draft' | 'Published') => {
-    // TODO: Implement save logic
-    console.log('Saving monastery:', { ...formData, status });
-    router.push('/admin/monasteries');
+  const handleSave = async (status: 'Draft' | 'Published') => {
+    // Show confirmation dialog
+    setConfirmationStatus(status);
+    setShowConfirmation(true);
+  };
+
+  const confirmSave = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+
+      // Validate required fields
+      if (!formData.name || !formData.location) {
+        setError('Monastery name and location are required');
+        setShowConfirmation(false);
+        setLoading(false);
+        return;
+      }
+
+      const monasteryData = {
+        name: formData.name,
+        slug: formData.slug,
+        location: formData.location,
+        district: '',
+        altitude: formData.altitude,
+        founded: formData.founded,
+        shortDescription: formData.shortDescription,
+        heroImageUrl: formData.heroImage,
+        gallery: formData.gallery.filter(img => img.trim()),
+        sections: Object.entries(formData.sections)
+          .filter(([, content]) => content.trim())
+          .map(([key, content]) => ({
+            key,
+            title: key.charAt(0).toUpperCase() + key.slice(1),
+            content,
+          })),
+        isPublished: confirmationStatus === 'Published',
+      };
+
+      const response = await fetch('/api/monasteries', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify(monasteryData),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || 'Failed to save monastery');
+      }
+
+      setShowConfirmation(false);
+      router.push('/admin/monasteries');
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to save monastery');
+      setShowConfirmation(false);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -360,6 +423,11 @@ export default function NewMonasteryPage() {
             <h2 className="text-xl font-bold text-white mb-6" style={{ fontFamily: 'Poppins' }}>
               Publish
             </h2>
+            {error && (
+              <div className="mb-4 p-4 rounded-lg bg-red-500/20 border border-red-500/30 text-red-200">
+                {error}
+              </div>
+            )}
             <div className="space-y-4">
               <div>
                 <label className="block text-amber-200 font-medium mb-2" style={{ fontFamily: 'Poppins' }}>
@@ -370,6 +438,7 @@ export default function NewMonasteryPage() {
                   onChange={(e) => setFormData({ ...formData, status: e.target.value as 'Draft' | 'Published' })}
                   className="w-full px-4 py-3 rounded-lg bg-amber-900/30 border border-amber-500/30 text-amber-100 focus:outline-none focus:border-amber-500/50 transition"
                   style={{ fontFamily: 'Poppins' }}
+                  disabled={loading}
                 >
                   <option value="Draft">Draft</option>
                   <option value="Published">Published</option>
@@ -379,21 +448,24 @@ export default function NewMonasteryPage() {
               <div className="space-y-2">
                 <button
                   onClick={() => handleSave(formData.status)}
-                  className="w-full px-4 py-3 rounded-lg bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-amber-900 font-bold transition shadow-lg hover:shadow-xl"
+                  disabled={loading}
+                  className="w-full px-4 py-3 rounded-lg bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-amber-900 font-bold transition shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
                   style={{ fontFamily: 'Poppins' }}
                 >
-                  Save Monastery
+                  {loading ? 'Saving...' : 'Save Monastery'}
                 </button>
                 <button
                   onClick={() => handleSave('Draft')}
-                  className="w-full px-4 py-3 rounded-lg bg-amber-900/30 hover:bg-amber-900/50 text-amber-100 font-semibold transition border border-amber-500/30"
+                  disabled={loading}
+                  className="w-full px-4 py-3 rounded-lg bg-amber-900/30 hover:bg-amber-900/50 text-amber-100 font-semibold transition border border-amber-500/30 disabled:opacity-50 disabled:cursor-not-allowed"
                   style={{ fontFamily: 'Poppins' }}
                 >
                   Save as Draft
                 </button>
                 <button
                   onClick={() => router.back()}
-                  className="w-full px-4 py-3 rounded-lg bg-amber-900/30 hover:bg-amber-900/50 text-amber-100 font-semibold transition"
+                  disabled={loading}
+                  className="w-full px-4 py-3 rounded-lg bg-amber-900/30 hover:bg-amber-900/50 text-amber-100 font-semibold transition disabled:opacity-50 disabled:cursor-not-allowed"
                   style={{ fontFamily: 'Poppins' }}
                 >
                   Cancel
@@ -403,6 +475,70 @@ export default function NewMonasteryPage() {
           </div>
         </div>
       </div>
+
+      {/* Confirmation Dialog */}
+      {showConfirmation && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div
+            className="rounded-2xl p-8 max-w-md w-full backdrop-blur-sm"
+            style={{
+              background: 'rgba(217, 119, 6, 0.15)',
+              border: '2px solid rgba(217, 119, 6, 0.3)',
+            }}
+          >
+            <h3 className="text-2xl font-bold text-white mb-4" style={{ fontFamily: 'Poppins' }}>
+              Confirm {confirmationStatus === 'Published' ? 'Publishing' : 'Saving as Draft'}
+            </h3>
+            
+            <div className="mb-6 p-4 rounded-lg bg-amber-900/20 border border-amber-500/30">
+              <p className="text-amber-100 mb-3" style={{ fontFamily: 'Poppins' }}>
+                <strong>Monastery:</strong> {formData.name}
+              </p>
+              <p className="text-amber-100 mb-3" style={{ fontFamily: 'Poppins' }}>
+                <strong>Location:</strong> {formData.location}
+              </p>
+              <p className="text-amber-100" style={{ fontFamily: 'Poppins' }}>
+                <strong>Status:</strong> <StatusBadge status={confirmationStatus} />
+              </p>
+            </div>
+
+            {confirmationStatus === 'Published' && (
+              <div className="mb-6 p-4 rounded-lg bg-green-500/10 border border-green-500/30">
+                <p className="text-green-100 text-sm" style={{ fontFamily: 'Poppins' }}>
+                  ✓ This monastery will be visible on the main website and public pages immediately after confirmation.
+                </p>
+              </div>
+            )}
+
+            {confirmationStatus === 'Draft' && (
+              <div className="mb-6 p-4 rounded-lg bg-blue-500/10 border border-blue-500/30">
+                <p className="text-blue-100 text-sm" style={{ fontFamily: 'Poppins' }}>
+                  ℹ This monastery will be saved as a draft and only visible in the admin dashboard. You can publish it later.
+                </p>
+              </div>
+            )}
+
+            <div className="space-y-3">
+              <button
+                onClick={confirmSave}
+                disabled={loading}
+                className="w-full px-4 py-3 rounded-lg bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-amber-900 font-bold transition shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
+                style={{ fontFamily: 'Poppins' }}
+              >
+                {loading ? 'Saving...' : `Yes, ${confirmationStatus === 'Published' ? 'Publish' : 'Save as Draft'}`}
+              </button>
+              <button
+                onClick={() => setShowConfirmation(false)}
+                disabled={loading}
+                className="w-full px-4 py-3 rounded-lg bg-amber-900/30 hover:bg-amber-900/50 text-amber-100 font-semibold transition border border-amber-500/30 disabled:opacity-50 disabled:cursor-not-allowed"
+                style={{ fontFamily: 'Poppins' }}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
