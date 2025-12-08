@@ -41,7 +41,6 @@ export default function Nav() {
           {/* Center: links */}
           <ul className="mx-auto hidden md:flex items-center gap-8 text-sm uppercase tracking-wider">
             <li><a href="#home" className="hover:opacity-80">Home</a></li>
-            <li><a href="#explore" className="hover:opacity-80">Virtual Tour</a></li>
             <li><a href="#monastery-slideshow" className="hover:opacity-80">Overview</a></li>
             <li><a href="#monastery-map" className="hover:opacity-80">Map</a></li>
             <li><Link href="/meditate" className="hover:opacity-80">Sangha Retreat</Link></li>
@@ -78,7 +77,6 @@ export default function Nav() {
           <div className="md:hidden border-t border-white/15">
               <ul className="mx-auto max-w-7xl px-4 py-3 flex flex-col gap-3 text-sm uppercase tracking-wider">
               <li><a href="#home" onClick={()=>setOpen(false)}>Home</a></li>
-              <li><a href="#explore" onClick={()=>setOpen(false)}>Virtual Tour</a></li>
               <li><a href="#monastery-slideshow" onClick={()=>setOpen(false)}>Overview</a></li>
               <li><a href="#monastery-map" onClick={()=>setOpen(false)}>Map</a></li>
               <li><Link href="/archive" onClick={()=>setOpen(false)}>Digital Archive</Link></li>

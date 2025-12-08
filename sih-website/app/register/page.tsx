@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { authAPI } from '@/lib/api';
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -13,14 +14,17 @@ export default function RegisterPage() {
     confirmPassword: '',
   });
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+    setSuccess(false);
 
     // Validation
-    if (!formData.fullName || !formData.email || !formData.username || !formData.password || !formData.confirmPassword) {
-      setError('Please fill in all fields');
+    if (!formData.fullName || !formData.email || !formData.password || !formData.confirmPassword) {
+      setError('Please fill in all required fields');
       return;
     }
 
@@ -34,9 +38,28 @@ export default function RegisterPage() {
       return;
     }
 
-    // Registration logic here
-    console.log('Register:', formData);
-    router.push('/admin');
+    setLoading(true);
+
+    try {
+      const response = await authAPI.register(
+        formData.fullName,
+        formData.email,
+        formData.password
+      );
+
+      if (response.success) {
+        setSuccess(true);
+        setTimeout(() => {
+          router.push('/admin');
+        }, 1500);
+      } else {
+        setError(response.error || 'Registration failed');
+      }
+    } catch (err) {
+      setError('Network error. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -144,28 +167,6 @@ export default function RegisterPage() {
                 </div>
               </div>
 
-              {/* Username Input */}
-              <div className="relative">
-                <input
-                  type="text"
-                  name="username"
-                  placeholder="Username"
-                  value={formData.username}
-                  onChange={handleChange}
-                  className="w-full px-6 py-4 rounded-full backdrop-blur-sm border-2 text-amber-100 placeholder-amber-300/60 focus:outline-none transition"
-                  style={{ 
-                    fontFamily: 'Poppins',
-                    backgroundColor: 'rgba(217, 119, 6, 0.2)',
-                    borderColor: 'rgba(217, 119, 6, 0.3)',
-                  }}
-                />
-                <div className="absolute right-5 top-1/2 -translate-y-1/2 text-amber-300/60">
-                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z" clipRule="evenodd" />
-                  </svg>
-                </div>
-              </div>
-
               {/* Password Input */}
               <div className="relative">
                 <input
@@ -217,13 +218,21 @@ export default function RegisterPage() {
                 </div>
               )}
 
+              {/* Success Message */}
+              {success && (
+                <div className="text-green-200 text-sm text-center bg-green-900/40 py-2 px-4 rounded-full border border-green-500/30">
+                  Account created! Redirecting to login...
+                </div>
+              )}
+
               {/* Register Button */}
               <button
                 type="submit"
-                className="w-full py-4 rounded-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-amber-900 font-bold text-lg transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+                disabled={loading || success}
+                className="w-full py-4 rounded-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-amber-900 font-bold text-lg transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed"
                 style={{ fontFamily: 'Poppins' }}
               >
-                Create Account
+                {loading ? 'Creating Account...' : success ? 'Success!' : 'Create Account'}
               </button>
 
               {/* Login Link */}
