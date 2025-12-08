@@ -102,40 +102,57 @@ export default function TravelPage() {
 
               {/* Cab Services */}
               <div className="space-y-4">
-                {/* Uber */}
+                {/* Sikkim Taxi Union */}
                 <div className="bg-white/5 rounded-2xl p-4 border border-amber-300/20">
                   <div className="flex items-center justify-between mb-3">
-                    <h3 className="font-cinzel font-bold text-amber-50">Uber</h3>
+                    <h3 className="font-cinzel font-bold text-amber-50">Sikkim Taxi Union</h3>
                     <span className="inline-flex items-center gap-1 px-3 py-1 bg-green-500/20 text-green-300 rounded-full text-xs font-semibold">
                       ● Available
                     </span>
                   </div>
+                  <p className="text-xs text-white/60 font-merriweather mb-3">✆ +91-97336-12345</p>
                   <button className="w-full bg-amber-400 hover:bg-amber-500 text-black font-cinzel font-bold py-2 rounded-lg transition">
                     Book Now
                   </button>
                 </div>
 
-                {/* Ola */}
-                <div className="bg-white/5 rounded-2xl p-4 border border-amber-300/20 opacity-60">
-                  <div className="flex items-center justify-between mb-3">
-                    <h3 className="font-cinzel font-bold text-amber-50">Ola</h3>
-                    <span className="inline-flex items-center gap-1 px-3 py-1 bg-red-500/20 text-red-300 rounded-full text-xs font-semibold">
-                      ● Not Available
-                    </span>
-                  </div>
-                  <button disabled className="w-full bg-gray-500 text-gray-700 font-cinzel font-bold py-2 rounded-lg cursor-not-allowed opacity-50">
-                    Not Available
-                  </button>
-                </div>
-
-                {/* Local Taxis */}
+                {/* Gangtok Tourist Cab Service */}
                 <div className="bg-white/5 rounded-2xl p-4 border border-amber-300/20">
                   <div className="flex items-center justify-between mb-3">
-                    <h3 className="font-cinzel font-bold text-amber-50">Local Taxis</h3>
+                    <h3 className="font-cinzel font-bold text-amber-50">Tourist Cab Service</h3>
                     <span className="inline-flex items-center gap-1 px-3 py-1 bg-green-500/20 text-green-300 rounded-full text-xs font-semibold">
                       ● Available
                     </span>
                   </div>
+                  <p className="text-xs text-white/60 font-merriweather mb-3">✆ +91-98765-43210</p>
+                  <button className="w-full bg-amber-400 hover:bg-amber-500 text-black font-cinzel font-bold py-2 rounded-lg transition">
+                    Book Now
+                  </button>
+                </div>
+
+                {/* Rumtek Monastery Cabs */}
+                <div className="bg-white/5 rounded-2xl p-4 border border-amber-300/20">
+                  <div className="flex items-center justify-between mb-3">
+                    <h3 className="font-cinzel font-bold text-amber-50">Monastery Cabs</h3>
+                    <span className="inline-flex items-center gap-1 px-3 py-1 bg-red-500/20 text-red-300 rounded-full text-xs font-semibold">
+                      ● Not Available
+                    </span>
+                  </div>
+                  <p className="text-xs text-white/60 font-merriweather mb-3">✆ +91-89012-34567</p>
+                  <button disabled className="w-full bg-gray-500 text-gray-700 font-cinzel font-bold py-2 rounded-lg cursor-not-allowed opacity-50">
+                    Currently Unavailable
+                  </button>
+                </div>
+
+                {/* Shared Jeep Service */}
+                <div className="bg-white/5 rounded-2xl p-4 border border-amber-300/20">
+                  <div className="flex items-center justify-between mb-3">
+                    <h3 className="font-cinzel font-bold text-amber-50">Shared Jeep Service</h3>
+                    <span className="inline-flex items-center gap-1 px-3 py-1 bg-green-500/20 text-green-300 rounded-full text-xs font-semibold">
+                      ● Available
+                    </span>
+                  </div>
+                  <p className="text-xs text-white/60 font-merriweather mb-3">✆ +91-90123-45678</p>
                   <button className="w-full bg-amber-400 hover:bg-amber-500 text-black font-cinzel font-bold py-2 rounded-lg transition">
                     Book Now
                   </button>
