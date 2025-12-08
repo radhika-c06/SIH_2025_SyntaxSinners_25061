@@ -80,6 +80,15 @@ export default function ExperiencesPage() {
                           <circle cx="17" cy="17.2" r="1" stroke="currentColor" fill="none" />
                         </svg>
                       )}
+                      {opt.id === 'meditate' && (
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-6 h-6 text-black" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden>
+                          <circle cx="12" cy="4.5" r="2" stroke="currentColor" fill="none" />
+                          <path d="M7 10c1.5-1 4-1.5 5-1.5s3.5.5 5 1.5" stroke="currentColor" fill="none" strokeLinecap="round" />
+                          <path d="M5.5 13.5c1-2 3.5-3 6.5-3s5.5 1 6.5 3" stroke="currentColor" fill="none" strokeLinecap="round" />
+                          <path d="M8 16.5c0-1.2 1.5-2.2 4-2.2s4 1 4 2.2" stroke="currentColor" fill="none" strokeLinecap="round" />
+                          <rect x="9" y="17.7" width="6" height="0.9" rx="0.45" stroke="currentColor" fill="none" />
+                        </svg>
+                      )}
                     </div>
                     <div>
                       <h3 className="text-xl text-amber-50 font-cinzel-decorative">{opt.title}</h3>
