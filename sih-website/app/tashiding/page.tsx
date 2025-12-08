@@ -703,7 +703,7 @@ export default function TashidingMonastery() {
               <div className="relative">
                 <Reveal delay={0.1}>
                   <div className="absolute left-1/2 transform -translate-x-1/2 rounded-2xl bg-gradient-to-br from-yellow-300 to-yellow-200 border-4 border-yellow-400 p-4 w-44 shadow-lg"
-                    style={{ top: 'calc(50% - 160px)', zIndex:2 }}>
+                    style={{ top: 'calc(50% - 180px)', zIndex:2 }}>
                     <p className="text-xs font-semibold text-amber-900 mb-1">February – March</p>
                     <p className="text-xs text-amber-900 mb-2">1st Tibetan Month — 14th–15th day</p>
                     <h3 className="text-lg font-bold text-amber-900 uppercase" style={{ fontFamily: 'Cinzel' }}>Bhumchu Festival</h3>
@@ -733,7 +733,7 @@ export default function TashidingMonastery() {
               <div className="relative">
                 <Reveal delay={0.3}>
                   <div className="absolute left-1/2 transform -translate-x-1/2 rounded-2xl bg-gradient-to-br from-orange-500 to-orange-400 border-4 border-orange-600 p-4 w-44 shadow-lg"
-                    style={{ top: 'calc(50% - 160px)', zIndex:2 }}>
+                    style={{ top: 'calc(50% - 190px)', zIndex:2 }}>
                     <p className="text-xs font-semibold text-white mb-1">October – November</p>
                     <p className="text-xs text-white mb-2">9th Tibetan Month — 22nd day</p>
                     <h3 className="text-lg font-bold text-white uppercase" style={{ fontFamily: 'Cinzel' }}>Lhabab Düchen</h3>
@@ -763,7 +763,7 @@ export default function TashidingMonastery() {
           </div>
 
           <Reveal delay={0.6}>
-            <div className="mt-32 space-y-8">
+            <div className="mt-12 space-y-8">
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <Reveal delay={0.7}>
                   <div className="rounded-2xl bg-white/5 backdrop-blur-sm border border-yellow-500/20 p-6 hover:border-yellow-400/40 transition-colors">
