@@ -1,11 +1,20 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
 export default function LoginPage() {
   const router = useRouter();
   const [mode, setMode] = useState<'admin' | 'guest'>('admin');
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  useEffect(() => {
+    // Check if user is already authenticated
+    const authStatus = localStorage.getItem('isAuthenticated');
+    if (authStatus === 'true') {
+      router.push('/admin/dashboard');
+    }
+  }, [router]);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
@@ -19,6 +28,7 @@ export default function LoginPage() {
       if (username && password) {
         // Add your authentication logic here
         console.log('Admin login:', { username, password, rememberMe });
+        localStorage.setItem('isAuthenticated', 'true');
         router.push('/admin/dashboard');
       } else {
         setError('Please enter username and password');
