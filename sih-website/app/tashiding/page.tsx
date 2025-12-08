@@ -359,6 +359,14 @@ export default function TashidingMonastery() {
       <Nav />
       {/* Hero Section */}
       <section className="relative w-full overflow-hidden pt-8 pb-4" style={{ backgroundImage: 'url(/bg1.png)', backgroundSize: 'cover', backgroundPosition: 'center 30%', backgroundClip: 'border-box', minHeight: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+        {/* Decorative black MT icons behind the hero title (top-left & bottom-right) */}
+        <div className="pointer-events-none absolute top-6 left-6 z-0 opacity-20 sm:opacity-25 md:opacity-30">
+          <img src="/Icons/ICONS/black mt.png" alt="mt" className="w-36 sm:w-44 md:w-56 object-contain" />
+        </div>
+
+        <div className="pointer-events-none absolute bottom-6 right-6 z-0 opacity-20 sm:opacity-25 md:opacity-30">
+          <img src="/Icons/ICONS/black mt.png" alt="mt" className="w-36 sm:w-44 md:w-56 object-contain rotate-180" />
+        </div>
         {/* Top Carousel - Three Images */}
         <div className="flex justify-center gap-4 mt-6 mb-4 px-4 relative">
           <Reveal delay={0.1}>
@@ -390,7 +398,7 @@ export default function TashidingMonastery() {
         </div>
 
         {/* Main Content - Left Title, Right Info */}
-        <div className="max-w-7xl mx-auto px-8 flex justify-between items-center">
+        <div className="max-w-7xl mx-auto px-8 flex justify-between items-center relative z-20">
           {/* Left - Monastery Name */}
           <Reveal delay={0.4}>
             <div className="flex-1">
