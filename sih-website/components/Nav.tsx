@@ -5,6 +5,7 @@ import Link from "next/link";
 export default function Nav() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [contributionsOpen, setContributionsOpen] = useState(false);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 4);
@@ -40,9 +41,41 @@ export default function Nav() {
 
           {/* Center: links */}
           <ul className="mx-auto hidden md:flex items-center gap-8 text-sm uppercase tracking-wider">
-            <li><a href="#home" className="hover:opacity-80">Home</a></li>
-            <li><a href="#monastery-slideshow" className="hover:opacity-80">Overview</a></li>
-            <li><a href="#monastery-map" className="hover:opacity-80">Map</a></li>
+            <li className="relative">
+              <button 
+                onClick={() => setContributionsOpen(!contributionsOpen)}
+                className="hover:opacity-80 flex items-center gap-1"
+              >
+                CONTRIBUTIONS
+                <svg 
+                  width="12" 
+                  height="12" 
+                  viewBox="0 0 24 24" 
+                  className={`transition-transform ${contributionsOpen ? 'rotate-180' : ''}`}
+                >
+                  <path fill="currentColor" d="M7 10l5 5 5-5z"/>
+                </svg>
+              </button>
+              {contributionsOpen && (
+                <div className="absolute top-full left-0 mt-2 bg-[#0c3b44] border border-white/20 rounded-md shadow-lg py-2 min-w-[200px]">
+                  <Link 
+                    href="/media-contribution" 
+                    className="block px-4 py-2 hover:bg-white/10"
+                    onClick={() => setContributionsOpen(false)}
+                  >
+                    Media Contribution
+                  </Link>
+                  <Link 
+                    href="/data-contribution" 
+                    className="block px-4 py-2 hover:bg-white/10"
+                    onClick={() => setContributionsOpen(false)}
+                  >
+                    Data Contribution
+                  </Link>
+                </div>
+              )}
+            </li>
+            <li><Link href="/experiences" className="hover:opacity-80">Bookings</Link></li>
             <li><Link href="/meditate" className="hover:opacity-80">Sangha Retreat</Link></li>
           </ul>
 
