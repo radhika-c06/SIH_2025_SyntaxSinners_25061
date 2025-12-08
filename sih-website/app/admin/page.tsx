@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { authAPI } from '@/lib/api';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -10,18 +11,35 @@ export default function LoginPage() {
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (mode === 'admin') {
       // Admin login logic
-      if (username && password) {
-        // Add your authentication logic here
-        console.log('Admin login:', { username, password, rememberMe });
-        router.push('/admin/dashboard');
-      } else {
+      if (!username || !password) {
         setError('Please enter username and password');
+        return;
+      }
+
+      setLoading(true);
+      setError('');
+
+      try {
+        const response = await authAPI.login(username, password);
+        
+        if (response.success) {
+          // Login successful, redirect to dashboard
+          router.push('/admin/dashboard');
+        } else {
+          // Show error message
+          setError(response.error || 'Login failed');
+        }
+      } catch (err) {
+        setError('Network error. Please try again.');
+      } finally {
+        setLoading(false);
       }
     } else {
       // Guest mode - direct navigation
@@ -189,10 +207,11 @@ export default function LoginPage() {
                   {/* Login Button */}
                   <button
                     type="submit"
-                    className="w-full py-4 rounded-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-amber-900 font-bold text-lg transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+                    disabled={loading}
+                    className="w-full py-4 rounded-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-amber-900 font-bold text-lg transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed"
                     style={{ fontFamily: 'Poppins' }}
                   >
-                    Login
+                    {loading ? 'Logging in...' : 'Login'}
                   </button>
 
                   {/* Register Link */}
