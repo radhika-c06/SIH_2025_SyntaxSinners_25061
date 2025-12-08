@@ -6,6 +6,31 @@ import Reveal from '@/components/Reveal';
 import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
 
+const styles = `
+  /* Hide Google Maps labels and overlays */
+  iframe[src*="maps.embed"] {
+    -webkit-filter: brightness(1.1) contrast(1.05);
+    filter: brightness(1.1) contrast(1.05);
+  }
+  
+  /* Attempt to hide text overlays using opacity and shadow tricks */
+  iframe[src*="maps.embed"]::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.01);
+    pointer-events: none;
+  }
+  
+  /* Hide any text elements that might appear near the iframe */
+  .maps-label {
+    display: none !important;
+  }
+`;
+
 export default function TashidingMonastery() {
   const [activeIndex, setActiveIndex] = useState(1);
   const [scrollPosition, setScrollPosition] = useState(0);
@@ -13,6 +38,7 @@ export default function TashidingMonastery() {
   const [openDialog, setOpenDialog] = useState(false);
   const [activeItem, setActiveItem] = useState<any | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [audioDuration, setAudioDuration] = useState('0:00');
   const [isLiked, setIsLiked] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
@@ -34,10 +60,11 @@ export default function TashidingMonastery() {
     if (audioRef.current) {
       if (isPlaying) {
         audioRef.current.pause();
+        setIsPlaying(false);
       } else {
         audioRef.current.play();
+        setIsPlaying(true);
       }
-      setIsPlaying(!isPlaying);
     }
   };
 
@@ -84,9 +111,9 @@ export default function TashidingMonastery() {
   const sidebarItems = [
     { id: 'overview', label: 'Overview' },
     { id: 'digital-archive', label: 'Digital Archive' },
+    { id: 'cultural-calendar', label: 'Cultural Calendar' },
     { id: 'audio-tour', label: 'Audio Tour' },
     { id: 'virtual-tour', label: 'Virtual Tour' },
-    { id: 'cultural-calendar', label: 'Cultural Calendar' },
   ];
 
   const tashidingArchiveItems = [
@@ -194,6 +221,46 @@ export default function TashidingMonastery() {
     { src: '/tashiding/tash-6.png', alt: 'Tashiding 3' },
   ];
 
+    const panoramicShots = [
+  {
+    id: 'p0',
+    title: 'Tashiding Monastery',
+    note: 'Main panoramic view',
+    url: 'https://www.google.com/maps/place/Tashiding+Monastery/@27.3117664,88.2976364,3a,75y,200h,90t/data=!3m8!1e1!3m6!1sCIHM0ogKEICAgICEzv29aA!2e10!3e11!6shttps:%2F%2Flh3.googleusercontent.com%2Fgps-cs-s%2FAG0ilSwSpbbNfjj0AsNJkAbZASV8BqTvqJdrq7zOAOLfxF16sJgWW1qPc6kWfw5yhihHZqo_kuz9llju-kw-lyQoWySftgjsjtD1Lwr1MwABvTajubhcFZbMWcY4EH8ZMIX9QoZqjBI%3Dw900-h600-k-no-pi0-ya89-ro0-fo100!7i8704!8i4352!4m9!3m8!1s0x39e685fca06dc171:0x92150f5f129db887!8m2!3d27.3089308!4d88.2978746!10e5!14m1!1BCgIgARICCAI!16s%2Fm%2F09glmyd',
+    embedUrl: 'https://www.google.com/maps/embed?pb=!4v1765166574121!6m8!1m7!1sCIHM0ogKEICAgICEzv29aA!2m2!1d27.3117664!2d88.2976364!3f200!4f75!5f0.7820865974627469',
+    earthUrl: 'https://earth.google.com/earth/rpc/cc/map?pb=!1m2!1sCIHM0ogKEICAgICEzv29aA!2m2!1d27.3117664!2d88.2976364',
+  },
+  {
+    id: 'p1',
+    title: 'Approach to Tashiding Monastery',
+    note: 'Monastery in the landscape',
+    url: 'https://maps.app.goo.gl/GVnM9bfDhz2ckP4m9',
+    embedUrl: 'https://www.google.com/maps/embed?pb=!4v1765166574121!6m8!1m7!1sCAoSFkNJSE0wb2dLRUlDQWdJQ0V6b09UVnc.!2m2!1d27.3080960299431!2d88.29783391014004!3f260!4f10!5f0.7820865974627469',
+    earthUrl: 'https://earth.google.com/earth/rpc/cc/map?pb=!1m2!1sCAoSFkNJSE0wb2dLRUlDQWdJQ0V6b09UVnc.!2m2!1d27.3080960299431!2d88.29783391014004',
+  },
+  {
+    id: 'p2',
+    title: 'Monastery Courtyard View',
+    note: 'Prayer flags and chortens',
+    url: 'https://maps.app.goo.gl/4uMyY25gvWW7NJFt5',
+    embedUrl: 'https://www.google.com/maps/embed?pb=!4v1765166574121!6m8!1m7!1sCAoSFkNJSE0wb2dLRUlDQWdJQ0V6b09UVnc.!2m2!1d27.3080960299431!2d88.29783391014004!3f180!4f0!5f0.7820865974627469',
+    earthUrl: 'https://earth.google.com/earth/rpc/cc/map?pb=!1m2!1sCAoSFkNJSE0wb2dLRUlDQWdJQ0V6b09UVnc.!2m2!1d27.3080960299431!2d88.29783391014004',
+  },
+  {
+    id: 'p3',
+    title: 'Main Shrine Surroundings',
+    note: '360° around the central complex',
+    url: 'https://maps.app.goo.gl/7VS6TvYXtVm53LQPA',
+    embedUrl: 'https://www.google.com/maps/embed?pb=!4v1765166574121!6m8!1m7!1sCAoSFkNJSE0wb2dLRUlDQWdJQ0V6b09UVnc.!2m2!1d27.3080960299431!2d88.29783391014004!3f90!4f0!5f0.7820865974627469',
+    earthUrl: 'https://earth.google.com/earth/rpc/cc/map?pb=!1m2!1sCAoSFkNJSE0wb2dLRUlDQWdJQ0V6b09UVnc.!2m2!1d27.3080960299431!2d88.29783391014004',
+  },
+];
+
+
+  const [activePanorama, setActivePanorama] = useState(panoramicShots[0]);
+
+
+
   useEffect(() => {
     const interval = setInterval(() => {
       setActiveIndex((prev) => (prev + 1) % images.length);
@@ -208,6 +275,24 @@ export default function TashidingMonastery() {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    const updateProgress = () => {
+      setCurrentTime(audio.currentTime);
+      setDuration(audio.duration || 0);
+    };
+
+    const interval = setInterval(() => {
+      if (audio && !audio.paused) {
+        updateProgress();
+      }
+    }, 100);
+
+    return () => clearInterval(interval);
+  }, [isPlaying]);
 
   const goToSlide = (index: number) => {
     setActiveIndex(index);
@@ -270,6 +355,7 @@ export default function TashidingMonastery() {
 
   return (
     <main className="overflow-hidden">
+      <style>{styles}</style>
       <Nav />
       {/* Hero Section */}
       <section className="relative w-full overflow-hidden pt-8 pb-4" style={{ backgroundImage: 'url(/bg1.png)', backgroundSize: 'cover', backgroundPosition: 'center 30%', backgroundClip: 'border-box', minHeight: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
@@ -356,9 +442,9 @@ export default function TashidingMonastery() {
           {[
             { label: 'Overview', target: 'overview' },
             { label: 'Digital Archive', target: 'digital-archive' },
+            { label: 'Cultural Calendar', target: 'cultural-calendar' },
             { label: 'Audio Tour', target: 'audio-tour' },
             { label: 'Virtual Tour', target: 'virtual-tour' },
-            { label: 'Cultural Calendar', target: 'cultural-calendar' },
           ].map((btn) => (
             <button
               key={btn.label}
@@ -711,7 +797,7 @@ export default function TashidingMonastery() {
               <div className="relative">
                 <Reveal delay={0.1}>
                   <div className="absolute left-1/2 transform -translate-x-1/2 rounded-2xl bg-gradient-to-br from-yellow-300 to-yellow-200 border-4 border-yellow-400 p-4 w-44 shadow-lg"
-                    style={{ top: 'calc(50% - 160px)', zIndex:2 }}>
+                    style={{ top: 'calc(50% - 180px)', zIndex:2 }}>
                     <p className="text-xs font-semibold text-amber-900 mb-1">February – March</p>
                     <p className="text-xs text-amber-900 mb-2">1st Tibetan Month — 14th–15th day</p>
                     <h3 className="text-lg font-bold text-amber-900 uppercase" style={{ fontFamily: 'Cinzel' }}>Bhumchu Festival</h3>
@@ -741,7 +827,7 @@ export default function TashidingMonastery() {
               <div className="relative">
                 <Reveal delay={0.3}>
                   <div className="absolute left-1/2 transform -translate-x-1/2 rounded-2xl bg-gradient-to-br from-orange-500 to-orange-400 border-4 border-orange-600 p-4 w-44 shadow-lg"
-                    style={{ top: 'calc(50% - 160px)', zIndex:2 }}>
+                    style={{ top: 'calc(50% - 190px)', zIndex:2 }}>
                     <p className="text-xs font-semibold text-white mb-1">October – November</p>
                     <p className="text-xs text-white mb-2">9th Tibetan Month — 22nd day</p>
                     <h3 className="text-lg font-bold text-white uppercase" style={{ fontFamily: 'Cinzel' }}>Lhabab Düchen</h3>
@@ -771,7 +857,7 @@ export default function TashidingMonastery() {
           </div>
 
           <Reveal delay={0.6}>
-            <div className="mt-32 space-y-8">
+            <div className="mt-12 space-y-8">
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <Reveal delay={0.7}>
                   <div className="rounded-2xl bg-white/5 backdrop-blur-sm border border-yellow-500/20 p-6 hover:border-yellow-400/40 transition-colors">
@@ -876,6 +962,26 @@ export default function TashidingMonastery() {
 
             {/* Audio Tour Card */}
             <div className="max-w-4xl mx-auto rounded-3xl p-8" style={{ backgroundColor: 'rgba(217, 119, 6, 0.15)', border: '2px solid rgba(217, 119, 6, 0.3)', backdropFilter: 'blur(10px)' }}>
+            <audio 
+              ref={audioRef} 
+              src="/tashiding audio.mp4"
+              preload="metadata"
+              onTimeUpdate={(e) => {
+                const time = (e.target as HTMLAudioElement).currentTime;
+                setCurrentTime(time);
+                console.log('Time update:', time);
+              }}
+              onLoadedMetadata={(e) => {
+                const dur = (e.target as HTMLAudioElement).duration;
+                setDuration(dur);
+                const minutes = Math.floor(dur / 60);
+                const seconds = Math.floor(dur % 60);
+                setAudioDuration(`${minutes}:${seconds.toString().padStart(2, '0')}`);
+              }}
+              onEnded={() => {
+                setIsPlaying(false);
+              }}
+            />
             <div className="grid md:grid-cols-2 gap-8 items-center">
               {/* Image */}
               <div className="rounded-2xl overflow-hidden group cursor-pointer">
@@ -895,15 +1001,6 @@ export default function TashidingMonastery() {
                 {/* Player Controls */}
                 <div className="flex items-center justify-between gap-4">
                   <button className="text-amber-100 hover:text-white transition">☰</button>
-                  <div 
-                    className="flex-1 h-1 bg-gray-600 rounded cursor-pointer relative"
-                    onClick={handleProgressClick}
-                  >
-                    <div 
-                      className="h-full bg-gradient-to-r from-amber-400 to-amber-200 rounded"
-                      style={{ width: `${progress}%` }}
-                    ></div>
-                  </div>
                   <button 
                     onClick={toggleLike}
                     className={`transition ${isLiked ? 'text-red-500' : 'text-amber-100 hover:text-white'}`}
@@ -912,13 +1009,20 @@ export default function TashidingMonastery() {
                   </button>
                 </div>
 
-                {/* Audio Element */}
-                <audio 
-                  ref={audioRef} 
-                  src="/tashiding audio.mp4"
-                  onTimeUpdate={(e) => setCurrentTime(e.currentTarget.currentTime)}
-                  onLoadedMetadata={(e) => setDuration(e.currentTarget.duration)}
-                />
+                {/* Progress Bar */}
+                <div className="relative w-full mb-4">
+                  <div 
+                    className="w-full h-2 bg-amber-900/30 rounded-full cursor-pointer group"
+                    onClick={handleProgressClick}
+                  >
+                    <div 
+                      className="h-full bg-gradient-to-r from-amber-400 to-amber-200 rounded-full relative"
+                      style={{ width: `${duration > 0 ? (currentTime / duration) * 100 : 0}%`, transition: 'width 0.1s linear' }}
+                    >
+                      <div className="absolute right-0 top-1/2 -translate-y-1/2 w-3 h-3 bg-amber-100 rounded-full" />
+                    </div>
+                  </div>
+                </div>
 
                 {/* Playback Controls */}
                 <div className="flex items-center justify-center gap-6">
@@ -959,7 +1063,7 @@ export default function TashidingMonastery() {
                   <div className="flex items-center gap-2 text-amber-100">
                     <span className="text-xl">⏱</span>
                     <span className="font-semibold">
-                      {Math.floor(currentTime / 60)}:{String(Math.floor(currentTime % 60)).padStart(2, '0')} / {Math.floor(duration / 60)}:{String(Math.floor(duration % 60)).padStart(2, '0')}
+                      {Math.floor(currentTime / 60)}:{String(Math.floor(currentTime % 60)).padStart(2, '0')}
                     </span>
                   </div>
                   <button className="text-amber-100 hover:text-white transition text-2xl">⬇</button>
@@ -1035,8 +1139,8 @@ export default function TashidingMonastery() {
                 <h3 className="text-lg font-semibold text-amber-50 mb-4 uppercase" style={{ fontFamily: 'Cinzel' }}>Tour Features</h3>
                 <div className="space-y-3 flex-1 flex flex-col justify-center overflow-y-auto">
                   <div className="flex items-start gap-3 transition-all duration-300 hover:scale-105 cursor-pointer p-2 rounded-lg hover:bg-opacity-60" style={{ backgroundColor: 'rgba(217, 119, 6, 0.1)' }}>
-                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-orange-400 to-amber-500 flex items-center justify-center flex-shrink-0">
-                      <span className="text-lg">🎯</span>
+                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-orange-400 to-amber-500 flex items-center justify-center flex-shrink-0 p-2.5">
+                      <img src="/Icons/ICONS/LOCATION.png" alt="Interactive Navigation" className="w-full h-full object-contain" />
                     </div>
                     <div className="flex-1 min-w-0">
                       <h4 className="text-amber-100 font-semibold text-sm mb-0.5">Interactive Navigation</h4>
@@ -1044,8 +1148,8 @@ export default function TashidingMonastery() {
                     </div>
                   </div>
                   <div className="flex items-start gap-3 transition-all duration-300 hover:scale-105 cursor-pointer p-2 rounded-lg hover:bg-opacity-60" style={{ backgroundColor: 'rgba(217, 119, 6, 0.1)' }}>
-                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-amber-400 to-yellow-500 flex items-center justify-center flex-shrink-0">
-                      <span className="text-lg">🎧</span>
+                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-amber-400 to-yellow-500 flex items-center justify-center flex-shrink-0 p-2.5">
+                      <img src="/Icons/ICONS/HEADPHONE.png" alt="Audio Narration" className="w-full h-full object-contain" />
                     </div>
                     <div className="flex-1 min-w-0">
                       <h4 className="text-amber-100 font-semibold text-sm mb-0.5">Audio Narration</h4>
@@ -1053,8 +1157,20 @@ export default function TashidingMonastery() {
                     </div>
                   </div>
                   <div className="flex items-start gap-3 transition-all duration-300 hover:scale-105 cursor-pointer p-2 rounded-lg hover:bg-opacity-60" style={{ backgroundColor: 'rgba(217, 119, 6, 0.1)' }}>
-                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-yellow-400 to-orange-500 flex items-center justify-center flex-shrink-0">
-                      <span className="text-lg">📱</span>
+                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-yellow-400 to-orange-500 flex items-center justify-center flex-shrink-0 p-2">
+                      <svg viewBox="0 0 24 24" fill="none" className="w-full h-full">
+                        <path d="M17 2H7C5.89543 2 5 2.89543 5 4V20C5 21.1046 5.89543 22 7 22H17C18.1046 22 19 21.1046 19 20V4C19 2.89543 18.1046 2 17 2Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                        <path d="M7 6H17M7 18H17M10 19H14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                        <circle cx="8" cy="10" r="0.75" fill="currentColor"/>
+                        <circle cx="12" cy="10" r="0.75" fill="currentColor"/>
+                        <circle cx="16" cy="10" r="0.75" fill="currentColor"/>
+                        <circle cx="8" cy="13" r="0.75" fill="currentColor"/>
+                        <circle cx="12" cy="13" r="0.75" fill="currentColor"/>
+                        <circle cx="16" cy="13" r="0.75" fill="currentColor"/>
+                        <circle cx="8" cy="16" r="0.75" fill="currentColor"/>
+                        <circle cx="12" cy="16" r="0.75" fill="currentColor"/>
+                        <circle cx="16" cy="16" r="0.75" fill="currentColor"/>
+                      </svg>
                     </div>
                     <div className="flex-1 min-w-0">
                       <h4 className="text-amber-100 font-semibold text-sm mb-0.5">Mobile Friendly</h4>
@@ -1062,8 +1178,13 @@ export default function TashidingMonastery() {
                     </div>
                   </div>
                   <div className="flex items-start gap-3 transition-all duration-300 hover:scale-105 cursor-pointer p-2 rounded-lg hover:bg-opacity-60" style={{ backgroundColor: 'rgba(217, 119, 6, 0.1)' }}>
-                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-orange-300 to-amber-600 flex items-center justify-center flex-shrink-0">
-                      <span className="text-lg">🎨</span>
+                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-orange-300 to-amber-600 flex items-center justify-center flex-shrink-0 p-2">
+                      <svg viewBox="0 0 24 24" fill="none" className="w-full h-full">
+                        <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" strokeWidth="1.5" strokeDasharray="2 2"/>
+                        <path d="M3 14L8 9L12 13L21 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                        <circle cx="16" cy="8" r="2" fill="currentColor"/>
+                        <path d="M1 1L5 5M19 1L23 5M1 23L5 19M19 23L23 19" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                      </svg>
                     </div>
                     <div className="flex-1 min-w-0">
                       <h4 className="text-amber-100 font-semibold text-sm mb-0.5">High Resolution</h4>
@@ -1076,8 +1197,13 @@ export default function TashidingMonastery() {
               {/* Vlogger Journeys Box */}
               <div className="rounded-3xl p-6" style={{ backgroundColor: 'rgba(120, 53, 15, 0.5)', border: '2px solid rgba(217, 119, 6, 0.4)', backdropFilter: 'blur(10px)' }}>
                 <div className="flex items-start gap-4 mb-4">
-                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center flex-shrink-0">
-                    <span className="text-2xl">🎥</span>
+                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center flex-shrink-0 p-2.5">
+                    <svg viewBox="0 0 24 24" fill="currentColor" className="w-full h-full">
+                      <path d="M3 4C3 2.89543 3.89543 2 5 2H16C17.1046 2 18 2.89543 18 4V13C18 14.1046 17.1046 15 16 15H5C3.89543 15 3 14.1046 3 13V4Z" stroke="currentColor" strokeWidth="0.5"/>
+                      <path d="M18 6.5L22 4V13L18 10.5V6.5Z"/>
+                      <circle cx="6.5" cy="5.5" r="1" fill="white" opacity="0.8"/>
+                      <path d="M8.5 7L13 9.5L8.5 12V7Z" fill="white"/>
+                    </svg>
                   </div>
                   <div className="flex-1">
                     <h3 className="text-xl font-semibold text-amber-50 mb-2 leading-tight" style={{ fontFamily: 'Chivo' }}>
@@ -1140,7 +1266,11 @@ export default function TashidingMonastery() {
                     style={{ fontFamily: 'Cinzel' }}
                   >
                     <span className="flex items-center justify-center gap-2">
-                      <span className="text-xl">🏛️</span>
+                      <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
+                        <path d="M12 2L3 7V17L12 22L21 17V7L12 2Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+                        <path d="M12 12L3 7M12 12L21 7M12 12V22" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                        <path d="M7.5 9.5L12 12L16.5 9.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
                       <span>3D Model</span>
                     </span>
                   </button>
@@ -1154,48 +1284,135 @@ export default function TashidingMonastery() {
                     style={{ fontFamily: 'Cinzel' }}
                   >
                     <span className="flex items-center justify-center gap-2">
-                      <span className="text-xl">👁️</span>
+                      <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
+                        <ellipse cx="12" cy="6" rx="10" ry="3" stroke="currentColor" strokeWidth="1.5" fill="none"/>
+                        <path d="M2 6V18C2 19.6569 6.47715 21 12 21C17.5228 21 22 19.6569 22 18V6" stroke="currentColor" strokeWidth="1.5" fill="none"/>
+                        <circle cx="9" cy="11" r="1.5" fill="currentColor"/>
+                        <path d="M7 15L10 12L13 15L17 10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+                      </svg>
                       <span>Panoramic</span>
                     </span>
                   </button>
                 </div>
               </div>
 
-              {/* Start Tour Button */}
-              <button className="w-full py-6 rounded-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 transition-all duration-300 shadow-lg hover:shadow-xl flex items-center justify-center gap-3 group" style={{ fontFamily: 'Cinzel' }}>
-                <span className="text-3xl group-hover:scale-110 transition-transform">▶</span>
-                <span className="text-2xl font-bold text-amber-900">Start {viewMode === '3d' ? '3D' : 'Panoramic'} Tour</span>
-              </button>
-
               {/* Preview Box with Dynamic Content */}
-              <div className="rounded-3xl overflow-hidden" style={{ backgroundColor: 'rgba(217, 119, 6, 0.15)', border: '2px solid rgba(217, 119, 6, 0.3)', backdropFilter: 'blur(10px)' }}>
-                <div className="h-[28rem] bg-gradient-to-br from-amber-900 to-orange-900 flex items-center justify-center relative">
+              <div
+                className="rounded-3xl overflow-hidden"
+                style={{
+                  backgroundColor: 'rgba(217, 119, 6, 0.15)',
+                  border: '2px solid rgba(217, 119, 6, 0.3)',
+                  backdropFilter: 'blur(10px)',
+                }}
+              >
+                {/* TOP AREA: MODE PREVIEW / EMBED */}
+                <div className="h-[20rem] bg-gradient-to-br from-amber-900 to-orange-900 relative px-6 py-4 flex items-center justify-center">
                   {viewMode === '3d' ? (
-                    <div className="text-center text-amber-100">
-                      <div className="text-6xl mb-4">🏛️</div>
-                      <p className="text-lg font-semibold mb-2" style={{ fontFamily: 'Cinzel' }}>3D Model View</p>
-                      <p className="text-sm text-amber-200" style={{ fontFamily: 'Cinzel' }}>Interactive 3D monastery model</p>
-                    </div>
+                    <video
+                      autoPlay
+                      loop
+                      muted
+                      playsInline
+                      preload="auto"
+                      className="w-full h-full object-cover rounded-2xl"
+                      style={{ filter: 'contrast(1.15) saturate(1.2) brightness(1.08) sharpness(1.1)' }}
+                    >
+                      <source src="/tashiding/tashiding 3d.mp4" type="video/mp4" />
+                    </video>
                   ) : (
-                    <div className="text-center text-amber-100">
-                      <div className="text-6xl mb-4">👁️</div>
-                      <p className="text-lg font-semibold mb-2" style={{ fontFamily: 'Cinzel' }}>Panoramic View</p>
-                      <p className="text-sm text-amber-200" style={{ fontFamily: 'Cinzel' }}>360° immersive experience</p>
+                    <div className="w-full h-full flex flex-col md:flex-row items-stretch gap-4">
+                      {/* EMBEDDED MAP / STREET VIEW */}
+                      <div className="flex-1 rounded-2xl overflow-hidden border border-amber-500/40 bg-black/40">
+                        <iframe
+                          src={activePanorama.embedUrl}
+                          title={activePanorama.title}
+                          className="w-full h-full border-0"
+                          loading="lazy"
+                          allowFullScreen
+                          referrerPolicy="no-referrer-when-downgrade"
+                        />
+                      </div>
+
+                      {/* TEXT DESCRIPTION OF CURRENT SHOT */}
+                      <div className="w-full md:w-64 flex flex-col justify-center text-left text-amber-100">
+                        <p
+                          className="text-sm font-semibold mb-1 uppercase"
+                          style={{ fontFamily: 'Cinzel' }}
+                        >
+                          Panoramic View
+                        </p>
+                        <p
+                          className="text-base font-semibold mb-1"
+                          style={{ fontFamily: 'Cinzel' }}
+                        >
+                          {activePanorama.title}
+                        </p>
+                        {activePanorama.note && (
+                          <p className="text-sm text-amber-200 mb-3">
+                            {activePanorama.note}
+                          </p>
+                        )}
+                        <a
+                          href={activePanorama.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1 text-xs text-amber-200 underline"
+                        >
+                          View directly on Google Maps ↗
+                        </a>
+                      </div>
                     </div>
                   )}
-                  
+
                   {/* Mode indicator badge */}
                   <div className="absolute top-4 right-4 px-4 py-2 rounded-full bg-amber-900/80 backdrop-blur-sm border border-amber-500/30">
-                    <span className="text-xs font-semibold text-amber-100 uppercase" style={{ fontFamily: 'Cinzel' }}>
+                    <span
+                      className="text-xs font-semibold text-amber-100 uppercase"
+                      style={{ fontFamily: 'Cinzel' }}
+                    >
                       {viewMode === '3d' ? '3D Model' : 'Panoramic 360°'}
                     </span>
                   </div>
                 </div>
-              </div>
 
+                {/* BOTTOM AREA: PANORAMIC SHOTS GRID */}
+                {viewMode === 'panoramic' && (
+                  <div className="border-top border-amber-500/20 bg-black/20 px-6 py-5">
+                    <h4
+                      className="text-sm md:text-base font-semibold text-amber-100 mb-3 flex items-center gap-2 uppercase"
+                      style={{ fontFamily: 'Cinzel' }}
+                    >
+                      <span className="text-lg">📍</span>
+                      Panoramic Shots from Google Maps
+                    </h4>
+
+                    <div className="grid sm:grid-cols-2 gap-4">
+                      {panoramicShots.map((shot) => (
+                        <div
+                          key={shot.id}
+                          onClick={() => setActivePanorama(shot)}
+                          className="group rounded-2xl overflow-hidden border border-amber-500/30 bg-black/30 hover:border-amber-300/70 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl cursor-pointer"
+                        >
+                          {/* Panoramic view display */}
+                          <div className="aspect-video w-full flex items-center justify-center bg-gradient-to-br from-amber-900/60 to-orange-900/60 overflow-hidden">
+                            <iframe
+                              src={shot.embedUrl}
+                              title={shot.title}
+                              className="w-full h-full border-0"
+                              loading="lazy"
+                              allowFullScreen
+                              referrerPolicy="no-referrer-when-downgrade"
+                            />
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
-        </div>
+        </div>    
       </section>
 
       <Footer />

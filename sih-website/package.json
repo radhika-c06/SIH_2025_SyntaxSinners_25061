@@ -9,8 +9,11 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "bcryptjs": "^3.0.3",
     "framer-motion": "^12.23.16",
     "gsap": "^3.13.0",
+    "jsonwebtoken": "^9.0.3",
+    "mongoose": "^9.0.1",
     "next": "^15.5.7",
     "react": "^19.2.1",
     "react-dom": "^19.2.1",
@@ -19,6 +22,8 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "@tailwindcss/postcss": "^4",
+    "@types/bcryptjs": "^2.4.6",
+    "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
