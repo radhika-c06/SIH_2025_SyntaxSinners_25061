@@ -1,12 +1,21 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { authAPI } from '@/lib/api';
 
 export default function LoginPage() {
   const router = useRouter();
   const [mode, setMode] = useState<'admin' | 'guest'>('admin');
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  useEffect(() => {
+    // Check if user is already authenticated
+    const authStatus = localStorage.getItem('isAuthenticated');
+    if (authStatus === 'true') {
+      router.push('/admin/dashboard');
+    }
+  }, [router]);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
@@ -17,7 +26,7 @@ export default function LoginPage() {
     e.preventDefault();
     
     if (mode === 'admin') {
-      // Admin login logic
+      // Admin login logic - validation
       if (!username || !password) {
         setError('Please enter username and password');
         return;
@@ -30,7 +39,8 @@ export default function LoginPage() {
         const response = await authAPI.login(username, password);
         
         if (response.success) {
-          // Login successful, redirect to dashboard
+          // Login successful - set auth state and redirect
+          localStorage.setItem('isAuthenticated', 'true');
           router.push('/admin/dashboard');
         } else {
           // Show error message
