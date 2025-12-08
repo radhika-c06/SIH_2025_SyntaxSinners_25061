@@ -40,26 +40,26 @@ export default function TsukMonastery() {
     {
       id: 't1',
       title: 'Royal Chapel Murals',
-      monastery: 'Tsuk',
+      monastery: 'Tsuk La Khang',
       type: 'mural',
       year: '19th c.',
       img: '/tsuk/tsuk4.jpg',
       tags: ['Color-corrected', 'AI-enhanced'],
       ocrText: 'Placeholder OCR text for Royal Chapel Murals.',
-      location: 'Tsuk',
+      location: 'Tsuk La Khang',
       description:
         'Vibrant murals within the former royal chapel, depicting scenes from the life of Buddha and various deities, showcasing the rich artistic heritage of Sikkim.',
     },
     {
       id: 't2',
       title: 'Ancient Buddhist Scriptures',
-      monastery: 'Tsuk',
+      monastery: 'Tsuk La Khang',
       type: 'manuscript',
       year: '19th c.',
       img: '/tsuk/tsuk5.avif',
       tags: ['AI-OCR processed', 'High-res'],
       ocrText: 'Placeholder OCR text for ancient scriptures.',
-      location: 'Tsuk',
+      location: 'Tsuk La Khang',
       description: 'A collection of centuries-old Buddhist scriptures and manuscripts, preserved at the monastery, representing a significant repository of spiritual knowledge.',
     },
   ];
@@ -282,9 +282,9 @@ export default function TsukMonastery() {
         {/* Title + Info */}
         <div className="max-w-7xl mx-auto px-10 flex justify-between items-center">
           <Reveal delay={0.4}>
-            <div className="flex-1">
+            <div className="flex-1 flex flex-col items-center text-center">
               <h1 className="text-6xl font-bold text-amber-100 tracking-wide leading-tight font-cinzel-decorative">
-                TSUK
+                TSUK LA KHANG
               </h1>
               <h2 className="text-5xl font-bold text-amber-100 tracking-wide font-cinzel-decorative">
                 MONASTERY
@@ -309,8 +309,8 @@ export default function TsukMonastery() {
                   />
                 </svg>
                 <div>
-                  <div className="text-xl font-semibold">Tsuk, East Sikkim</div>
-                  <div className="text-lg">Gangtok (737135), India</div>
+                  <div className="text-xl font-semibold">TSUK LA KHANG, GANGTOK</div>
+                  <div className="text-lg">GANGTOK (737135), INDIA</div>
                 </div>
               </div>
 
@@ -329,7 +329,7 @@ export default function TsukMonastery() {
                   />
                 </svg>
                 <div>
-                  <div className="text-xl font-semibold">Built in</div>
+                  <div className="text-xl font-semibold">BUILT IN</div>
                   <div className="text-lg">1894 CE</div>
                 </div>
               </div>
@@ -364,14 +364,14 @@ export default function TsukMonastery() {
             <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,2.1fr)_minmax(0,0.9fr)] gap-10 xl:gap-12 items-start">
               {/* LEFT TEXT */}
               <div>
-                <div className="rounded-3xl bg-white/5 backdrop-blur-sm border border-amber-500/10 p-8">
-                  <Reveal>
-                    <h2 className="text-4xl md:text-5xl font-bold text-amber-100 mb-10 leading-tight">
-                      Tsuk La Khang Monastery
-                    </h2>
-                  </Reveal>
+                <Reveal>
+                  <h2 className="text-4xl md:text-5xl font-bold text-amber-100 mb-8 leading-tight uppercase" style={{ fontFamily: 'Cinzel', fontWeight: 900 }}>
+                    TSUK LA KHANG MONASTERY: WHERE THE SPIRIT FINDS HARMONY IN SACRED STILLNESS
+                  </h2>
+                </Reveal>
 
-                  <Reveal delay={0.2}>
+                <div className="rounded-3xl bg-white/5 backdrop-blur-sm border border-amber-500/10 p-8">
+                    <Reveal delay={0.2}>
                     <p className="text-base text-amber-50 leading-relaxed mb-6">
                       Tsuk La Khang Monastery, located in the heart of Gangtok, is the former royal chapel of the Chogyal dynasty and one of Sikkim’s most significant centres of Buddhist learning. Set against the Himalayan skyline, its simple white façade opens into a richly adorned prayer hall filled with vibrant murals, intricate thangka paintings, and centuries-old Buddhist scriptures. The monastery remains an active spiritual space where monks chant, meditate, and perform traditional rituals, offering visitors an authentic glimpse into living Buddhist practice rather than a staged cultural display.
                     </p>
