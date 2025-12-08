@@ -31,6 +31,12 @@ export default function NewMonasteryPage() {
   const [confirmationStatus, setConfirmationStatus] = useState<'Draft' | 'Published'>('Draft');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [verificationResult, setVerificationResult] = useState<{
+    approved: boolean;
+    verdict: string;
+    reason: string;
+  } | null>(null);
+  const [isVerifying, setIsVerifying] = useState(false);
 
   const generateSlug = (name: string) => {
     return name
@@ -71,23 +77,58 @@ export default function NewMonasteryPage() {
   };
 
   const handleSave = async (status: 'Draft' | 'Published') => {
-    // Show confirmation dialog
-    setConfirmationStatus(status);
-    setShowConfirmation(true);
+    // Validate required fields first
+    if (!formData.name || !formData.location) {
+      setError('Monastery name and location are required');
+      return;
+    }
+
+    // Verify information with AI before showing confirmation
+    setIsVerifying(true);
+    setError(null);
+
+    try {
+      const response = await fetch('/api/verify-monastery', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          location: formData.location,
+          altitude: formData.altitude,
+          founded: formData.founded,
+          description: formData.shortDescription,
+        }),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || 'Verification failed');
+      }
+
+      setVerificationResult(result.data);
+      setConfirmationStatus(status);
+      setShowConfirmation(true);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to verify monastery information');
+    } finally {
+      setIsVerifying(false);
+    }
   };
 
   const confirmSave = async () => {
+    // Check if verification was rejected
+    if (verificationResult && !verificationResult.approved) {
+      setError('Cannot save: AI verification rejected the information');
+      setShowConfirmation(false);
+      return;
+    }
+
     try {
       setLoading(true);
       setError(null);
-
-      // Validate required fields
-      if (!formData.name || !formData.location) {
-        setError('Monastery name and location are required');
-        setShowConfirmation(false);
-        setLoading(false);
-        return;
-      }
 
       const monasteryData = {
         name: formData.name,
@@ -448,19 +489,19 @@ export default function NewMonasteryPage() {
               <div className="space-y-2">
                 <button
                   onClick={() => handleSave(formData.status)}
-                  disabled={loading}
+                  disabled={loading || isVerifying}
                   className="w-full px-4 py-3 rounded-lg bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-amber-900 font-bold transition shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
                   style={{ fontFamily: 'Poppins' }}
                 >
-                  {loading ? 'Saving...' : 'Save Monastery'}
+                  {isVerifying ? 'Verifying with AI...' : loading ? 'Saving...' : 'Save Monastery'}
                 </button>
                 <button
                   onClick={() => handleSave('Draft')}
-                  disabled={loading}
+                  disabled={loading || isVerifying}
                   className="w-full px-4 py-3 rounded-lg bg-amber-900/30 hover:bg-amber-900/50 text-amber-100 font-semibold transition border border-amber-500/30 disabled:opacity-50 disabled:cursor-not-allowed"
                   style={{ fontFamily: 'Poppins' }}
                 >
-                  Save as Draft
+                  {isVerifying ? 'Verifying with AI...' : 'Save as Draft'}
                 </button>
                 <button
                   onClick={() => router.back()}
@@ -518,10 +559,42 @@ export default function NewMonasteryPage() {
               </div>
             )}
 
+            {/* AI Verification Result */}
+            {verificationResult && (
+              <div className={`mb-6 p-4 rounded-lg border ${
+                verificationResult.approved 
+                  ? 'bg-green-500/10 border-green-500/30' 
+                  : 'bg-red-500/10 border-red-500/30'
+              }`}>
+                <div className="flex items-start gap-3">
+                  <span className="text-2xl">
+                    {verificationResult.approved ? '✓' : '✗'}
+                  </span>
+                  <div className="flex-1">
+                    <p className={`font-bold mb-2 ${
+                      verificationResult.approved ? 'text-green-100' : 'text-red-100'
+                    }`} style={{ fontFamily: 'Poppins' }}>
+                      AI Verification: {verificationResult.verdict}
+                    </p>
+                    <p className={`text-sm ${
+                      verificationResult.approved ? 'text-green-100/90' : 'text-red-100/90'
+                    }`} style={{ fontFamily: 'Poppins' }}>
+                      {verificationResult.reason}
+                    </p>
+                  </div>
+                </div>
+                {!verificationResult.approved && (
+                  <p className="text-red-200 text-sm mt-3 font-semibold" style={{ fontFamily: 'Poppins' }}>
+                    ⚠ You cannot save this monastery until the information is corrected.
+                  </p>
+                )}
+              </div>
+            )}
+
             <div className="space-y-3">
               <button
                 onClick={confirmSave}
-                disabled={loading}
+                disabled={loading || (verificationResult && !verificationResult.approved)}
                 className="w-full px-4 py-3 rounded-lg bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-amber-900 font-bold transition shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
                 style={{ fontFamily: 'Poppins' }}
               >
