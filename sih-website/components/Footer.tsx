@@ -1,8 +1,10 @@
 "use client";
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 export default function Footer() {
   const [show, setShow] = useState(false);
+  const { t } = useTranslation();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -22,8 +24,8 @@ export default function Footer() {
       style={{ background: "#0c3b44", color: "#fff", boxShadow: "0 -2px 16px #0006" }}
     >
       <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
-        <span className="font-cinzel text-lg">Treasures of Sikkim</span>
-        <span className="font-lora text-sm opacity-80">© 2025 All rights reserved</span>
+        <span className="font-cinzel text-lg">{t("footer.title")}</span>
+        <span className="font-lora text-sm opacity-80">{t("footer.rights")}</span>
       </div>
     </footer>
   );

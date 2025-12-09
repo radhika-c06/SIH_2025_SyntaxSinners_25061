@@ -2,22 +2,24 @@
 import Intro from "../components/Intro";
 import Nav from "../components/Nav";
 import Hero from "../components/Hero";
-import Reveal from "../components/Reveal";
 import ExploreCarouselMount from "../components/ExploreCarouselMount";
-import { useEffect, useRef, useState } from "react";
 import MonasterySlideshow from "../components/MonasterySlideshow";
 import MonasteryMap from "../components/MonasteryMap";
+import { useTranslation } from "react-i18next";
 
 // Animation for Explore section
 
 export default function Page() {
+  const { t } = useTranslation();
+
   return (
     <main className="bg-white text-black">
       {/* Landing overlay */}
       <Intro
         mp4="/hero.mp4"
-        title="Sangha"
-        subtitle="A digital window into Sikkim’s monasteries"
+        title={t("intro.title")}
+        subtitle={t("intro.subtitle")}
+        buttonLabel={t("intro.enter")}
       />
 
       <Nav />
