@@ -14,5 +14,13 @@
     "passwordHash": "$2b$10$1pNU9BCe5SSByC7iVPA53eSlkizoUY90hV.CMUrmyToHkTuDyaWzC",
     "role": "admin",
     "createdAt": "2025-12-09T08:15:15.962Z"
+  },
+  {
+    "id": "admin_1765277395643",
+    "name": "nisha",
+    "email": "nisha@gmail.com",
+    "passwordHash": "$2b$10$dxhPpCrpwhe1ghEbtypsae0Y3PCF8gyzJxoJPbQK99Wu0KdWtvUti",
+    "role": "admin",
+    "createdAt": "2025-12-09T10:49:55.643Z"
   }
 ]
