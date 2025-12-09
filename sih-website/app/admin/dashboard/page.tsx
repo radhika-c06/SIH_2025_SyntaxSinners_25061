@@ -31,15 +31,6 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    // Check authentication on page load
-    const isAuthenticated = localStorage.getItem('isAuthenticated');
-    if (isAuthenticated !== 'true') {
-      // Not authenticated, redirect to login
-      router.push('/admin');
-    }
-  }, [router]);
-
   // Fetch dashboard data
   useEffect(() => {
     const fetchDashboardData = async () => {

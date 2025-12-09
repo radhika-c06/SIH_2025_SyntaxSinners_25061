@@ -10,6 +10,10 @@ export interface IAdminUser extends Document {
   name: string;
   email: string;
   passwordHash: string;
+  // TOTP secret (if 2FA enabled or in setup). Hidden by default on queries.
+  totpSecret?: string;
+  // Whether the admin has enabled 2-factor authentication
+  is2FAEnabled?: boolean;
   role: 'superadmin' | 'editor';
   createdAt: Date;
   updatedAt: Date;
@@ -37,6 +41,14 @@ const adminUserSchema = new Schema<IAdminUser>(
       required: [true, 'Password hash is required'],
       minlength: 6,
       select: false, // Don't include by default in queries
+    },
+    totpSecret: {
+      type: String,
+      select: false,
+    },
+    is2FAEnabled: {
+      type: Boolean,
+      default: false,
     },
     role: {
       type: String,
