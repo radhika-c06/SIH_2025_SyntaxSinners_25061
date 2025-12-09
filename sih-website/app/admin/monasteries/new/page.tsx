@@ -24,6 +24,8 @@ export default function NewMonasteryPage() {
       travelInfo: '',
       digitalArchive: '',
     },
+    historicalPeriod: '',
+    sourceReferences: '',
     status: 'Draft' as 'Draft' | 'Published',
   });
 
@@ -302,7 +304,7 @@ export default function NewMonasteryPage() {
             </div>
           </div>
 
-          {/* Media */}
+          {/* Additional Information */}
           <div
             className="rounded-2xl p-6 backdrop-blur-sm"
             style={{
@@ -311,63 +313,42 @@ export default function NewMonasteryPage() {
             }}
           >
             <h2 className="text-xl font-bold text-white mb-6" style={{ fontFamily: 'Poppins' }}>
-              Media
+              Additional Information
             </h2>
             <div className="space-y-4">
               <div>
                 <label className="block text-amber-200 font-medium mb-2" style={{ fontFamily: 'Poppins' }}>
-                  Hero Image URL *
+                  Historical Period
                 </label>
-                <input
-                  type="text"
-                  value={formData.heroImage}
-                  onChange={(e) => setFormData({ ...formData, heroImage: e.target.value })}
-                  className="w-full px-4 py-3 rounded-lg bg-amber-900/30 border border-amber-500/30 text-amber-100 placeholder-amber-300/50 focus:outline-none focus:border-amber-500/50 transition"
-                  placeholder="/path/to/hero-image.jpg"
+                <select
+                  value={formData.historicalPeriod}
+                  onChange={(e) => setFormData({ ...formData, historicalPeriod: e.target.value })}
+                  className="w-full px-4 py-3 rounded-lg bg-amber-900/30 border border-amber-500/30 text-amber-100 focus:outline-none focus:border-amber-500/50 transition"
                   style={{ fontFamily: 'Poppins' }}
-                />
+                >
+                  <option value="">Select a historical period...</option>
+                  <option value="Ancient">Ancient (Before 1000 AD)</option>
+                  <option value="Medieval">Medieval (1000-1500 AD)</option>
+                  <option value="Early Modern">Early Modern (1500-1800 AD)</option>
+                  <option value="Modern">Modern (1800-1950 AD)</option>
+                  <option value="Contemporary">Contemporary (1950 AD onwards)</option>
+                </select>
+                <p className="text-amber-300/70 text-sm mt-1" style={{ fontFamily: 'Poppins' }}>Optional</p>
               </div>
 
               <div>
                 <label className="block text-amber-200 font-medium mb-2" style={{ fontFamily: 'Poppins' }}>
-                  Gallery Images
+                  Source References or Citations
                 </label>
-                <div className="space-y-2">
-                  {formData.gallery.map((url, index) => (
-                    <div key={index} className="flex gap-2">
-                      <input
-                        type="text"
-                        value={url}
-                        onChange={(e) => updateGalleryImage(index, e.target.value)}
-                        className="flex-1 px-4 py-3 rounded-lg bg-amber-900/30 border border-amber-500/30 text-amber-100 placeholder-amber-300/50 focus:outline-none focus:border-amber-500/50 transition"
-                        placeholder="/path/to/gallery-image.jpg"
-                        style={{ fontFamily: 'Poppins' }}
-                      />
-                      {formData.gallery.length > 1 && (
-                        <button
-                          type="button"
-                          onClick={() => removeGalleryImage(index)}
-                          className="px-4 py-3 rounded-lg bg-red-900/30 hover:bg-red-900/50 text-red-400 transition"
-                        >
-                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                          </svg>
-                        </button>
-                      )}
-                    </div>
-                  ))}
-                </div>
-                <button
-                  type="button"
-                  onClick={addGalleryImage}
-                  className="mt-2 px-4 py-2 rounded-lg bg-amber-900/30 hover:bg-amber-900/50 text-amber-100 font-medium transition inline-flex items-center gap-2"
+                <textarea
+                  value={formData.sourceReferences}
+                  onChange={(e) => setFormData({ ...formData, sourceReferences: e.target.value })}
+                  rows={4}
+                  className="w-full px-4 py-3 rounded-lg bg-amber-900/30 border border-amber-500/30 text-amber-100 placeholder-amber-300/50 focus:outline-none focus:border-amber-500/50 transition resize-none"
+                  placeholder="Add sources, citations, or references used for this information..."
                   style={{ fontFamily: 'Poppins' }}
-                >
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                  </svg>
-                  Add Image
-                </button>
+                />
+                <p className="text-amber-300/70 text-sm mt-1" style={{ fontFamily: 'Poppins' }}>Optional</p>
               </div>
             </div>
           </div>
@@ -391,7 +372,6 @@ export default function NewMonasteryPage() {
                 rituals: 'Rituals',
                 bestVisitTime: 'Best Visit Time',
                 travelInfo: 'Travel Info',
-                digitalArchive: 'Digital Archive',
               }).map(([key, label]) => (
                 <div key={key}>
                   <label className="block text-amber-200 font-medium mb-2" style={{ fontFamily: 'Poppins' }}>
@@ -462,7 +442,7 @@ export default function NewMonasteryPage() {
             }}
           >
             <h2 className="text-xl font-bold text-white mb-6" style={{ fontFamily: 'Poppins' }}>
-              Publish
+              Status
             </h2>
             {error && (
               <div className="mb-4 p-4 rounded-lg bg-red-500/20 border border-red-500/30 text-red-200">
@@ -470,21 +450,16 @@ export default function NewMonasteryPage() {
               </div>
             )}
             <div className="space-y-4">
-              <div>
-                <label className="block text-amber-200 font-medium mb-2" style={{ fontFamily: 'Poppins' }}>
-                  Status
-                </label>
-                <select
-                  value={formData.status}
-                  onChange={(e) => setFormData({ ...formData, status: e.target.value as 'Draft' | 'Published' })}
-                  className="w-full px-4 py-3 rounded-lg bg-amber-900/30 border border-amber-500/30 text-amber-100 focus:outline-none focus:border-amber-500/50 transition"
-                  style={{ fontFamily: 'Poppins' }}
-                  disabled={loading}
-                >
-                  <option value="Draft">Draft</option>
-                  <option value="Published">Published</option>
-                </select>
-              </div>
+              <select
+                value={formData.status}
+                onChange={(e) => setFormData({ ...formData, status: e.target.value as 'Draft' | 'Published' })}
+                className="w-full px-4 py-3 rounded-lg bg-amber-900/30 border border-amber-500/30 text-amber-100 focus:outline-none focus:border-amber-500/50 transition"
+                style={{ fontFamily: 'Poppins' }}
+                disabled={loading}
+              >
+                <option value="Draft">Draft</option>
+                <option value="Publish">Publish</option>
+              </select>
 
               <div className="space-y-2">
                 <button
@@ -493,15 +468,7 @@ export default function NewMonasteryPage() {
                   className="w-full px-4 py-3 rounded-lg bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-amber-900 font-bold transition shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
                   style={{ fontFamily: 'Poppins' }}
                 >
-                  {isVerifying ? 'Verifying with AI...' : loading ? 'Saving...' : 'Save Monastery'}
-                </button>
-                <button
-                  onClick={() => handleSave('Draft')}
-                  disabled={loading || isVerifying}
-                  className="w-full px-4 py-3 rounded-lg bg-amber-900/30 hover:bg-amber-900/50 text-amber-100 font-semibold transition border border-amber-500/30 disabled:opacity-50 disabled:cursor-not-allowed"
-                  style={{ fontFamily: 'Poppins' }}
-                >
-                  {isVerifying ? 'Verifying with AI...' : 'Save as Draft'}
+                  {isVerifying ? 'Verifying with AI...' : loading ? 'Saving...' : formData.status === 'Published' ? 'Save and Publish' : 'Save Monastery'}
                 </button>
                 <button
                   onClick={() => router.back()}
@@ -594,7 +561,7 @@ export default function NewMonasteryPage() {
             <div className="space-y-3">
               <button
                 onClick={confirmSave}
-                disabled={loading || (verificationResult && !verificationResult.approved)}
+                disabled={loading || (verificationResult !== null && !verificationResult.approved)}
                 className="w-full px-4 py-3 rounded-lg bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-amber-900 font-bold transition shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
                 style={{ fontFamily: 'Poppins' }}
               >
