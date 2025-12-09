@@ -5,7 +5,35 @@ import Reveal from '@/components/Reveal';
 import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
 
-export default function MonasteryTemplate() {
+interface ISection {
+  key: string;
+  title: string;
+  content: string;
+}
+
+interface MonasteryTemplateProps {
+  name?: string;
+  location?: string;
+  altitude?: string;
+  founded?: string;
+  shortDescription?: string;
+  heroImageUrl?: string;
+  gallery?: string[];
+  sections?: ISection[];
+  archiveItems?: any[];
+}
+
+export default function MonasteryTemplate({
+  name = '',
+  location = '',
+  altitude = '',
+  founded = '',
+  shortDescription = '',
+  heroImageUrl = '',
+  gallery = [],
+  sections = [],
+  archiveItems = [],
+}: MonasteryTemplateProps = {}) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [openDialog, setOpenDialog] = useState(false);
   const [activeItem, setActiveItem] = useState<any | null>(null);
@@ -30,12 +58,12 @@ export default function MonasteryTemplate() {
     });
   };
 
-  // EMPTY: Replace with actual monastery images
-  const images = [
-    { src: '', alt: 'Monastery image 1' },
-    { src: '', alt: 'Monastery image 2' },
-    { src: '', alt: 'Monastery image 3' },
-  ];
+  // Create images array from gallery or hero image
+  const images = gallery.length > 0 
+    ? gallery.map((src, idx) => ({ src, alt: `Monastery image ${idx + 1}` }))
+    : heroImageUrl
+    ? [{ src: heroImageUrl, alt: 'Monastery image 1' }]
+    : [{ src: '', alt: 'Monastery image 1' }];
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -76,21 +104,8 @@ export default function MonasteryTemplate() {
   const Eye = (props: any) => <Icon {...props}>👁️</Icon>;
   const Download = (props: any) => <Icon {...props}>⬇️</Icon>;
 
-  // EMPTY: Add archive items here
-  const monasteryArchiveItems: any[] = [
-    // {
-    //   id: 'm1',
-    //   title: '',
-    //   monastery: '',
-    //   type: '',
-    //   year: '',
-    //   img: '',
-    //   tags: [],
-    //   ocrText: '',
-    //   location: '',
-    //   description: '',
-    // },
-  ];
+  // Use archiveItems prop or empty array
+  const monasteryArchiveItems: any[] = archiveItems;
 
   return (
     <div className="min-h-screen text-amber-100">
@@ -130,7 +145,7 @@ export default function MonasteryTemplate() {
                 className="text-6xl md:text-7xl font-bold text-amber-100 drop-shadow-lg leading-tight font-cinzel-decorative"
                 style={{ fontWeight: '900', letterSpacing: '3px' }}
               >
-                {/* EMPTY: Monastery name */}
+                {name}
               </h1>
               <h2
                 className="text-5xl md:text-6xl font-bold text-amber-100 drop-shadow-lg font-cinzel-decorative"
@@ -143,7 +158,7 @@ export default function MonasteryTemplate() {
 
           <Reveal delay={0.5}>
             <div className="flex-1 flex flex-col gap-6 text-amber-100 pl-12 mt-6">
-              {/* EMPTY: Location */}
+              {/* Location */}
               <div className="flex items-start gap-4">
                 <svg className="w-8 h-8 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path
@@ -158,15 +173,15 @@ export default function MonasteryTemplate() {
                     className="text-xl font-bold tracking-wide uppercase"
                     style={{ fontFamily: 'Cormorant SC' }}
                   >
-                    {/* Location name */}
+                    {location || 'Location'}
                   </div>
                   <div className="text-lg uppercase" style={{ fontFamily: 'Cormorant SC' }}>
-                    {/* Address */}
+                    {altitude && `${altitude} meters`}
                   </div>
                 </div>
               </div>
 
-              {/* EMPTY: Founded year */}
+              {/* Founded year */}
               <div className="flex items-start gap-4">
                 <svg className="w-8 h-8 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path
@@ -184,7 +199,7 @@ export default function MonasteryTemplate() {
                     Founded
                   </div>
                   <div className="text-lg uppercase" style={{ fontFamily: 'Cormorant SC' }}>
-                    {/* Year */}
+                    {founded || 'Year'}
                   </div>
                 </div>
               </div>
@@ -221,36 +236,28 @@ export default function MonasteryTemplate() {
           </Reveal>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-            {/* EMPTY: History content */}
-            <Reveal delay={0.2}>
-              <div>
-                <h3 className="text-2xl font-bold text-amber-200 mb-4">History</h3>
-                <p className="text-amber-50/80 leading-relaxed text-lg">
-                  {/* Add history content here */}
-                </p>
-              </div>
-            </Reveal>
-
-            {/* EMPTY: Architecture content */}
-            <Reveal delay={0.3}>
-              <div>
-                <h3 className="text-2xl font-bold text-amber-200 mb-4">Architecture</h3>
-                <p className="text-amber-50/80 leading-relaxed text-lg">
-                  {/* Add architecture content here */}
-                </p>
-              </div>
-            </Reveal>
+            {sections.filter(s => ['overview', 'history', 'architecture'].includes(s.key)).map((section, idx) => (
+              <Reveal key={section.key} delay={0.2 + idx * 0.1}>
+                <div>
+                  <h3 className="text-2xl font-bold text-amber-200 mb-4">{section.title}</h3>
+                  <p className="text-amber-50/80 leading-relaxed text-lg">
+                    {section.content}
+                  </p>
+                </div>
+              </Reveal>
+            ))}
           </div>
 
-          {/* EMPTY: Additional info */}
-          <Reveal delay={0.4}>
-            <div className="mt-12 p-8 bg-amber-900/30 rounded-lg border border-amber-600/50">
-              <h3 className="text-2xl font-bold text-amber-200 mb-4">Religious Significance</h3>
-              <p className="text-amber-50/80 leading-relaxed text-lg">
-                {/* Add significance content here */}
-              </p>
-            </div>
-          </Reveal>
+          {sections.filter(s => s.key === 'rituals').map((section) => (
+            <Reveal key={section.key} delay={0.4}>
+              <div className="mt-12 p-8 bg-amber-900/30 rounded-lg border border-amber-600/50">
+                <h3 className="text-2xl font-bold text-amber-200 mb-4">{section.title}</h3>
+                <p className="text-amber-50/80 leading-relaxed text-lg">
+                  {section.content}
+                </p>
+              </div>
+            </Reveal>
+          ))}
         </div>
       </section>
 
@@ -260,11 +267,11 @@ export default function MonasteryTemplate() {
           <Reveal>
             <h2 className="text-5xl font-bold text-amber-100 mb-4 font-cinzel-decorative">Digital Archive</h2>
             <p className="text-amber-50/70 text-lg mb-12">
-              {/* Add description */}
+              {shortDescription}
             </p>
           </Reveal>
 
-          {/* Archive grid - EMPTY: Add items */}
+          {/* Archive grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {monasteryArchiveItems.length === 0 ? (
               <div className="col-span-full text-center py-12">

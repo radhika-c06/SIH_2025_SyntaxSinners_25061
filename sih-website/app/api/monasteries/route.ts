@@ -80,6 +80,7 @@ export async function POST(request: NextRequest) {
       heroImageUrl,
       gallery,
       sections,
+      isPublished,
     } = body;
 
     // Validation
@@ -122,7 +123,7 @@ export async function POST(request: NextRequest) {
       heroImageUrl: heroImageUrl || '',
       gallery: gallery || [],
       sections: sections || [],
-      isPublished: false, // Default to draft
+      isPublished: isPublished ?? false, // Use isPublished from request body, default to false
     });
 
     await monastery.save();

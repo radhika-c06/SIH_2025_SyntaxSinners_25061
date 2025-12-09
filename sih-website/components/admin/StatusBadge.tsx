@@ -44,9 +44,18 @@ export default function StatusBadge({ status, size = 'md' }: StatusBadgeProps) {
 
   const config = statusConfig[status];
 
+  // Fallback configuration if status is not in the config
+  const defaultConfig = {
+    bg: 'bg-gray-500/20',
+    text: 'text-gray-400',
+    border: 'border-gray-500/30',
+  };
+
+  const activeConfig = config || defaultConfig;
+
   return (
     <span
-      className={`inline-flex items-center rounded-full border font-medium ${config.bg} ${config.text} ${config.border} ${sizeClasses[size]}`}
+      className={`inline-flex items-center rounded-full border font-medium ${activeConfig.bg} ${activeConfig.text} ${activeConfig.border} ${sizeClasses[size]}`}
       style={{ fontFamily: 'Poppins' }}
     >
       {status}
