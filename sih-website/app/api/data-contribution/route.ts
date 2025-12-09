@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { promises as fs } from 'fs';
-import path from 'path';
+import { connectDB } from '@/lib/db';
+import { ContributorSubmission } from '@/lib/models/ContributorSubmission';
 
 // Define the type for data contribution
 interface DataContribution {
@@ -27,38 +27,10 @@ interface DataContribution {
   status: 'pending' | 'approved' | 'rejected';
 }
 
-const SUBMISSIONS_FILE = path.join(process.cwd(), 'data', 'submissions', 'data-contributions.json');
-
-// Ensure directory exists
-async function ensureDirectoryExists() {
-  try {
-    await fs.mkdir(path.dirname(SUBMISSIONS_FILE), { recursive: true });
-  } catch (error) {
-    // Directory might already exist
-  }
-}
-
-// Read all submissions
-async function readSubmissions(): Promise<DataContribution[]> {
-  try {
-    await ensureDirectoryExists();
-    const data = await fs.readFile(SUBMISSIONS_FILE, 'utf-8');
-    return JSON.parse(data);
-  } catch (error) {
-    // File doesn't exist yet, return empty array
-    return [];
-  }
-}
-
-// Write submissions to file
-async function writeSubmissions(submissions: DataContribution[]) {
-  await ensureDirectoryExists();
-  await fs.writeFile(SUBMISSIONS_FILE, JSON.stringify(submissions, null, 2));
-}
-
 // POST: Create new data contribution submission
 export async function POST(request: NextRequest) {
   try {
+    await connectDB();
     const body = await request.json();
 
     // Validate required fields
@@ -82,42 +54,44 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Read existing submissions
-    const submissions = await readSubmissions();
-
-    // Create new submission
-    const newSubmission: DataContribution = {
-      id: `DATA-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-      timestamp: new Date().toISOString(),
-      fullName: body.fullName.trim(),
-      email: body.email.trim(),
-      organization: body.organization?.trim() || '',
-      monastery: body.monastery.trim(),
-      dataType: body.dataType.trim(),
+    // Create new submission in MongoDB
+    const newSubmission = new ContributorSubmission({
+      monasteryName: body.monastery.trim(),
       location: body.location.trim(),
-      altitude: body.altitude.trim(),
-      founded: body.founded.trim(),
-      description: body.description.trim(),
-      historicalPeriod: body.historicalPeriod || '',
-      language: body.language || '',
-      sourceReference: body.sourceReference || '',
-      overview: body.overview || '',
-      history: body.history || '',
-      architecture: body.architecture || '',
-      rituals: body.rituals || '',
-      bestVisitTime: body.bestVisitTime || '',
-      travelInfo: body.travelInfo || '',
+      contributorName: body.fullName.trim(),
+      contributorEmail: body.email.trim(),
+      rawContent: {
+        id: `DATA-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+        timestamp: new Date().toISOString(),
+        fullName: body.fullName.trim(),
+        email: body.email.trim(),
+        organization: body.organization?.trim() || '',
+        monastery: body.monastery.trim(),
+        dataType: body.dataType.trim(),
+        location: body.location.trim(),
+        altitude: body.altitude.trim(),
+        founded: body.founded.trim(),
+        description: body.description.trim(),
+        historicalPeriod: body.historicalPeriod || '',
+        language: body.language || '',
+        sourceReference: body.sourceReference || '',
+        overview: body.overview || '',
+        history: body.history || '',
+        architecture: body.architecture || '',
+        rituals: body.rituals || '',
+        bestVisitTime: body.bestVisitTime || '',
+        travelInfo: body.travelInfo || '',
+      },
       status: 'pending',
-    };
+    });
 
-    // Add to submissions
-    submissions.push(newSubmission);
-
-    // Write back to file
-    await writeSubmissions(submissions);
+    await newSubmission.save();
 
     return NextResponse.json(
-      { message: 'Data contribution submitted successfully', id: newSubmission.id },
+      { 
+        message: 'Data contribution submitted successfully', 
+        id: newSubmission._id 
+      },
       { status: 201 }
     );
   } catch (error) {
@@ -132,9 +106,37 @@ export async function POST(request: NextRequest) {
 // GET: Retrieve all data contribution submissions (for admin)
 export async function GET(request: NextRequest) {
   try {
-    // Check if user is authenticated (optional - add your auth check here)
-    const submissions = await readSubmissions();
-    return NextResponse.json(submissions);
+    await connectDB();
+
+    // Get query parameters for filtering
+    const { searchParams } = new URL(request.url);
+    const status = searchParams.get('status');
+
+    // Build query
+    let query: any = {};
+    if (status && status !== 'All') {
+      query.status = status.toLowerCase();
+    }
+
+    // Fetch submissions
+    const submissions = await ContributorSubmission.find(query)
+      .sort({ createdAt: -1 })
+      .lean();
+
+    // Format response to match what admin dashboard expects
+    const formatted = submissions.map((doc: any) => ({
+      id: doc._id,
+      monasteryName: doc.monasteryName,
+      contributorName: doc.contributorName,
+      contributorEmail: doc.contributorEmail,
+      status: doc.status,
+      timestamp: doc.createdAt,
+      dataType: doc.rawContent?.dataType || 'Data Contribution',
+      ...doc.rawContent,
+      _id: doc._id,
+    }));
+
+    return NextResponse.json(formatted);
   } catch (error) {
     console.error('Error retrieving data contributions:', error);
     return NextResponse.json(

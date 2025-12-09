@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import LanguageSwitcher from "./LanguageSwitcher";
 
 export default function Nav() {
+  const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [contributionsOpen, setContributionsOpen] = useState(false);
@@ -136,6 +137,8 @@ export default function Nav() {
             </li>
             <li><Link href="/experiences" className="hover:opacity-80">{t("nav.bookings")}</Link></li>
             <li><Link href="/meditate" className="hover:opacity-80">{t("nav.retreat")}</Link></li>
+            <li><Link href="/experiences" className="hover:opacity-80">Bookings</Link></li>
+            <li><Link href="/meditate" className="hover:opacity-80">Sangha Retreat</Link></li>
           </ul>
 
           {/* Right: search + burger */}

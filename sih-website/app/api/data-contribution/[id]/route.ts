@@ -1,22 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { promises as fs } from 'fs';
-import path from 'path';
-
-const SUBMISSIONS_FILE = path.join(process.cwd(), 'data', 'submissions', 'data-contributions.json');
-
-async function readSubmissions() {
-  try {
-    const data = await fs.readFile(SUBMISSIONS_FILE, 'utf-8');
-    return JSON.parse(data);
-  } catch (error) {
-    return [];
-  }
-}
-
-async function writeSubmissions(submissions: any[]) {
-  await fs.mkdir(path.dirname(SUBMISSIONS_FILE), { recursive: true });
-  await fs.writeFile(SUBMISSIONS_FILE, JSON.stringify(submissions, null, 2));
-}
+import { connectDB } from '@/lib/db';
+import { ContributorSubmission } from '@/lib/models/ContributorSubmission';
+import mongoose from 'mongoose';
 
 // GET: Retrieve a specific data contribution
 export async function GET(
@@ -24,21 +9,49 @@ export async function GET(
   { params }: { params: { id: string } }
 ) {
   try {
-    const submissions = await readSubmissions();
-    const submission = submissions.find((s: any) => s.id === params.id);
+    await connectDB();
+
+    console.log('API: Fetching submission with ID:', params.id);
+
+    // Try to find by _id (MongoDB ObjectId)
+    let submission = null;
+    
+    // If it looks like an ObjectId, try to find it
+    if (mongoose.Types.ObjectId.isValid(params.id)) {
+      submission = await ContributorSubmission.findById(params.id).lean();
+      console.log('Found by ObjectId:', !!submission);
+    }
 
     if (!submission) {
+      console.log('Submission not found for ID:', params.id);
       return NextResponse.json(
         { error: 'Submission not found' },
         { status: 404 }
       );
     }
 
-    return NextResponse.json(submission);
+    console.log('Submission found, formatting response');
+
+    // Format response
+    const formatted = {
+      id: submission._id.toString(),
+      monasteryName: submission.monasteryName,
+      contributorName: submission.contributorName,
+      contributorEmail: submission.contributorEmail,
+      status: submission.status || 'pending',
+      timestamp: submission.createdAt,
+      ...submission.rawContent,
+      _id: submission._id.toString(),
+    };
+
+    return NextResponse.json(formatted);
   } catch (error) {
     console.error('Error fetching submission:', error);
     return NextResponse.json(
-      { error: 'Failed to fetch submission' },
+      { 
+        error: 'Failed to fetch submission',
+        details: error instanceof Error ? error.message : 'Unknown error'
+      },
       { status: 500 }
     );
   }
@@ -50,31 +63,59 @@ export async function PUT(
   { params }: { params: { id: string } }
 ) {
   try {
-    const body = await request.json();
-    const submissions = await readSubmissions();
-    const submissionIndex = submissions.findIndex((s: any) => s.id === params.id);
+    await connectDB();
 
-    if (submissionIndex === -1) {
+    // Validate MongoDB ObjectId
+    if (!mongoose.Types.ObjectId.isValid(params.id)) {
+      return NextResponse.json(
+        { error: 'Invalid submission ID' },
+        { status: 400 }
+      );
+    }
+
+    const body = await request.json();
+    const { status, reviewNotes } = body;
+
+    // Validate status
+    if (!['approved', 'rejected', 'pending'].includes(status)) {
+      return NextResponse.json(
+        { error: 'Invalid status' },
+        { status: 400 }
+      );
+    }
+
+    // Update submission
+    const submission = await ContributorSubmission.findByIdAndUpdate(
+      params.id,
+      {
+        status,
+        reviewNotes: reviewNotes || '',
+      },
+      { new: true }
+    ).lean();
+
+    if (!submission) {
       return NextResponse.json(
         { error: 'Submission not found' },
         { status: 404 }
       );
     }
 
-    // Update submission
-    submissions[submissionIndex] = {
-      ...submissions[submissionIndex],
-      status: body.status,
-      reviewNotes: body.reviewNotes || '',
-      reviewedAt: body.reviewedAt,
-      reviewedBy: body.reviewedBy || 'admin',
+    // Format response
+    const formatted = {
+      id: submission._id,
+      monasteryName: submission.monasteryName,
+      contributorName: submission.contributorName,
+      contributorEmail: submission.contributorEmail,
+      status: submission.status,
+      timestamp: submission.createdAt,
+      ...submission.rawContent,
+      _id: submission._id,
     };
-
-    await writeSubmissions(submissions);
 
     return NextResponse.json({
       message: 'Submission updated successfully',
-      submission: submissions[submissionIndex],
+      submission: formatted,
     });
   } catch (error) {
     console.error('Error updating submission:', error);
