@@ -46,6 +46,38 @@ export async function POST(request: NextRequest) {
     // Save to JSON file
     await writeFile(filepath, JSON.stringify(ocrRecord, null, 2), 'utf-8');
 
+    // Also save to media submissions for the admin submissions page
+    const submissionsDir = join(process.cwd(), 'data', 'submissions');
+    if (!existsSync(submissionsDir)) {
+      await mkdir(submissionsDir, { recursive: true });
+    }
+
+    const submissionRecord = {
+      id: timestamp.toString(),
+      title: data.title,
+      monasteryName: data.monasteryName,
+      contributorName: data.contributorName || 'Anonymous',
+      contributorEmail: data.contributorEmail || '',
+      type: 'ocr',
+      description: data.description || '',
+      location: data.location || '',
+      tags: data.tags || [],
+      mediaFiles: data.imageData ? [{ type: 'image', data: data.imageData }] : [],
+      ocrData: {
+        language: data.language,
+        capturedOn: data.capturedOn,
+        rawText: data.rawText,
+        cleanedText: data.cleanedText,
+      },
+      status: 'pending',
+      createdAt: new Date().toISOString(),
+      submittedOn: new Date().toISOString().split('T')[0],
+    };
+
+    const submissionFilename = `${data.title.replace(/[^a-z0-9]/gi, '_').toLowerCase()}_ocr_${timestamp}.json`;
+    const submissionFilepath = join(submissionsDir, submissionFilename);
+    await writeFile(submissionFilepath, JSON.stringify(submissionRecord, null, 2), 'utf-8');
+
     // Save image separately if provided
     if (data.imageData) {
       const imagesDir = join(process.cwd(), 'data', 'ocr', 'images');
