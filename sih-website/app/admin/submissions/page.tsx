@@ -74,10 +74,10 @@ export default function SubmissionsPage() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 bg-amber-950 min-h-screen p-8">
       {/* Page Header */}
       <div>
-        <h1 className="text-3xl font-bold text-white mb-2" style={{ fontFamily: 'Poppins' }}>
+        <h1 className="text-3xl font-bold text-amber-50 mb-2" style={{ fontFamily: 'Poppins' }}>
           Submissions
         </h1>
         <p className="text-amber-200" style={{ fontFamily: 'Poppins' }}>
@@ -87,17 +87,17 @@ export default function SubmissionsPage() {
 
       {/* Error State */}
       {error && (
-        <div className="rounded-2xl p-4 bg-red-900/30 border border-red-700/50 text-red-200" style={{ fontFamily: 'Poppins' }}>
+        <div className="rounded-2xl p-4 bg-red-950/60 border border-red-900/50 text-red-200" style={{ fontFamily: 'Poppins' }}>
           Error: {error}
         </div>
       )}
 
       {/* Loading State */}
       {loading && (
-        <div className="rounded-2xl p-6 backdrop-blur-sm" style={{ background: 'rgba(217, 119, 6, 0.1)', border: '1px solid rgba(217, 119, 6, 0.2)' }}>
+        <div className="rounded-2xl p-6 backdrop-blur-sm bg-amber-900/40 border border-amber-800/50">
           <div className="flex items-center justify-center gap-3">
             <div className="animate-spin rounded-full h-6 w-6 border-2 border-amber-500 border-t-transparent"></div>
-            <p className="text-amber-200" style={{ fontFamily: 'Poppins' }}>Loading submissions...</p>
+            <p className="text-amber-100" style={{ fontFamily: 'Poppins' }}>Loading submissions...</p>
           </div>
         </div>
       )}
@@ -105,11 +105,7 @@ export default function SubmissionsPage() {
       {/* Filter Chips */}
       {!loading && (
         <div
-          className="rounded-2xl p-6 backdrop-blur-sm"
-          style={{
-            background: 'rgba(217, 119, 6, 0.1)',
-            border: '1px solid rgba(217, 119, 6, 0.2)',
-          }}
+          className="rounded-2xl p-6 backdrop-blur-sm bg-amber-900/40 border border-amber-800/50"
         >
           <div className="flex flex-wrap gap-2">
             {(['All', 'Pending', 'Approved', 'Rejected'] as const).map((status) => (
@@ -118,8 +114,8 @@ export default function SubmissionsPage() {
                 onClick={() => setStatusFilter(status)}
                 className={`px-4 py-2 rounded-lg font-medium transition ${
                   statusFilter === status
-                    ? 'bg-amber-500 text-amber-900'
-                    : 'bg-amber-900/30 text-amber-100 hover:bg-amber-900/50'
+                    ? 'bg-amber-600 text-amber-50'
+                    : 'bg-amber-800/50 text-amber-200 hover:bg-amber-800/70'
                 }`}
                 style={{ fontFamily: 'Poppins' }}
               >
@@ -133,42 +129,38 @@ export default function SubmissionsPage() {
       {/* Submissions Table */}
       {!loading && (
         <div
-          className="rounded-2xl overflow-hidden backdrop-blur-sm"
-          style={{
-            background: 'rgba(217, 119, 6, 0.1)',
-            border: '1px solid rgba(217, 119, 6, 0.2)',
-          }}
+          className="rounded-2xl overflow-hidden backdrop-blur-sm bg-amber-900/40 border border-amber-800/50"
         >
           <div className="overflow-x-auto">
             {filteredSubmissions.length === 0 ? (
               <div className="p-6 text-center">
-                <p className="text-gray-400" style={{ fontFamily: 'Poppins' }}>
+                <p className="text-amber-700" style={{ fontFamily: 'Poppins' }}>
                   No submissions found
                 </p>
               </div>
             ) : (
               <table className="w-full">
                 <thead>
-                  <tr className="border-b border-amber-800/30">
-                    <th className="text-left px-6 py-4 text-white font-semibold" style={{ fontFamily: 'Poppins' }}>
+                  <tr className="border-b border-amber-800/50 bg-amber-900/60">
+                    <th className="text-left px-6 py-4 text-amber-50 font-semibold" style={{ fontFamily: 'Poppins' }}>
                       Title
                     </th>
-                    <th className="text-left px-6 py-4 text-white font-semibold" style={{ fontFamily: 'Poppins' }}>
+                    <th className="text-left px-6 py-4 text-amber-50 font-semibold" style={{ fontFamily: 'Poppins' }}>
                       Monastery Name
                     </th>
-                    <th className="text-left px-6 py-4 text-white font-semibold" style={{ fontFamily: 'Poppins' }}>
+                    <th className="text-left px-6 py-4 text-amber-50 font-semibold" style={{ fontFamily: 'Poppins' }}>
                       Contributor
                     </th>
-                    <th className="text-left px-6 py-4 text-white font-semibold" style={{ fontFamily: 'Poppins' }}>
+                    <th className="text-left px-6 py-4 text-amber-50 font-semibold" style={{ fontFamily: 'Poppins' }}>
                       Type
                     </th>
-                    <th className="text-left px-6 py-4 text-white font-semibold" style={{ fontFamily: 'Poppins' }}>
+                    <th className="text-left px-6 py-4 text-amber-50 font-semibold" style={{ fontFamily: 'Poppins' }}>
                       Status
                     </th>
-                    <th className="text-left px-6 py-4 text-white font-semibold" style={{ fontFamily: 'Poppins' }}>
+                    <th className="text-left px-6 py-4 text-amber-50 font-semibold" style={{ fontFamily: 'Poppins' }}>
                       Submitted On
                     </th>
-                    <th className="text-right px-6 py-4 text-white font-semibold" style={{ fontFamily: 'Poppins' }}>
+                    <th className="text-right px-6 py-4 text-amber-50 font-semibold" style={{ fontFamily: 'Poppins' }}>
                       Actions
                     </th>
                   </tr>
@@ -177,28 +169,28 @@ export default function SubmissionsPage() {
                   {filteredSubmissions.map((submission) => (
                     <tr
                       key={submission.id}
-                      className="border-b border-amber-800/20 hover:bg-amber-900/20 transition"
+                      className="border-b border-amber-800/30 hover:bg-amber-800/30 transition"
                     >
                       <td className="px-6 py-4">
-                        <p className="text-white font-medium" style={{ fontFamily: 'Poppins' }}>
+                        <p className="text-amber-50 font-medium" style={{ fontFamily: 'Poppins' }}>
                           {submission.title}
                         </p>
                       </td>
                       <td className="px-6 py-4">
-                        <p className="text-white font-medium" style={{ fontFamily: 'Poppins' }}>
+                        <p className="text-amber-50 font-medium" style={{ fontFamily: 'Poppins' }}>
                           {submission.monasteryName}
                         </p>
                       </td>
                       <td className="px-6 py-4">
-                        <p className="text-white font-medium" style={{ fontFamily: 'Poppins' }}>
+                        <p className="text-amber-50 font-medium" style={{ fontFamily: 'Poppins' }}>
                           {submission.contributorName}
                         </p>
-                        <p className="text-sm text-gray-400" style={{ fontFamily: 'Poppins' }}>
+                        <p className="text-sm text-amber-300" style={{ fontFamily: 'Poppins' }}>
                           {submission.contributorEmail}
                         </p>
                       </td>
                       <td className="px-6 py-4">
-                        <span className="inline-block px-3 py-1 rounded-full text-xs font-medium bg-amber-600/30 text-amber-200">
+                        <span className="inline-block px-3 py-1 rounded-full text-xs font-medium bg-amber-800/60 text-amber-100">
                           {submission.type}
                         </span>
                       </td>
@@ -212,7 +204,7 @@ export default function SubmissionsPage() {
                         <div className="flex items-center justify-end gap-2">
                           <Link
                             href={`/admin/submissions/${submission.id}`}
-                            className="px-4 py-2 rounded-lg bg-amber-500 hover:bg-amber-600 text-amber-900 font-medium transition"
+                            className="px-4 py-2 rounded-lg bg-amber-600 hover:bg-amber-700 text-amber-50 font-medium transition"
                             style={{ fontFamily: 'Poppins' }}
                           >
                             Review
