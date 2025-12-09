@@ -4,8 +4,9 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import StatusBadge from '@/components/admin/StatusBadge';
 import { Submission } from '@/types/admin';
+import { ProtectedRoute } from '@/components/ProtectedRoute';
 
-export default function SubmissionsPage() {
+function SubmissionsPage() {
   const [submissions, setSubmissions] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -227,5 +228,13 @@ export default function SubmissionsPage() {
         </div>
       )}
     </div>
+  );
+}
+
+export default function SubmissionsPageWrapper() {
+  return (
+    <ProtectedRoute>
+      <SubmissionsPage />
+    </ProtectedRoute>
   );
 }
