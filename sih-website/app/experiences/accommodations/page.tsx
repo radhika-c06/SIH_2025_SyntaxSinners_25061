@@ -110,7 +110,7 @@ const accommodations: Accommodation[] = [
 export default function AccommodationsPage() {
   const searchParams = new URLSearchParams(typeof window !== 'undefined' ? window.location.search : '')
   const monasteryParam = searchParams.get('monastery') || 'tashiding'
-  
+
   const filteredAccommodations = useMemo(() => {
     return accommodations.filter(acc => acc.monastery === monasteryParam)
   }, [monasteryParam])
