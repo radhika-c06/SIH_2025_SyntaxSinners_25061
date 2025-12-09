@@ -14,5 +14,21 @@
     "password": "2a8610aefdd0028c6bf074dd18721c0ef8bc43241cc7a653d7aedf2036bdf6b3",
     "phone": "8368857069",
     "registeredAt": "2025-12-09T05:23:15.757Z"
+  },
+  {
+    "id": "37dba36e8eccbea18ecf3ead823f9753",
+    "fullName": "Vidushi",
+    "email": "vidushikochhar24@gmail.com",
+    "password": "7e9a28694934d5bffd89fd44af47b481a3ee6ba8afbb13c6258c5944ed8c37d8",
+    "phone": "9910427513",
+    "registeredAt": "2025-12-09T05:30:57.824Z"
+  },
+  {
+    "id": "e78b024f3ad036e80eb46fa26de60e6f",
+    "fullName": "palak sachdeva",
+    "email": "palak@gmail.com",
+    "password": "ef797c8118f02dfb649607dd5d3f8c7623048c9c063d532cc95c5ed7a898a64f",
+    "phone": "7027053520",
+    "registeredAt": "2025-12-09T05:33:41.084Z"
   }
 ]
