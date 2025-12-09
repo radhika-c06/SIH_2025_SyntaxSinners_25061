@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import Reveal from '@/components/Reveal';
 // Removed MonasterySlideshow and ExploreCarouselMount per page requirements
 import Nav from '@/components/Nav';
@@ -109,11 +110,11 @@ export default function TashidingMonastery() {
   const progress = duration > 0 ? (currentTime / duration) * 100 : 0;
 
   const sidebarItems = [
-    { id: 'overview', label: 'Overview' },
-    { id: 'digital-archive', label: 'Digital Archive' },
-    { id: 'cultural-calendar', label: 'Cultural Calendar' },
-    { id: 'audio-tour', label: 'Audio Tour' },
-    { id: 'virtual-tour', label: 'Virtual Tour' },
+    { id: 'overview', labelKey: 'overview' },
+    { id: 'digital-archive', labelKey: 'digitalArchive' },
+    { id: 'cultural-calendar', labelKey: 'culturalCalendar' },
+    { id: 'audio-tour', labelKey: 'audioTour' },
+    { id: 'virtual-tour', labelKey: 'virtualTour' },
   ];
 
   const tashidingArchiveItems = [
