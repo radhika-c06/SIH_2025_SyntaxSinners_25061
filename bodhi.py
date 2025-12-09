@@ -352,7 +352,7 @@ def main():
     """Main function"""
     print("🚀 Initializing Sikkim Monasteries & Tourism Chatbot...\n")
 
-    api_key = ""  # Add your Gemini API key here
+    api_key = "AIzaSyCZDLmjKYUNK_F3VKTlDrWtufs8sv5QPgU"  # Add your Gemini API key here
 
     if not api_key:
         print("❌ Gemini API key is required!")
