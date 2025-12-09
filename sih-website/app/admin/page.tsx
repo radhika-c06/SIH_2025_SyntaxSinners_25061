@@ -2,51 +2,106 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { authAPI } from '@/lib/api';
 
 export default function LoginPage() {
   const router = useRouter();
   const [mode, setMode] = useState<'admin' | 'guest'>('admin');
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
-
-  useEffect(() => {
-    setIsMounted(true);
-    // Check if user is already authenticated
-    const authStatus = localStorage.getItem('isAuthenticated');
-    if (authStatus === 'true') {
-      router.push('/admin/dashboard');
-    }
-  }, [router]);
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [totpCode, setTotpCode] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [needs2FA, setNeeds2FA] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+    // Clear form fields on mount
+    setEmail('');
+    setPassword('');
+    setTotpCode('');
+    setError('');
+  }, [router]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (mode === 'admin') {
       // Admin login logic - validation
-      if (!username || !password) {
-        setError('Please enter username and password');
+      if (!email || !password) {
+        setError('Please enter email and password');
         return;
       }
 
       setLoading(true);
       setError('');
 
-      // Simulate login (temporary until backend is ready)
-      setTimeout(() => {
-        // Login successful - set auth state and redirect
-        localStorage.setItem('isAuthenticated', 'true');
+      try {
+        const response = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password }),
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          setError(data.error || 'Login failed');
+          setLoading(false);
+          return;
+        }
+
+        if (data.needs2FA) {
+          // Admin has 2FA enabled, show TOTP input
+          setNeeds2FA(true);
+          setLoading(false);
+          return;
+        }
+
+        // Login successful - redirect to dashboard
         router.push('/admin/dashboard');
+      } catch (err) {
+        setError('Network error. Please try again.');
         setLoading(false);
-      }, 1000);
+      }
     } else {
       // Guest mode - direct navigation
       router.push('/');
+    }
+  };
+
+  const handleVerify2FA = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!totpCode || totpCode.length !== 6) {
+      setError('Please enter a valid 6-digit code');
+      return;
+    }
+
+    setLoading(true);
+    setError('');
+
+    try {
+      const response = await fetch('/api/auth/2fa/verify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ code: totpCode, action: 'login' }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        setError(data.error || '2FA verification failed');
+        setLoading(false);
+        return;
+      }
+
+      // 2FA successful - redirect to dashboard
+      router.push('/admin/dashboard');
+    } catch (err) {
+      setError('Network error. Please try again.');
+      setLoading(false);
     }
   };
 
@@ -137,70 +192,119 @@ export default function LoginPage() {
             </div>
 
             {/* Form */}
-            <form onSubmit={handleLogin} className="space-y-6">
+            <form onSubmit={needs2FA ? handleVerify2FA : handleLogin} className="space-y-6">
               {mode === 'admin' ? (
                 <>
-                  {/* Username Input */}
-                  <div className="relative">
-                    <input
-                      type="text"
-                      placeholder="Username"
-                      value={username}
-                      onChange={(e) => setUsername(e.target.value)}
-                      className="w-full px-6 py-4 rounded-full backdrop-blur-sm border-2 text-amber-100 placeholder-amber-300/60 focus:outline-none transition"
-                      style={{ 
-                        fontFamily: 'Poppins',
-                        backgroundColor: 'rgba(217, 119, 6, 0.2)',
-                        borderColor: 'rgba(217, 119, 6, 0.3)',
-                      }}
-                    />
-                    <div className="absolute right-5 top-1/2 -translate-y-1/2 text-amber-300/60">
-                      <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
-                      </svg>
-                    </div>
-                  </div>
+                  {!needs2FA ? (
+                    <>
+                      {/* Email Input */}
+                      <div className="relative">
+                        <input
+                          type="email"
+                          placeholder="Email"
+                          value={email}
+                          onChange={(e) => setEmail(e.target.value)}
+                          autoComplete="off"
+                          className="w-full px-6 py-4 rounded-full backdrop-blur-sm border-2 text-amber-100 placeholder-amber-300/60 focus:outline-none transition"
+                          style={{ 
+                            fontFamily: 'Poppins',
+                            backgroundColor: 'rgba(217, 119, 6, 0.2)',
+                            borderColor: 'rgba(217, 119, 6, 0.3)',
+                          }}
+                        />
+                        <div className="absolute right-5 top-1/2 -translate-y-1/2 text-amber-300/60">
+                          <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
+                          </svg>
+                        </div>
+                      </div>
 
-                  {/* Password Input */}
-                  <div className="relative">
-                    <input
-                      type="password"
-                      placeholder="Password"
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      className="w-full px-6 py-4 rounded-full backdrop-blur-sm border-2 text-amber-100 placeholder-amber-300/60 focus:outline-none transition"
-                      style={{ 
-                        fontFamily: 'Poppins',
-                        backgroundColor: 'rgba(217, 119, 6, 0.2)',
-                        borderColor: 'rgba(217, 119, 6, 0.3)',
-                      }}
-                    />
-                    <div className="absolute right-5 top-1/2 -translate-y-1/2 text-amber-300/60">
-                      <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
-                      </svg>
-                    </div>
-                  </div>
+                      {/* Password Input */}
+                      <div className="relative">
+                        <input
+                          type="password"
+                          placeholder="Password"
+                          value={password}
+                          onChange={(e) => setPassword(e.target.value)}
+                          autoComplete="new-password"
+                          className="w-full px-6 py-4 rounded-full backdrop-blur-sm border-2 text-amber-100 placeholder-amber-300/60 focus:outline-none transition"
+                          style={{ 
+                            fontFamily: 'Poppins',
+                            backgroundColor: 'rgba(217, 119, 6, 0.2)',
+                            borderColor: 'rgba(217, 119, 6, 0.3)',
+                          }}
+                        />
+                        <div className="absolute right-5 top-1/2 -translate-y-1/2 text-amber-300/60">
+                          <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
+                          </svg>
+                        </div>
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      {/* 2FA Code Input */}
+                      <div className="text-center mb-4">
+                        <h3 className="text-xl font-semibold text-amber-100 mb-2" style={{ fontFamily: 'Poppins' }}>
+                          Two-Factor Authentication
+                        </h3>
+                        <p className="text-amber-200 text-sm" style={{ fontFamily: 'Poppins' }}>
+                          Enter the 6-digit code from your authenticator app
+                        </p>
+                      </div>
+                      <div className="relative">
+                        <input
+                          type="text"
+                          placeholder="000000"
+                          value={totpCode}
+                          onChange={(e) => setTotpCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
+                          maxLength={6}
+                          className="w-full px-6 py-4 rounded-full backdrop-blur-sm border-2 text-amber-100 placeholder-amber-300/60 focus:outline-none transition text-center text-2xl tracking-widest"
+                          style={{ 
+                            fontFamily: 'Poppins',
+                            backgroundColor: 'rgba(217, 119, 6, 0.2)',
+                            borderColor: 'rgba(217, 119, 6, 0.3)',
+                          }}
+                        />
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setNeeds2FA(false);
+                          setTotpCode('');
+                          setError('');
+                        }}
+                        className="text-amber-200 text-sm hover:text-amber-100 transition"
+                        style={{ fontFamily: 'Poppins' }}
+                      >
+                        ← Back to login
+                      </button>
+                    </>
+                  )}
 
-                  {/* Remember Me & Forgot Password */}
-                  <div className="flex items-center justify-between text-amber-100 text-sm">
-                    <label className="flex items-center gap-2 cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={rememberMe}
-                        onChange={(e) => setRememberMe(e.target.checked)}
-                        className="w-4 h-4 rounded bg-amber-900/40 border-amber-500/40 text-amber-600 focus:ring-amber-500"
-                      />
-                      <span style={{ fontFamily: 'Poppins' }}>Remember me</span>
-                    </label>
-                    <button
-                      type="button"
-                      className="hover:text-amber-200 transition"
-                      style={{ fontFamily: 'Poppins' }}
-                    >
-                      Forgot Password?
-                    </button>
-                  </div>
+                  {!needs2FA && (
+                    <>
+                      {/* Remember Me & Forgot Password */}
+                      <div className="flex items-center justify-between text-amber-100 text-sm">
+                        <label className="flex items-center gap-2 cursor-pointer">
+                          <input
+                            type="checkbox"
+                            checked={rememberMe}
+                            onChange={(e) => setRememberMe(e.target.checked)}
+                            className="w-4 h-4 rounded bg-amber-900/40 border-amber-500/40 text-amber-600 focus:ring-amber-500"
+                          />
+                          <span style={{ fontFamily: 'Poppins' }}>Remember me</span>
+                        </label>
+                        <button
+                          type="button"
+                          className="hover:text-amber-200 transition"
+                          style={{ fontFamily: 'Poppins' }}
+                        >
+                          Forgot Password?
+                        </button>
+                      </div>
+                    </>
+                  )}
 
                   {/* Error Message */}
                   {error && (
@@ -209,14 +313,14 @@ export default function LoginPage() {
                     </div>
                   )}
 
-                  {/* Login Button */}
+                  {/* Login/Verify Button */}
                   <button
                     type="submit"
                     disabled={loading}
                     className="w-full py-4 rounded-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-amber-900 font-bold text-lg transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed"
                     style={{ fontFamily: 'Poppins' }}
                   >
-                    {loading ? 'Logging in...' : 'Login'}
+                    {loading ? (needs2FA ? 'Verifying...' : 'Logging in...') : (needs2FA ? 'Verify Code' : 'Login')}
                   </button>
 
                   {/* Register Link */}

@@ -20,7 +20,19 @@ export async function POST(request: NextRequest) {
       name: 'admin_token',
       value: '',
       httpOnly: true,
+      path: '/',
+      maxAge: 0,
       expires: new Date(0), // Set to past date to delete
+    });
+
+    // Also clear 2FA temp cookie if exists
+    response.cookies.set({
+      name: 'admin_2fa_temp',
+      value: '',
+      httpOnly: true,
+      path: '/',
+      maxAge: 0,
+      expires: new Date(0),
     });
 
     return response;

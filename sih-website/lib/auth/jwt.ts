@@ -31,6 +31,13 @@ export function signToken(admin: IAdminUser): string {
 }
 
 /**
+ * Sign a short-lived token for transient actions (e.g., 2FA verification)
+ */
+export function signShortLivedToken(payload: Partial<JWTPayload>, expiresIn: string | number = '5m') {
+  return jwt.sign(payload as object, JWT_SECRET, { expiresIn });
+}
+
+/**
  * Verify and decode a JWT token
  */
 export function verifyToken(token: string): JWTPayload | null {
