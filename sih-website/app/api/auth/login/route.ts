@@ -4,11 +4,8 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { connectDB } from '@/lib/db';
-import { AdminUser } from '@/lib/models/AdminUser';
-import { comparePassword } from '@/lib/auth/password';
+import { loginUser } from '@/lib/auth/fileAuth';
 import { signToken } from '@/lib/auth/jwt';
-import { signShortLivedToken } from '@/lib/auth/jwt';
 
 export async function POST(request: NextRequest) {
   try {
@@ -26,77 +23,36 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Connect to DB
-    await connectDB();
+    // Login user
+    const result = await loginUser(email, password);
 
-    // Find admin by email and explicitly select passwordHash
-    const admin = await AdminUser.findOne({ email: email.toLowerCase() }).select('+passwordHash');
-    if (!admin) {
+    if (!result.success) {
       return NextResponse.json(
         {
           success: false,
-          error: 'Invalid email or password',
+          error: result.error,
         },
         { status: 401 }
       );
     }
 
-    // Compare password
-    const isPasswordValid = await comparePassword(password, admin.passwordHash);
-    if (!isPasswordValid) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: 'Invalid email or password',
-        },
-        { status: 401 }
-      );
-    }
-
-    // Create JWT token
-    // If admin has 2FA enabled, issue a short-lived temp token and ask for TOTP
-    if (admin.is2FAEnabled) {
-      const temp = signShortLivedToken({ adminId: admin._id.toString(), role: admin.role }, '5m');
-
-      const response = NextResponse.json(
-        {
-          success: true,
-          needs2FA: true,
-          data: {
-            id: admin._id,
-            name: admin.name,
-            email: admin.email,
-            role: admin.role,
-          },
-        },
-        { status: 200 }
-      );
-
-      // Set temporary cookie for 2FA validation
-      response.cookies.set({
-        name: 'admin_2fa_temp',
-        value: temp,
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'lax',
-        path: '/',
-        maxAge: 5 * 60, // 5 minutes
-      });
-
-      return response;
-    }
-
-    const token = signToken(admin);
+    // Create JWT token - pass user data to signToken
+    const token = signToken({
+      _id: result.data?.id || '',
+      name: result.data?.name || '',
+      email: result.data?.email || '',
+      role: (result.data?.role as 'superadmin' | 'editor') || 'editor',
+    } as any);
 
     // Create response
     const response = NextResponse.json(
       {
         success: true,
         data: {
-          id: admin._id,
-          name: admin.name,
-          email: admin.email,
-          role: admin.role,
+          id: result.data?.id,
+          name: result.data?.name,
+          email: result.data?.email,
+          role: result.data?.role,
         },
       },
       { status: 200 }

@@ -1,0 +1,10 @@
+[
+  {
+    "id": "admin_1765267726217",
+    "name": "vishi",
+    "email": "vishi@gmail.com",
+    "passwordHash": "$2b$10$8ksjikbdoJCaJSeeH6g3ieLprMG.vVKcHJQScuksAQFgl.3cMLHOq",
+    "role": "admin",
+    "createdAt": "2025-12-09T08:08:46.217Z"
+  }
+]
