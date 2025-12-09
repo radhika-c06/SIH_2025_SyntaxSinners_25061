@@ -1,8 +1,10 @@
 "use client";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 export default function Hero() {
   const [fallback, setFallback] = useState(false);
+  const { t } = useTranslation();
 
   return (
     <section id="home" className="relative h-[100svh] w-full overflow-hidden pt-16">
@@ -31,10 +33,11 @@ export default function Hero() {
         <div className="mx-auto flex h-full max-w-7xl items-center px-6">
           <div className="w-full max-w-3xl text-white">
             <h1 className="text-5xl sm:text-6xl lg:text-7xl font-extrabold leading-[0.95] tracking-tight">
-              <span className="text-amber-400">DIGITALIZING</span><br />SIKKIM
+              <span className="text-amber-400">{t("hero.headingTop")}</span><br />
+              {t("hero.headingBottom")}
             </h1>
             <p className="mt-4 max-w-md text-white/85">
-              Preserving sacred stories forever.
+              {t("hero.tagline")}
             </p>
           </div>
         </div>
@@ -51,7 +54,7 @@ export default function Hero() {
               <animate attributeName="opacity" values="1;0;1" dur="1.6s" repeatCount="indefinite" />
             </circle>
           </svg>
-          <span className="uppercase tracking-widest text-sm">Scroll To Explore</span>
+          <span className="uppercase tracking-widest text-sm">{t("hero.scroll")}</span>
         </a>
       </div>
     </section>

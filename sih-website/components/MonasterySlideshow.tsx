@@ -1,13 +1,13 @@
 "use client";
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link"; 
+import { useTranslation } from "react-i18next";
 
 type Monastery = {
-  name: string;
+  key: "tashiding" | "tsuk" | "dubdi" | "rumtek";
   location: string;
   altitude: string;
   founded: string;
-  description: string;
   image: string;
   href: string;   // 👈 important
 };
@@ -16,42 +16,34 @@ type Monastery = {
 
 const MONASTERIES: Monastery[] = [
   {
-    name: "Tashiding Monastery",
+    key: "tashiding",
     location: "West Sikkim",
     altitude: "1,465m",
     founded: "1700 CE",
-    description:
-      "Revered as the 'Venerated Central Glory', Tashiding is vital to Sikkimese monasticism, its sublime mountain site and stupa are iconic. A single image is said to cleanse one's sins.",
     image: "/monasteries/tashiding.png",
     href: "/tashiding",          // 👈 route: app/tashiding/page.tsx
   },
   {
-    name: "Tsuk La Khang Monastery",
+    key: "tsuk",
     location: "Gangtok, East Sikkim",
     altitude: "1,437m",
     founded: "1894 CE",
-    description:
-      "Tsuk La Khang Monastery, located in the heart of Gangtok, is the former royal chapel of the Chogyal dynasty and one of Sikkim’s most significant centres of Buddhist learning.",
     image: "/tsuk/tsuk.avif",
     href: "/tsuk",               // 👈 route: app/tsuk/page.tsx
   },
   {
-    name: "Dubdi Monastery",
+    key: "dubdi",
     location: "Yuksom, West Sikkim",
     altitude: "2,100m",
     founded: "1701 CE",
-    description:
-      "The 'Hermit's Cell', Dubdi, is Sikkim's first monastery, its stone chapel marking the crowning of the kingdom's Buddhist order.",
     image: "/monasteries/dubdi.png",
     href: "/dubdi",              // 👈 route: app/dubdi/page.tsx
   },
   {
-    name: "Rumtek Monastery",
+    key: "rumtek",
     location: "East Sikkim",
     altitude: "1,500m",
     founded: "18th century",
-    description:
-      "Grand and imposing, Rumtek is the Dharma Chakra Centre, stunning, alive with ritual, color, and living tradition.",
     image: "/monasteries/rumtek.jpg",
     href: "/rumtek",             // 👈 route: app/rumtek/page.tsx
   },
@@ -61,6 +53,7 @@ const MONASTERIES: Monastery[] = [
 export default function MonasterySlideshow() {
   const [index, setIndex] = useState(0);
   const [fade, setFade] = useState(true);
+  const { t } = useTranslation();
   const next = () => setIndex((i) => (i + 1) % MONASTERIES.length);
   const prev = () => setIndex((i) => (i - 1 + MONASTERIES.length) % MONASTERIES.length);
   const m = MONASTERIES[index];
@@ -87,9 +80,11 @@ export default function MonasterySlideshow() {
   return (
     <div ref={ref} className={`w-full flex flex-col items-center mt-50 fade-in-section${visible ? ' is-visible' : ''}`}> 
       {/* Title and Subtitle */}
-      <h2 className="text-4xl md:text-5xl font-cinzel text-white mb-2 tracking-wide text-center">SACRED MONASTRIES</h2>
+      <h2 className="text-4xl md:text-5xl font-cinzel text-white mb-2 tracking-wide text-center">
+        {t("slideshow.heading")}
+      </h2>
       <p className="text-lg md:text-xl text-white/90 font-lora mb-8 text-center max-w-2xl">
-        Explore the spiritual heart of Sikkim through its ancient monasteries, each telling a unique story of devotion and cultural heritage.
+        {t("slideshow.subtitle")}
       </p>
   <div className="relative flex flex-row items-stretch w-full max-w-none bg-transparent" style={{ minHeight: '400px', height: '400px', margin: '32px 0' }}>
         {/* Left Arrow */}
@@ -109,19 +104,23 @@ export default function MonasterySlideshow() {
           <div className="flex-1 flex flex-col justify-between p-0 min-w-[320px]">
             {/* Yellow Header */}
             <div className="bg-amber-400 px-12 py-4 rounded-tr-2xl rounded-bl-2xl flex items-center">
-              <span className="text-3xl font-cinzel tracking-wide text-black">{m.name}</span>
+              <span className="text-3xl font-cinzel tracking-wide text-black">
+                {t(`slideshow.monasteries.${m.key}.name`)}
+              </span>
             </div>
             {/* Description and Details */}
             <div className="flex flex-row w-full gap-0 h-full">
               {/* Description in lighter grey box */}
               <div className="px-12 py-8 flex-1 flex flex-col justify-center h-full bg-[#e5e5e5]" style={{ minHeight: '100%' }}>
                 <div className="flex flex-col justify-center h-full">
-                  <p className="text-xl font-merriweather text-black mb-8 leading-relaxed">{m.description}</p>
+                  <p className="text-xl font-merriweather text-black mb-8 leading-relaxed">
+                    {t(`slideshow.monasteries.${m.key}.description`)}
+                  </p>
                   <Link
   href={m.href}
   className="inline-block bg-amber-400 text-black font-cinzel px-8 py-3 rounded-full text-lg self-start hover:bg-amber-500 transition-colors"
 >
-  Slide in
+  {t("slideshow.cta")}
 </Link>
                 </div>
               </div>
@@ -136,7 +135,9 @@ export default function MonasterySlideshow() {
                         <path d="M24 6C15.163 6 8 13.163 8 22c0 8.837 16 20 16 20s16-11.163 16-20c0-8.837-7.163-16-16-16zm0 26a6 6 0 1 1 0-12 6 6 0 0 1 0 12z" fill="#222"/>
                       </svg>
                     </span>
-                    <span className="font-merriweather text-black text-lg">{m.location}</span>
+                    <span className="font-merriweather text-black text-lg">
+                      {t(`slideshow.monasteries.${m.key}.location`, { defaultValue: m.location })}
+                    </span>
                   </div>
                   <div className="flex items-center gap-3">
                     {/* Mountain Icon */}
@@ -156,7 +157,9 @@ export default function MonasterySlideshow() {
                         <path d="M24 14v10l8 8" stroke="#222" strokeWidth="3" strokeLinecap="round"/>
                       </svg>
                     </span>
-                    <span className="font-merriweather text-black text-lg">Founded in {m.founded}</span>
+                    <span className="font-merriweather text-black text-lg">
+                      {t("slideshow.founded", { year: m.founded })}
+                    </span>
                   </div>
                 </div>
               </div>
