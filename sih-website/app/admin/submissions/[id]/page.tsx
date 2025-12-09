@@ -25,7 +25,16 @@ export default function SubmissionDetailPage() {
       setLoading(true);
       setError(null);
 
-      const response = await fetch(`/api/submissions/media/${params.id}`);
+      // Try to fetch from data-contribution first, then fall back to media
+      let response = await fetch(`/api/data-contribution/${params.id}`);
+      let isDataContribution = true;
+
+      if (!response.ok) {
+        // Try media submissions
+        response = await fetch(`/api/submissions/media/${params.id}`);
+        isDataContribution = false;
+      }
+
       if (!response.ok) {
         if (response.status === 404) {
           throw new Error('Submission not found');
@@ -34,7 +43,7 @@ export default function SubmissionDetailPage() {
       }
 
       const data = await response.json();
-      setSubmission(data);
+      setSubmission({ ...data, isDataContribution });
     } catch (err) {
       console.error('Error fetching submission:', err);
       setError(err instanceof Error ? err.message : 'Failed to load submission');
@@ -47,7 +56,8 @@ export default function SubmissionDetailPage() {
     if (!submission) return;
     setIsProcessing(true);
     try {
-      const response = await fetch(`/api/submissions/media/${params.id}`, {
+      const endpoint = submission.isDataContribution ? '/api/data-contribution' : '/api/submissions/media';
+      const response = await fetch(`${endpoint}/${params.id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -78,7 +88,8 @@ export default function SubmissionDetailPage() {
     }
     setIsProcessing(true);
     try {
-      const response = await fetch(`/api/submissions/media/${params.id}`, {
+      const endpoint = submission.isDataContribution ? '/api/data-contribution' : '/api/submissions/media';
+      const response = await fetch(`${endpoint}/${params.id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
