@@ -8,11 +8,8 @@ export default function Nav() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [contributionsOpen, setContributionsOpen] = useState(false);
-<<<<<<< HEAD
   const [monasteriesOpen, setMonasteriesOpen] = useState(false);
-=======
   const { t } = useTranslation();
->>>>>>> 17fb1afda7ce358f6765af6c01abc018c6acc3fb
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 4);
@@ -89,13 +86,12 @@ export default function Nav() {
                 </div>
               )}
             </li>
-<<<<<<< HEAD
             <li className="relative">
               <button 
                 onClick={() => setMonasteriesOpen(!monasteriesOpen)}
                 className="hover:opacity-80 flex items-center gap-1"
               >
-                MONASTERIES
+                {t("nav.monasteries")}
                 <svg 
                   width="12" 
                   height="12" 
@@ -138,12 +134,8 @@ export default function Nav() {
                 </div>
               )}
             </li>
-            <li><Link href="/experiences" className="hover:opacity-80">Bookings</Link></li>
-            
-=======
             <li><Link href="/experiences" className="hover:opacity-80">{t("nav.bookings")}</Link></li>
             <li><Link href="/meditate" className="hover:opacity-80">{t("nav.retreat")}</Link></li>
->>>>>>> 17fb1afda7ce358f6765af6c01abc018c6acc3fb
           </ul>
 
           {/* Right: search + burger */}
