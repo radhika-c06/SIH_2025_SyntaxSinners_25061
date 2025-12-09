@@ -2,9 +2,9 @@ import { NextRequest, NextResponse } from 'next/server';
 import { join } from 'path';
 import { existsSync } from 'fs';
 
-export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
-    const { id } = params;
+    const { id } = await params;
 
     const submissionsDir = join(process.cwd(), 'data', 'submissions');
 
@@ -43,9 +43,9 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
   }
 }
 
-export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {
+export async function PUT(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
-    const { id } = params;
+    const { id } = await params;
     const updateData = await request.json();
 
     const submissionsDir = join(process.cwd(), 'data', 'submissions');

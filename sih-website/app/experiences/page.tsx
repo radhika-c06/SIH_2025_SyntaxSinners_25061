@@ -65,10 +65,10 @@ export default function ExperiencesPage() {
               {options.map((opt) => {
                 const isClickable = opt.id === 'tour' || opt.id === 'cabs' || opt.id === 'stay' || opt.id === 'meditate'
                 const getHref = () => {
-                  if (opt.id === 'tour') return `/experiences/tour-guide-booking?monastery=${selected}`
-                  if (opt.id === 'cabs') return `/experiences/travel?monastery=${selected}`
-                  if (opt.id === 'stay') return `/experiences/accommodations?monastery=${selected}`
-                  if (opt.id === 'meditate') return `/meditate?monastery=${selected}`
+                  if (opt.id === 'tour') return '/experiences/tour-guide-booking'
+                  if (opt.id === 'cabs') return '/experiences/travel'
+                  if (opt.id === 'stay') return '/experiences/accommodations'
+                  if (opt.id === 'meditate') return '/meditate'
                   return '#'
                 }
 
