@@ -71,11 +71,12 @@ export default function MonasteryPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-amber-950 to-black flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-b from-amber-50 to-white flex items-center justify-center">
         <div className="text-center">
-          <p className="text-amber-100 text-xl" style={{ fontFamily: 'Poppins' }}>
-            Loading monastery details...
-          </p>
+          <div className="inline-block">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-amber-600"></div>
+          </div>
+          <p className="mt-4 text-amber-900">Loading monastery...</p>
         </div>
       </div>
     );
@@ -83,18 +84,20 @@ export default function MonasteryPage() {
 
   if (error || !monastery) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-amber-950 to-black flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-b from-amber-50 to-white flex items-center justify-center">
         <div className="text-center">
-          <p className="text-amber-100 text-xl mb-4" style={{ fontFamily: 'Poppins' }}>
-            {error || 'Monastery not found'}
+          <h1 className="text-4xl font-bold text-amber-900 mb-4">
+            Monastery Not Found
+          </h1>
+          <p className="text-amber-700 mb-6">
+            {error || 'The monastery you are looking for does not exist.'}
           </p>
-          <button
-            onClick={() => router.back()}
-            className="px-6 py-2 bg-amber-600 hover:bg-amber-500 text-white rounded-lg transition"
-            style={{ fontFamily: 'Poppins' }}
+          <a
+            href="/"
+            className="inline-block px-6 py-3 bg-amber-600 text-white rounded-lg hover:bg-amber-700 transition"
           >
-            Go Back
-          </button>
+            Return to Home
+          </a>
         </div>
       </div>
     );

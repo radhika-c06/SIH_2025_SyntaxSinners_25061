@@ -10,7 +10,6 @@ export default function Nav() {
   const [scrolled, setScrolled] = useState(false);
   const [contributionsOpen, setContributionsOpen] = useState(false);
   const [monasteriesOpen, setMonasteriesOpen] = useState(false);
-  const { t } = useTranslation();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 4);
