@@ -19,13 +19,13 @@ export default function TravelPage() {
     }
   }
 
-  const CallButton = ({ phoneNumber, label = "Call Now" }: { phoneNumber: string; label?: string }) => {
+  const CallButton = ({ phoneNumber, label = "Call Now", isBus = false }: { phoneNumber: string; label?: string; isBus?: boolean }) => {
     return (
       <button
         onClick={() => handleCallClick(phoneNumber)}
         className="w-full bg-amber-400 hover:bg-amber-500 text-black font-cinzel font-bold py-2 rounded-lg transition"
       >
-        {isMobile ? label : phoneNumber}
+        {isBus ? "Call Now" : isMobile ? label : phoneNumber}
       </button>
     )
   }
@@ -78,7 +78,7 @@ export default function TravelPage() {
                     <span className="inline-block text-amber-300 mr-2">⏰</span>
                     7:00 AM, 11:00 AM, 3:00 PM
                   </p>
-                  <CallButton phoneNumber="+91-97336-12345" />
+                  <CallButton phoneNumber="+91-97336-12345" isBus={true} />
                 </div>
 
                 {/* Route 2 */}
@@ -88,7 +88,7 @@ export default function TravelPage() {
                     <span className="inline-block text-amber-300 mr-2">⏰</span>
                     8:30 AM, 2:00 PM
                   </p>
-                  <CallButton phoneNumber="+91-98765-43210" />
+                  <CallButton phoneNumber="+91-98765-43210" isBus={true} />
                 </div>
 
                 {/* Route 3 */}
@@ -98,7 +98,7 @@ export default function TravelPage() {
                     <span className="inline-block text-amber-300 mr-2">⏰</span>
                     9:00 AM, 4:00 PM
                   </p>
-                  <CallButton phoneNumber="+91-90123-45678" />
+                  <CallButton phoneNumber="+91-90123-45678" isBus={true} />
                 </div>
               </div>
             </div>
