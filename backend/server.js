@@ -100,6 +100,10 @@ app.get("/api/bookings", (req, res) => {
   }
 })
 
+// Mount authentication routes
+const authRoutes = require('./routes/auth');
+app.use('/api/auth', authRoutes);
+
 // Health check
 app.get("/health", (req, res) => {
   res.json({ status: "Backend running on port " + PORT })
@@ -108,4 +112,5 @@ app.get("/health", (req, res) => {
 app.listen(PORT, () => {
   console.log(`✅ Backend server running on http://localhost:${PORT}`)
   console.log(`📝 Bookings stored in: ${bookingsFile}`)
+  console.log(`🔐 Auth API available at /api/auth/*`)
 })
