@@ -1,11 +1,13 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import Reveal from '@/components/Reveal';
 import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
 
 export default function TsukMonastery() {
+  const { t } = useTranslation();
   const [activeIndex, setActiveIndex] = useState(0);
   const [openDialog, setOpenDialog] = useState(false);
   const [activeItem, setActiveItem] = useState<any | null>(null);
@@ -340,19 +342,19 @@ export default function TsukMonastery() {
         {/* Hero Buttons */}
         <div className="flex justify-center gap-4 mt-10 flex-wrap px-8">
           {[
-            { label: 'Overview', target: 'overview' },
-            { label: 'Digital Archive', target: 'digital-archive' },
-            { label: 'Cultural Calendar', target: 'cultural-calendar' },
-            { label: 'Audio Tour', target: 'audio-tour' },
-            { label: 'Virtual Tour', target: 'virtual-tour' },
+            { key: 'overview', target: 'overview' },
+            { key: 'digitalArchive', target: 'digital-archive' },
+            { key: 'culturalCalendar', target: 'cultural-calendar' },
+            { key: 'audioTour', target: 'audio-tour' },
+            { key: 'virtualTour', target: 'virtual-tour' },
           ].map((btn) => (
             <button
-              key={btn.label}
+              key={btn.key}
               onClick={() => scrollToSection(btn.target)}
               className="px-8 py-3 bg-amber-200 text-amber-900 rounded-full font-bold uppercase hover:bg-amber-100 transition"
               style={{ fontFamily: 'Cinzel' }}
             >
-              {btn.label}
+              {t(`monasteryPage.sections.${btn.key}`)}
             </button>
           ))}
         </div>
@@ -402,7 +404,7 @@ export default function TsukMonastery() {
                 {/* UPDATED LOCATION CARD */}
                 <div className="ml-auto w-[340px] max-w-full rounded-3xl bg-[#1a1209] border border-amber-500/40 p-5 shadow-xl">
                   <h3 className="text-lg font-semibold text-amber-100 mb-2 flex items-center gap-2">
-                    Location Map
+                    {t('monasteryPage.common.locationMap')}
                   </h3>
 
                   <p className="text-xs text-amber-300 mb-3">
