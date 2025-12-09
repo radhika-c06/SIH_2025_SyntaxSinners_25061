@@ -1,12 +1,18 @@
 "use client";
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { useTranslation } from "react-i18next";
+import LanguageSwitcher from "./LanguageSwitcher";
 
 export default function Nav() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [contributionsOpen, setContributionsOpen] = useState(false);
+<<<<<<< HEAD
   const [monasteriesOpen, setMonasteriesOpen] = useState(false);
+=======
+  const { t } = useTranslation();
+>>>>>>> 17fb1afda7ce358f6765af6c01abc018c6acc3fb
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 4);
@@ -18,13 +24,20 @@ export default function Nav() {
   const [search, setSearch] = useState("");
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    const val = search.trim().toLowerCase();
-    if (val === "home") {
-      document.getElementById("home")?.scrollIntoView({ behavior: "smooth" });
-    } else if (val === "map") {
-      document.getElementById("monastery-map")?.scrollIntoView({ behavior: "smooth" });
-    } else if (val === "overview") {
-      document.getElementById("monastery-slideshow")?.scrollIntoView({ behavior: "smooth" });
+    const normalize = (value: string) => value.trim().toLowerCase();
+    const val = normalize(search);
+    const searchTargets = [
+      { id: "home", terms: [t("nav.home"), "home"] },
+      { id: "monastery-map", terms: [t("nav.map"), "map"] },
+      { id: "monastery-slideshow", terms: [t("nav.overview"), "overview"] },
+    ];
+
+    const match = searchTargets.find((target) =>
+      target.terms.some((term) => normalize(term) === val)
+    );
+
+    if (match?.id) {
+      document.getElementById(match.id)?.scrollIntoView({ behavior: "smooth" });
     }
     setSearch("");
   };
@@ -36,7 +49,7 @@ export default function Nav() {
           {/* Left: logo */}
           <Link href="/" className="flex flex-row items-center gap-2">
             <img src="/logo web.png" alt="Logo" className="h-12 w-12 object-contain" />
-            <span className="font-poppins tracking-wide text-xl">Sangha</span>
+            <span className="font-poppins tracking-wide text-xl">{t("brand.name")}</span>
             <span className="font-lora italic text-sm text-white/90"></span>
           </Link>
 
@@ -47,7 +60,7 @@ export default function Nav() {
                 onClick={() => setContributionsOpen(!contributionsOpen)}
                 className="hover:opacity-80 flex items-center gap-1"
               >
-                CONTRIBUTIONS
+                {t("nav.contributions")}
                 <svg 
                   width="12" 
                   height="12" 
@@ -64,18 +77,19 @@ export default function Nav() {
                     className="block px-4 py-2 hover:bg-white/10"
                     onClick={() => setContributionsOpen(false)}
                   >
-                    Media Contribution
+                    {t("nav.mediaContribution")}
                   </Link>
                   <Link 
                     href="/data-contribution" 
                     className="block px-4 py-2 hover:bg-white/10"
                     onClick={() => setContributionsOpen(false)}
                   >
-                    Data Contribution
+                    {t("nav.dataContribution")}
                   </Link>
                 </div>
               )}
             </li>
+<<<<<<< HEAD
             <li className="relative">
               <button 
                 onClick={() => setMonasteriesOpen(!monasteriesOpen)}
@@ -126,10 +140,15 @@ export default function Nav() {
             </li>
             <li><Link href="/experiences" className="hover:opacity-80">Bookings</Link></li>
             
+=======
+            <li><Link href="/experiences" className="hover:opacity-80">{t("nav.bookings")}</Link></li>
+            <li><Link href="/meditate" className="hover:opacity-80">{t("nav.retreat")}</Link></li>
+>>>>>>> 17fb1afda7ce358f6765af6c01abc018c6acc3fb
           </ul>
 
           {/* Right: search + burger */}
           <div className="ml-auto flex items-center gap-3">
+            <LanguageSwitcher />
             <form className="hidden sm:flex items-center gap-2 rounded-full bg-white/10 px-3 py-1.5" onSubmit={handleSearch}>
               {/* search icon */}
               <svg width="16" height="16" viewBox="0 0 24 24" className="opacity-80">
@@ -139,7 +158,7 @@ export default function Nav() {
               <input
                 value={search}
                 onChange={e => setSearch(e.target.value)}
-                placeholder="Search…"
+                placeholder={t("nav.searchPlaceholder")}
                 className="w-28 bg-transparent text-sm placeholder-white/70 outline-none"
               />
             </form>
@@ -158,10 +177,10 @@ export default function Nav() {
         {open && (
           <div className="md:hidden border-t border-white/15">
               <ul className="mx-auto max-w-7xl px-4 py-3 flex flex-col gap-3 text-sm uppercase tracking-wider">
-              <li><a href="#home" onClick={()=>setOpen(false)}>Home</a></li>
-              <li><a href="#monastery-slideshow" onClick={()=>setOpen(false)}>Overview</a></li>
-              <li><a href="#monastery-map" onClick={()=>setOpen(false)}>Map</a></li>
-              <li><Link href="/archive" onClick={()=>setOpen(false)}>Digital Archive</Link></li>
+              <li><a href="#home" onClick={()=>setOpen(false)}>{t("nav.home")}</a></li>
+              <li><a href="#monastery-slideshow" onClick={()=>setOpen(false)}>{t("nav.overview")}</a></li>
+              <li><a href="#monastery-map" onClick={()=>setOpen(false)}>{t("nav.map")}</a></li>
+              <li><Link href="/archive" onClick={()=>setOpen(false)}>{t("nav.archive")}</Link></li>
             </ul>
           </div>
         )}
