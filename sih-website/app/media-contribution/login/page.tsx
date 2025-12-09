@@ -139,7 +139,13 @@ export default function MediaContributionLogin() {
         </form>
 
         <div className="mt-8 text-center text-sm" style={{ fontFamily: "Poppins", color: "#fbe9d7" }}>
-          Don't have an account? <span className="font-semibold text-[#ffd48c]">Register</span>
+          Don't have an account?{" "}
+          <Link
+            href="/media-contribution/register"
+            className="font-semibold text-[#ffd48c] hover:underline cursor-pointer transition"
+          >
+            Register
+          </Link>
         </div>
 
         <div className="mt-6 text-center">
