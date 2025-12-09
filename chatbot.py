@@ -1,114 +1,57 @@
 import os
 import re
 from datetime import datetime
-import requests
-import json
+import google.generativeai as genai
 
 class SikkimMonasteryChatbot:
-    def __init__(self, api_key, api_provider="groq"):
-        """
-        Initialize the chatbot with Llama API and comprehensive knowledge base
-        
-        Supported API providers:
-        - "groq": Groq API (fastest, recommended)
-        - "together": Together AI
-        - "openrouter": OpenRouter
-        - "replicate": Replicate
-        """
-        self.api_key = api_key
-        self.api_provider = api_provider.lower()
-        
-        # Configure API endpoints and models based on provider
-        self.api_config = {
-            "groq": {
-                "url": "https://api.groq.com/openai/v1/chat/completions",
-                "model": "llama-3.3-70b-versatile",  # or "llama-3.1-70b-versatile"
-                "headers": {
-                    "Authorization": f"Bearer {api_key}",
-                    "Content-Type": "application/json"
-                }
-            },
-            "together": {
-                "url": "https://api.together.xyz/v1/chat/completions",
-                "model": "meta-llama/Meta-Llama-3.1-70B-Instruct-Turbo",
-                "headers": {
-                    "Authorization": f"Bearer {api_key}",
-                    "Content-Type": "application/json"
-                }
-            },
-            "openrouter": {
-                "url": "https://openrouter.ai/api/v1/chat/completions",
-                "model": "meta-llama/llama-3.1-70b-instruct",
-                "headers": {
-                    "Authorization": f"Bearer {api_key}",
-                    "Content-Type": "application/json"
-                }
-            },
-            "replicate": {
-                "url": "https://api.replicate.com/v1/predictions",
-                "model": "meta/llama-2-70b-chat",
-                "headers": {
-                    "Authorization": f"Token {api_key}",
-                    "Content-Type": "application/json"
-                }
-            }
-        }
-        
-        # Initialize conversation history
+    def __init__(self, gemini_api_key):
+        """Initialize the chatbot with Gemini API"""
+        genai.configure(api_key=gemini_api_key)
+        self.model = genai.GenerativeModel('gemini-2.5-flash')
+
         self.conversation_history = []
         self.max_history_length = 10
-        
-        # ============== MONASTERY PAGE LINKS ==============
-        self.monastery_pages = {
-            "rumtek": "https://yourwebsite.com/monstery/rumtek",
-            "dubdi": "https://yourwebsite.com/monastery/dubdi",
-            "pemayangtse": "https://yourwebsite.com/monastery/pemayangtse",
-            "tashiding": "https://yourwebsite.com/monastery/tashiding",
-            "kanyam": "https://yourwebsite.com/monastery/kanyam",
-            "ravangla": "https://yourwebsite.com/monastery/ravangla",
-            "lingdum": "https://yourwebsite.com/monastery/lingdum",
-            "enchey": "https://yourwebsite.com/monastery/enchey"
-        }
-        
-        # ============== WEBSITE CONFIGURATION ==============
+
+        # ============== CONFIGURATION ==============
+        # Update these with your actual website URLs
+        self.TRANSPORT_PAGE_URL = "https://yourwebsite.com/transport-permits"  # Your dedicated page
         self.WEBSITE_BASE_URL = "https://yourwebsite.com"
-        self.TRANSPORT_PAGE_URL = "https://yourwebsite.com/transport-permits"
-        
+
         self.system_prompt = """You are a knowledgeable and friendly tourism guide for Sikkim, India. You are an expert on Sikkim's monasteries, culture, tourism, and travel information.
 
 **Your Personality:**
-- Warm and welcoming, using occasional Nepali greetings like "Namaste" and "तपाईंलाई स्वागत छ" ONLY when the user greets you first (like "hello", "hi", "namaste")
+- Warm and welcoming, but NEVER start responses with greetings like "Namaste" unless the user explicitly greets you first
+- Jump directly into answering questions without unnecessary greetings
+- Only respond with "Namaste" or similar greetings if the user says "hi", "hello", "namaste", or similar greeting words
+- For ALL other questions (about monasteries, places, festivals, etc.), start DIRECTLY with the answer - absolutely no greetings needed
 - Detailed and informative responses with cultural sensitivity
-- Enthusiastic about sharing Sikkim's beauty and heritage
-- Respectful toward religious sites and traditions
-- Do NOT use emojis in your responses unless absolutely necessary for clarity
-
-**COMPREHENSIVE KNOWLEDGE BASE - Use this information to answer queries:**
+- Helpful with practical travel arrangements
+- Always suggest the dedicated Transport & Permits page for detailed information
+- Use emojis appropriately
+- Structure your responses with clear paragraph breaks
+- Start each new point or section on a new line for better readability
+- Use double line breaks between major sections
+- DO NOT use Markdown formatting like ** for bold or __ for emphasis - use plain text only
+- Instead of **Label:** use plain text like "Label:" or add emojis for emphasis
 
 **SIKKIM HISTORY:**
-Sikkim has a rich history spanning over 600 years. The kingdom was established in 1642 by Phuntsog Namgyal, who became the first Chogyal (king) of Sikkim. Originally inhabited by the Lepchas (original inhabitants), the Bhutias migrated from Tibet in the 14th century, followed by the Nepalese in the 19th century, creating Sikkim's unique multicultural identity. Sikkim remained an independent kingdom under British protection from 1861 until India's independence in 1947. In 1975, after a referendum, Sikkim became the 22nd state of India, ending centuries of monarchy while preserving its rich cultural heritage.
+Sikkim has a rich history spanning over 600 years. The kingdom was established in 1642 by Phuntsog Namgyal. Originally inhabited by the Lepchas, the Bhutias migrated from Tibet in the 14th century, followed by the Nepalese in the 19th century. Sikkim became the 22nd state of India in 1975.
 
 **WHAT SIKKIM IS FAMOUS FOR:**
-- Mountain Beauty: Home to Kangchenjunga, the world's third-highest peak
-- Ancient Monasteries: Over 200 monasteries including Rumtek, Dubdi, Tashiding, and Pemayangtse
-- Biodiversity: The only fully organic state in India, with over 5,000 species of flowering plants
-- Cultural Diversity: Harmonious blend of Lepcha, Bhutia, and Nepali communities
-- Adventure Tourism: Trekking routes like Goecha La, river rafting, paragliding
-- Peace and Serenity: One of India's most peaceful states with crime rates close to zero
+🏔️ Mountain Beauty: Home to Kangchenjunga, the world's third-highest peak
+🏛️ Ancient Monasteries: Over 200 monasteries including Rumtek, Dubdi, Tashiding, Pemayangtse
+🌸 Biodiversity: The only fully organic state in India
+🎭 Cultural Diversity: Harmonious blend of Lepcha, Bhutia, and Nepali communities
+⛰️ Adventure Tourism: Trekking routes, river rafting, paragliding
+🕊️ Peace and Serenity: One of India's most peaceful states
 
 **BEST TIME TO VISIT:**
-- March to May (Spring): 10°C to 25°C - Perfect for monastery visits and rhododendron blooms
-- October to December (Post-Monsoon): 5°C to 20°C - Crystal clear skies, best for photography
-- December to February (Winter): -5°C to 15°C - Snow-capped landscapes, fewer crowds
-- June to September (Monsoon): Generally avoided due to heavy rainfall and landslides
+🌸 March to May (Spring): 10°C to 25°C - Perfect for monastery visits and nature
+☀️ October to December (Post-Monsoon): 5°C to 20°C - Crystal clear skies
+❄️ December to February (Winter): -5°C to 15°C - Snow-capped landscapes
+🌧️ June to September (Monsoon): Generally avoided due to heavy rainfall
 
-**FAMOUS PLACES TO VISIT:**
-- Monasteries: Rumtek, Dubdi, Pemayangtse, Tashiding
-- Mountain Destinations: Tsomgo Lake, Nathula Pass, Gurudongmar Lake, Yumthang Valley
-- Cities: Gangtok (capital), Pelling, Lachung & Lachen, Yuksom
-- Cultural Sites: Namgyal Institute of Tibetology, Flower Exhibition Centre
-
-**DETAILED MONASTERY INFORMATION:**
+**FAMOUS MONASTERIES:**
 
 **RUMTEK MONASTERY:**
 - Seat of Kagyu school of Tibetan Buddhism outside Tibet
@@ -166,35 +109,113 @@ Sikkim has a rich history spanning over 600 years. The kingdom was established i
 - Gangtok is the main hub for accessing most destinations
 - Consider altitude acclimatization for high-altitude visits
 
-Always provide comprehensive, culturally sensitive responses using this knowledge base. Include practical travel information, distances, and cultural context in your answers."""
-        
-        # Greeting messages - shown only at start
+**MAJOR CITIES & APPROXIMATE DISTANCES FROM AIRPORT:**
+- Gangtok: 28 km (45 min-1 hour) - Capital city, main tourism hub
+- Pelling: 110 km (3-4 hours) - West Sikkim, monastery region
+- Lachung: 120 km (4-5 hours) - North Sikkim, Yumthang Valley
+- Lachen: 95 km (3-4 hours) - North Sikkim, Gurudongmar Lake access
+- Yuksom: 145 km (4-5 hours) - West Sikkim, Dubdi Monastery, trekking
+
+**TRAVEL TIPS:**
+- Book transport in advance during peak season (March-May, Oct-Dec)
+- Be respectful when visiting religious sites
+- Dress modestly for monastery visits
+- Altitude acclimatization recommended for high-altitude visits
+
+**IMPORTANT: When user asks about LOCAL TRANSPORT or TRAVEL COMPANIES:**
+1. Acknowledge their question
+2. Provide brief helpful info if you have general knowledge
+3. ALWAYS mention: "For detailed information about local transport companies near the airport, their contact details, pricing, and the specific permits you'll need, I've prepared a dedicated Transport & Permits page on our website."
+4. Suggest they visit: {TRANSPORT_PAGE_URL}
+5. Offer to help with other questions while they explore that page
+
+**IMPORTANT: When user asks about PERMITS:**
+1. Mention the main permits needed (Nathula Pass, Inner Line Permit)
+2. ALWAYS direct them to: "For complete permit details, requirements, and how to obtain them, please visit our Transport & Permits page: {TRANSPORT_PAGE_URL}"
+3. Be helpful but always redirect for detailed permit info
+
+**RESPONSE FORMATTING RULES:**
+- Break down complex information into separate paragraphs
+- Use double line breaks (\\n\\n) between different topics or sections
+- Start explanations on new lines
+- Make responses easy to scan and read
+- DO NOT use ** or __ for formatting - write in plain text
+- Use emojis or capital letters for emphasis instead of Markdown formatting
+
+**FOR ALL SIKKIM QUERIES:**
+- Be warm and knowledgeable about monasteries, culture, festivals, food, trekking
+- For specific current information about transport companies, always suggest the dedicated page
+- Never pretend to have real-time transport company data if you don't"""
+
+        # ============== LOCAL TRANSPORT DATA ==============
+        # This data structure will be replaced by backend API calls later
+        # For now, it's hardcoded so the chatbot can answer transport questions
+        self.local_transport_data = {
+            "near_airport": [
+                {
+                    "name": "Sikkim Luxury Travels",
+                    "contact": "+91-9876543210",
+                    "specialty": "Premium tours, monastery visits, experienced drivers",
+                    "vehicles": "SUVs, Innova, Toyota Fortuner",
+                    "distance_from_airport": "2 km",
+                    "avg_cost_gangtok": "₹1200-1500"
+                },
+                {
+                    "name": "Himalayan Adventure Taxi Service",
+                    "contact": "+91-9876543211",
+                    "specialty": "Trekking routes, adventure tourism, multilingual guides",
+                    "vehicles": "Bolero, Fortuner, Tempo Traveller",
+                    "distance_from_airport": "1.5 km",
+                    "avg_cost_gangtok": "₹1000-1300"
+                },
+                {
+                    "name": "Gangtok City Tours",
+                    "contact": "+91-9876543212",
+                    "specialty": "City tours, monastery circuits, cultural sites",
+                    "vehicles": "Innova, Swift, Xylo",
+                    "distance_from_airport": "2.5 km",
+                    "avg_cost_gangtok": "₹900-1200"
+                },
+                {
+                    "name": "Kangchenjunga Express Travels",
+                    "contact": "+91-9876543213",
+                    "specialty": "Long-distance tours, North Sikkim, group packages",
+                    "vehicles": "Tempo Traveller, Bolero, Innova",
+                    "distance_from_airport": "1.8 km",
+                    "avg_cost_gangtok": "₹1100-1400"
+                },
+                {
+                    "name": "Mountain Bliss Transport",
+                    "contact": "+91-9876543214",
+                    "specialty": "Budget-friendly, local knowledge, homestay packages",
+                    "vehicles": "Swift, Alto, Bolero",
+                    "distance_from_airport": "2.2 km",
+                    "avg_cost_gangtok": "₹700-1000"
+                }
+            ]
+        } # Added missing '}' here
+
         self.greetings = [
-            "Namaste! Welcome to the Sikkim Monasteries & Tourism Chatbot.",
-            "I'm your guide to explore the beautiful monasteries and culture of Sikkim.",
-            "How can I help you discover the spiritual and natural wonders of Sikkim today?"
+            "नमस्ते! Namaste! Welcome to Sikkim! 🏔️",
+            "तपाईंलाई स्वागत छ! I'm your guide to explore monasteries, culture, and tourism in Sikkim!",
+            "How can I help you discover the spiritual beauty of Sikkim today?"
         ]
-        
-        # Track if user has been greeted
-        self.has_greeted = False
-    
-    def is_greeting(self, user_input):
-        """Check if user input is a greeting"""
-        greetings = ['hello', 'hi', 'hey', 'namaste', 'namaskar', 'greetings', 'good morning', 
-                     'good afternoon', 'good evening', 'हेलो', 'नमस्ते']
-        user_lower = user_input.lower().strip()
-        return any(greeting in user_lower for greeting in greetings)
-    
-    def detect_monastery(self, user_input):
-        """Detect which monastery the user is asking about"""
-        user_lower = user_input.lower()
-        
-        for monastery_key in self.monastery_pages.keys():
-            if monastery_key in user_lower:
-                return monastery_key
-        
-        return None
-    
+
+    def remove_markdown_formatting(self, text):
+        """Remove common Markdown formatting symbols"""
+        # Remove bold formatting (**text** or __text__)
+        text = re.sub(r'\*\*(.+?)\*\*', r'\1', text)
+        text = re.sub(r'__(.+?)__', r'\1', text)
+
+        # Remove italic formatting (*text* or _text_)
+        text = re.sub(r'\*(.+?)\*', r'\1', text)
+        text = re.sub(r'_(.+?)_', r'\1', text)
+
+        # Remove header symbols (# ## ###)
+        text = re.sub(r'^#+\s+', '', text, flags=re.MULTILINE)
+
+        return text
+
     def add_to_conversation_history(self, user_input, bot_response):
         """Add conversation exchange to history"""
         conversation_entry = {
@@ -202,204 +223,147 @@ Always provide comprehensive, culturally sensitive responses using this knowledg
             "bot": bot_response,
             "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         }
-        
         self.conversation_history.append(conversation_entry)
-        
-        # Keep only recent conversations to manage context length
+
         if len(self.conversation_history) > self.max_history_length:
             self.conversation_history = self.conversation_history[-self.max_history_length:]
-    
+
     def get_conversation_context(self):
-        """Format conversation history for inclusion in prompts"""
+        """Format conversation history"""
         if not self.conversation_history:
             return ""
-        
+
         context = "\n--- Previous Conversation Context ---\n"
         for exchange in self.conversation_history[-3:]:
-            context += f"User previously asked: {exchange['user']}\n"
-            context += f"You responded: {exchange['bot'][:150]}{'...' if len(exchange['bot']) > 150 else ''}\n"
-            context += "---\n"
-        
+            context += f"User: {exchange['user']}\n"
+            context += f"Assistant: {exchange['bot'][:150]}{'...' if len(exchange['bot']) > 150 else ''}\n"
+
         return context
-    
+
     def build_enhanced_prompt(self, user_query):
-        """Build enhanced prompt with system prompt, context, and user query"""
+        """Build enhanced prompt with instructions to redirect appropriately"""
         conversation_context = self.get_conversation_context()
-        
-        enhanced_prompt = f"""{conversation_context}
+
+        # Check if user is greeting
+        greeting_words = ['hi', 'hello', 'namaste', 'hey', 'greetings', 'good morning', 'good afternoon', 'good evening']
+        user_query_lower = user_query.lower().strip()
+        is_greeting = any(user_query_lower == word or user_query_lower.startswith(word + ' ') or user_query_lower.startswith(word + ',') for word in greeting_words)
+
+        greeting_instruction = ""
+        if is_greeting:
+            greeting_instruction = "\n\nNOTE: The user is greeting you. You may respond with 'Namaste' or a warm greeting."
+        else:
+            greeting_instruction = "\n\nCRITICAL INSTRUCTION: The user is asking a question about Sikkim. Do NOT start with 'Namaste' or any greeting. Start DIRECTLY with the answer to their question. NO greetings allowed in this response."
+
+        # Create prompt with transport page URL embedded
+        enhanced_prompt = f"""{self.system_prompt.replace("{TRANSPORT_PAGE_URL}", self.TRANSPORT_PAGE_URL)}
+
+{conversation_context}
 
 Current User Query: {user_query}
+{greeting_instruction}
 
 Instructions for this response:
-1. FIRST, check if the query matches the comprehensive knowledge base provided above and use that detailed information
-2. FOR ALL OTHER SIKKIM-RELATED TOPICS (festivals, food, languages, wildlife, trekking, traditions, culture, etc.), use your extensive general knowledge about Sikkim confidently
-3. Consider the conversation context to provide continuity and avoid repetition
-4. Be warm, detailed, and informative for ALL topics related to Sikkim
-5. Include practical travel information when relevant (distances, timing, permits, dates)
-6. Do NOT use emojis in your responses
-7. Always maintain cultural sensitivity and respect for religious sites and local customs
-8. You are an expert on Sikkim - use your full knowledge base to help tourists with ANY Sikkim-related questions
-9. For festivals, provide dates, significance, rituals, and cultural importance
-10. For food, describe dishes, ingredients, cultural significance, and where to find them
-11. Only say you don't know something if it's truly outside your knowledge or requires real-time information
+1. Answer questions about monasteries, culture, history, festivals, food, and general Sikkim info with your full knowledge
+2. For questions about LOCAL TRANSPORT COMPANIES, TAXIS, TRAVEL SERVICES:
+   - Provide brief general guidance
+   - ALWAYS mention our dedicated Transport & Permits page
+   - Share this link: {self.TRANSPORT_PAGE_URL}
+   - Make it sound helpful and organized
+3. For PERMIT questions:
+   - Briefly mention which permits (Nathula Pass, Inner Line Permit)
+   - ALWAYS direct to the dedicated page for complete details
+   - Link: {self.TRANSPORT_PAGE_URL}
+4. Be warm, helpful, and enthusiastic
+5. Use emojis appropriately
+6. Make the page suggestion feel natural, not forced
+7. IMPORTANT: Use clear paragraph breaks (double line breaks) between different sections of your response
+8. CRITICAL: Do not use ** or __ or any Markdown formatting - write in plain text only
 
-Remember: You have comprehensive knowledge about Sikkim's festivals (Losar, Saga Dawa, Bumchu, Phang Lhabsol, etc.), food (momos, thukpa, gundruk, etc.), wildlife (red panda, snow leopard, etc.), languages, and all aspects of Sikkimese culture. Use this knowledge confidently!
+Now please respond to the user:"""
 
-Please provide a comprehensive response to the user's query now."""
-        
         return enhanced_prompt
-    
-    def get_llama_response(self, user_query):
-        """Get response from Llama AI via selected API provider"""
+
+    def get_gemini_response(self, user_query):
+        """Get response from Gemini AI"""
         try:
-            if self.api_provider not in self.api_config:
-                return f"Error: Unsupported API provider '{self.api_provider}'. Supported providers: {', '.join(self.api_config.keys())}"
-            
-            config = self.api_config[self.api_provider]
             enhanced_prompt = self.build_enhanced_prompt(user_query)
-            
-            # Prepare the API request based on provider
-            if self.api_provider == "replicate":
-                # Replicate has a different API structure
-                payload = {
-                    "version": "replicate-model-version-id",
-                    "input": {
-                        "prompt": f"{self.system_prompt}\n\n{enhanced_prompt}",
-                        "max_tokens": 2000,
-                        "temperature": 0.7
-                    }
-                }
-            else:
-                # OpenAI-compatible format (Groq, Together, OpenRouter)
-                payload = {
-                    "model": config["model"],
-                    "messages": [
-                        {"role": "system", "content": self.system_prompt},
-                        {"role": "user", "content": enhanced_prompt}
-                    ],
-                    "temperature": 0.7,
-                    "max_tokens": 2000,
-                    "top_p": 0.9
-                }
-            
-            # Make API request
-            response = requests.post(
-                config["url"],
-                headers=config["headers"],
-                json=payload,
-                timeout=30
-            )
-            
-            response.raise_for_status()
-            result = response.json()
-            
-            # Extract response text based on provider
-            if self.api_provider == "replicate":
-                return result.get("output", "No response generated")
-            else:
-                return result["choices"][0]["message"]["content"]
-            
-        except requests.exceptions.RequestException as e:
-            return f"I apologize, but I'm having trouble connecting to the AI service. Error: {str(e)}. Please check your API key and internet connection, then try again."
-        except KeyError as e:
-            return f"I apologize, but I received an unexpected response format. Error: {str(e)}. Please try asking your question again."
+            response = self.model.generate_content(enhanced_prompt)
+            # Remove any Markdown formatting from the response
+            clean_response = self.remove_markdown_formatting(response.text)
+            return clean_response
         except Exception as e:
-            return f"I apologize, but I'm having trouble processing your request. Error: {str(e)}. Please try asking your question again!"
-    
+            return f"I apologize, but I'm having trouble right now. Error: {str(e)}. Please try again!"
+
     def generate_response(self, user_input):
-        """Generate comprehensive response using Llama with integrated knowledge"""
-        
-        # Check if this is a greeting and user hasn't been greeted yet
-        if self.is_greeting(user_input) and not self.has_greeted:
-            self.has_greeted = True
-            greeting_response = "Namaste! Welcome to Sikkim. I'm here to help you explore the beautiful monasteries, culture, and tourism opportunities in Sikkim. How can I assist you today?"
-            return greeting_response
-        
-        print("Processing your query about Sikkim...")
-        
-        # Get the base response from Llama
-        response = self.get_llama_response(user_input)
-        
-        # Check if user is asking about a specific monastery
-        monastery = self.detect_monastery(user_input)
-        
-        if monastery and monastery in self.monastery_pages:
-            monastery_url = self.monastery_pages[monastery]
-            monastery_name = monastery.capitalize()
-            
-            # Add link to the response
-            response += f"\n\nVisit Our Detailed Page:\nFor more photographs, visitor information, and travel details about {monastery_name} Monastery, please visit:\n{monastery_url}\n\n(This page includes opening hours, entry fees, photography guidelines, and visitor reviews!)"
-        
-        return response
-    
+        """Generate response using Gemini"""
+        print("🔍 Processing your query...")
+        return self.get_gemini_response(user_input)
+
     def start_conversation(self):
         """Main conversation loop"""
         print("=" * 70)
-        print("SIKKIM MONASTERIES & TOURISM CHATBOT (Llama AI)")
+        print("🏔️ SIKKIM MONASTERIES & TOURISM CHATBOT 🚕")
         print("=" * 70)
-        
-        # Display initial greeting only
+
         for greeting in self.greetings:
             print(greeting)
+
         print("\n" + "=" * 70)
-        print(f"Using API Provider: {self.api_provider.upper()}")
-        print("Type 'exit' to end conversation")
-        print("Ask me about monasteries, places to visit, festivals, food, culture, travel tips, or anything about Sikkim!\n")
-        print("Available Monasteries:")
-        print("   Rumtek, Dubdi, Pemayangtse, Tashiding, Kanyam, Ravangla, Lingdum, Enchey")
+        print("I can help you with:")
+        print("  📍 Monasteries and spiritual sites")
+        print("  🏛️ Sikkim's culture, history, and festivals")
+        print("  🌸 Nature, biodiversity, and trekking")
+        print("  🚕 Local transport (redirects to our dedicated page)")
+        print("  📋 Travel permits and requirements")
+        print("  🛣️ Travel tips and best times to visit")
         print("=" * 70)
-        
+        print("\nType 'exit' to end conversation\n")
+
         while True:
             try:
-                user_input = input("\nYou: ").strip()
-                
+                user_input = input("\n👤 You: ").strip()
+
                 if user_input.lower() in ['exit', 'quit', 'bye', 'goodbye']:
-                    print("\nThank you for exploring Sikkim with me! Have a wonderful journey! Namaste!")
+                    print("\n🙏 Thank you for exploring Sikkim with me! Have a wonderful journey! Namaste! 🏔️")
                     break
-                
+
                 if not user_input:
-                    print("Bot: Please ask me something about Sikkim, its monasteries, or tourism!")
+                    print("🤖 Bot: Please ask me something about Sikkim!")
                     continue
-                
-                print("\nBot:")
+
+                print("\n🤖 Bot:")
                 response = self.generate_response(user_input)
                 print(response)
-                
-                # Add to conversation history
+
+                # Check if response mentions the transport page - if so, highlight it
+                if "transport" in user_input.lower() or "taxi" in user_input.lower() or "travel" in user_input.lower():
+                    print(f"\n💡 Quick Link: {self.TRANSPORT_PAGE_URL}")
+
                 self.add_to_conversation_history(user_input, response)
-                
+
             except KeyboardInterrupt:
-                print("\n\nThank you for exploring Sikkim with me! Goodbye!")
+                print("\n\n🙏 Thank you! Goodbye!")
                 break
             except Exception as e:
-                print(f"\nBot: I apologize for the error: {str(e)}. Please try asking your question again!")
+                print(f"\n🤖 Bot: I apologize for the error: {str(e)}")
 
 def main():
-    """Main function to run the chatbot"""
-    
-    
-    
-    # Configuration - Choose your API provider
-    # Options: "groq", "together", "openrouter", "replicate"
-    API_PROVIDER = "groq"  # Change this to your preferred provider
-    
-    # Add your API key here
-    api_key = " "  # Add your API key
-    
+    """Main function"""
+    print("🚀 Initializing Sikkim Monasteries & Tourism Chatbot...\n")
+
+    api_key = ""  # Add your Gemini API key here
+
     if not api_key:
-        print("API key is required to run the chatbot!")
-        print("\nGet API keys from:")
-        print("   - Groq (Recommended): https://console.groq.com/keys")
-       
+        print("❌ Gemini API key is required!")
+        print("Get one from: https://makersuite.google.com/app/apikeys")
         return
-    
+
     try:
-        # Initialize and start chatbot
-        chatbot = SikkimMonasteryChatbot(api_key, api_provider=API_PROVIDER)
+        chatbot = SikkimMonasteryChatbot(api_key)
         chatbot.start_conversation()
     except Exception as e:
-        print(f"Error initializing chatbot: {e}")
-        print("Please check your API key and internet connection.")
+        print(f"❌ Error initializing chatbot: {e}")
 
 if __name__ == "__main__":
     main()
