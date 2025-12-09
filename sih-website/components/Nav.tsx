@@ -56,7 +56,7 @@ export default function Nav() {
                 onClick={() => setContributionsOpen(!contributionsOpen)}
                 className="hover:opacity-80 flex items-center gap-1"
               >
-                {t("nav.contributions")}
+                {t("nav.contributions").toUpperCase()}
                 <svg 
                   width="12" 
                   height="12" 

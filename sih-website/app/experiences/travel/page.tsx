@@ -1,9 +1,35 @@
 "use client"
 
-import React from "react"
+import React, { useState, useEffect } from "react"
 import Link from "next/link"
 
 export default function TravelPage() {
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(/iPhone|iPad|iPod|Android|webOS|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent))
+    }
+    checkMobile()
+  }, [])
+
+  const handleCallClick = (phoneNumber: string) => {
+    if (isMobile) {
+      window.location.href = `tel:${phoneNumber}`
+    }
+  }
+
+  const CallButton = ({ phoneNumber, label = "Call Now" }: { phoneNumber: string; label?: string }) => {
+    return (
+      <button
+        onClick={() => handleCallClick(phoneNumber)}
+        className="w-full bg-amber-400 hover:bg-amber-500 text-black font-cinzel font-bold py-2 rounded-lg transition"
+      >
+        {isMobile ? label : phoneNumber}
+      </button>
+    )
+  }
+
   return (
     <div className="min-h-screen py-16 px-6 bg-gradient-to-b from-[#2b0d0d] via-[#5a1f1f] to-[#3b1212] text-white">
       <div className="max-w-6xl mx-auto">
@@ -52,9 +78,7 @@ export default function TravelPage() {
                     <span className="inline-block text-amber-300 mr-2">⏰</span>
                     7:00 AM, 11:00 AM, 3:00 PM
                   </p>
-                  <button className="w-full bg-amber-400 hover:bg-amber-500 text-black font-cinzel font-bold py-2 rounded-lg transition">
-                    Book Now
-                  </button>
+                  <CallButton phoneNumber="+91-97336-12345" />
                 </div>
 
                 {/* Route 2 */}
@@ -64,9 +88,7 @@ export default function TravelPage() {
                     <span className="inline-block text-amber-300 mr-2">⏰</span>
                     8:30 AM, 2:00 PM
                   </p>
-                  <button className="w-full bg-amber-400 hover:bg-amber-500 text-black font-cinzel font-bold py-2 rounded-lg transition">
-                    Book Now
-                  </button>
+                  <CallButton phoneNumber="+91-98765-43210" />
                 </div>
 
                 {/* Route 3 */}
@@ -76,9 +98,7 @@ export default function TravelPage() {
                     <span className="inline-block text-amber-300 mr-2">⏰</span>
                     9:00 AM, 4:00 PM
                   </p>
-                  <button className="w-full bg-amber-400 hover:bg-amber-500 text-black font-cinzel font-bold py-2 rounded-lg transition">
-                    Book Now
-                  </button>
+                  <CallButton phoneNumber="+91-90123-45678" />
                 </div>
               </div>
             </div>
@@ -111,9 +131,7 @@ export default function TravelPage() {
                     </span>
                   </div>
                   <p className="text-xs text-white/60 font-merriweather mb-3">✆ +91-97336-12345</p>
-                  <button className="w-full bg-amber-400 hover:bg-amber-500 text-black font-cinzel font-bold py-2 rounded-lg transition">
-                    Book Now
-                  </button>
+                  <CallButton phoneNumber="+91-97336-12345" />
                 </div>
 
                 {/* Gangtok Tourist Cab Service */}
@@ -125,9 +143,7 @@ export default function TravelPage() {
                     </span>
                   </div>
                   <p className="text-xs text-white/60 font-merriweather mb-3">✆ +91-98765-43210</p>
-                  <button className="w-full bg-amber-400 hover:bg-amber-500 text-black font-cinzel font-bold py-2 rounded-lg transition">
-                    Book Now
-                  </button>
+                  <CallButton phoneNumber="+91-98765-43210" />
                 </div>
 
                 {/* Rumtek Monastery Cabs */}
@@ -153,9 +169,7 @@ export default function TravelPage() {
                     </span>
                   </div>
                   <p className="text-xs text-white/60 font-merriweather mb-3">✆ +91-90123-45678</p>
-                  <button className="w-full bg-amber-400 hover:bg-amber-500 text-black font-cinzel font-bold py-2 rounded-lg transition">
-                    Book Now
-                  </button>
+                  <CallButton phoneNumber="+91-90123-45678" />
                 </div>
               </div>
             </div>
