@@ -25,7 +25,7 @@ export default function TravelPage() {
         onClick={() => handleCallClick(phoneNumber)}
         className="w-full bg-amber-400 hover:bg-amber-500 text-black font-cinzel font-bold py-2 rounded-lg transition"
       >
-        {isBus ? "Call Now" : isMobile ? label : phoneNumber}
+        {isBus ? "Book Now" : isMobile ? label : phoneNumber}
       </button>
     )
   }
