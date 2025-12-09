@@ -63,17 +63,14 @@ export default function ExperiencesPage() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {options.map((opt) => {
-<<<<<<< HEAD
                 const isClickable = opt.id === 'tour' || opt.id === 'cabs' || opt.id === 'stay' || opt.id === 'meditate'
-=======
-                const isClickable = opt.id === 'tour' || opt.id === 'cabs' || opt.id === 'stay'
                 const getHref = () => {
                   if (opt.id === 'tour') return '/experiences/tour-guide-booking'
                   if (opt.id === 'cabs') return '/experiences/travel'
                   if (opt.id === 'stay') return '/experiences/accommodations'
+                  if (opt.id === 'meditate') return '/meditate'
                   return '#'
                 }
->>>>>>> 83507415cf3e8003e8680fa32d9a8da6026c517f
 
                 const content = (
                   <div>
@@ -142,11 +139,7 @@ export default function ExperiencesPage() {
                 )
 
                 return isClickable ? (
-<<<<<<< HEAD
-                  <Link key={opt.id} href={opt.id === 'tour' ? "/experiences/tour-guide-booking" : opt.id === 'cabs' ? "/experiences/cabs-buses" : opt.id === 'meditate' ? "/experiences/meditation-booking" : "/experiences/accommodations"} className="bg-[#4a1414] rounded-3xl p-6 pop-card shine-border hover:bg-[#5a1a1a] transition-colors cursor-pointer">
-=======
                   <Link key={opt.id} href={getHref()} className="bg-[#4a1414] rounded-3xl p-6 pop-card shine-border hover:bg-[#5a1a1a] transition-colors cursor-pointer">
->>>>>>> 83507415cf3e8003e8680fa32d9a8da6026c517f
                     {content}
                   </Link>
                 ) : (
