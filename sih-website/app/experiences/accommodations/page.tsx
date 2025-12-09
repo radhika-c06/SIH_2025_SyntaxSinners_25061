@@ -1,11 +1,12 @@
 ﻿"use client"
 
-import React from "react"
+import React, { useMemo } from "react"
 import Link from "next/link"
 
 interface Accommodation {
   id: number
   name: string
+  monastery: string
   distance: string
   priceRange: string
   amenities: string[]
@@ -17,6 +18,7 @@ const accommodations: Accommodation[] = [
   {
     id: 1,
     name: "Yuksom Residency",
+    monastery: "tashiding",
     distance: "18 km from Tashiding",
     priceRange: "₹1,200 - ₹2,500",
     amenities: ["WiFi", "Parking", "Hot Water", "Restaurant", "Garden View"],
@@ -26,6 +28,7 @@ const accommodations: Accommodation[] = [
   {
     id: 2,
     name: "Tashiding Guest House",
+    monastery: "tashiding",
     distance: "0.5 km from Tashiding",
     priceRange: "₹800 - ₹1,500",
     amenities: ["WiFi", "Garden", "Traditional Decor", "Tea Service"],
@@ -35,6 +38,7 @@ const accommodations: Accommodation[] = [
   {
     id: 3,
     name: "Sikkim Heritage Hotel",
+    monastery: "tashiding",
     distance: "8 km from Tashiding",
     priceRange: "₹2,000 - ₹3,500",
     amenities: ["Restaurant", "Spa", "Conference Room", "Parking", "WiFi"],
@@ -44,6 +48,7 @@ const accommodations: Accommodation[] = [
   {
     id: 4,
     name: "Mountain View Resort",
+    monastery: "tashiding",
     distance: "12 km from Tashiding",
     priceRange: "₹1,500 - ₹3,000",
     amenities: ["Bonfire", "Trekking Guide", "WiFi", "Restaurant", "Parking"],
@@ -53,15 +58,63 @@ const accommodations: Accommodation[] = [
   {
     id: 5,
     name: "Monastery View Guesthouse",
+    monastery: "tashiding",
     distance: "2 km from Tashiding",
     priceRange: "₹1,000 - ₹2,000",
     amenities: ["Meditation Room", "Garden", "WiFi", "Traditional Food"],
     availability: "Full",
     rating: 4.9,
   },
+  {
+    id: 6,
+    name: "Rumtek Heritage Lodge",
+    monastery: "rumtek",
+    distance: "1 km from Rumtek",
+    priceRange: "₹900 - ₹1,800",
+    amenities: ["WiFi", "Restaurant", "Parking", "Monastery View"],
+    availability: "Available",
+    rating: 4.7,
+  },
+  {
+    id: 7,
+    name: "Karthala Guesthouse",
+    monastery: "rumtek",
+    distance: "5 km from Rumtek",
+    priceRange: "₹700 - ₹1,400",
+    amenities: ["Garden", "Tea House", "WiFi"],
+    availability: "Available",
+    rating: 4.5,
+  },
+  {
+    id: 8,
+    name: "Dubdi Retreat Center",
+    monastery: "dubdi",
+    distance: "0.2 km from Dubdi",
+    priceRange: "₹1,000 - ₹2,200",
+    amenities: ["Meditation Hall", "Traditional Meals", "WiFi", "Peaceful Garden"],
+    availability: "Limited",
+    rating: 4.9,
+  },
+  {
+    id: 9,
+    name: "Tsuk La Khang Guest Wing",
+    monastery: "tsuk",
+    distance: "Adjacent to Tsuk La Khang",
+    priceRange: "₹850 - ₹1,600",
+    amenities: ["Library Access", "Buddhist Teachings", "WiFi", "Courtyard"],
+    availability: "Available",
+    rating: 4.8,
+  },
 ]
 
 export default function AccommodationsPage() {
+  const searchParams = new URLSearchParams(typeof window !== 'undefined' ? window.location.search : '')
+  const monasteryParam = searchParams.get('monastery') || 'tashiding'
+  
+  const filteredAccommodations = useMemo(() => {
+    return accommodations.filter(acc => acc.monastery === monasteryParam)
+  }, [monasteryParam])
+
   return (
     <div className="min-h-screen py-16 px-6 bg-gradient-to-b from-[#2b0d0d] via-[#5a1f1f] to-[#3b1212] text-white">
       <div className="max-w-7xl mx-auto">
@@ -73,7 +126,7 @@ export default function AccommodationsPage() {
         </p>
 
         <div className="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {accommodations.map((acc) => (
+          {filteredAccommodations.map((acc) => (
             <div
               key={acc.id}
               className="bg-[#4a1414] rounded-3xl p-6 pop-card shine-border hover:bg-[#5a1a1a] transition-colors"

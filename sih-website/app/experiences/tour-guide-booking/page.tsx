@@ -97,13 +97,19 @@ const allTourGuides: TourGuide[] = [
   },
 ]
 
-function getRandomGuides(count: number = 4): TourGuide[] {
-  const shuffled = [...allTourGuides].sort(() => Math.random() - 0.5)
+function getRandomGuides(count: number = 4, monasteryFilter?: string): TourGuide[] {
+  const filtered = monasteryFilter 
+    ? allTourGuides.filter(guide => guide.monastery.toLowerCase() === monasteryFilter.toLowerCase())
+    : allTourGuides
+  const shuffled = [...filtered].sort(() => Math.random() - 0.5)
   return shuffled.slice(0, count)
 }
 
 export default function TourGuideBookingPage() {
   const router = useRouter()
+  const searchParams = new URLSearchParams(typeof window !== 'undefined' ? window.location.search : '')
+  const monasteryParam = searchParams.get('monastery') || 'tashiding'
+  
   const [guides, setGuides] = useState<TourGuide[]>([])
   const [selectedGuide, setSelectedGuide] = useState<TourGuide | null>(null)
   const [showModal, setShowModal] = useState(false)
@@ -113,6 +119,7 @@ export default function TourGuideBookingPage() {
   const [isProcessing, setIsProcessing] = useState(false)
   const [bookingConfirmed, setBookingConfirmed] = useState(false)
   const [showQRCode, setShowQRCode] = useState(false)
+  const [monastery, setMonastery] = useState(monasteryParam)
 
   const UPI_ID = "anshjayara.edu@okaxis"
   const PAYEE_NAME = "Ansh Jayara"
@@ -183,11 +190,11 @@ export default function TourGuideBookingPage() {
   }
 
   useEffect(() => {
-    setGuides(getRandomGuides(4))
-  }, [])
+    setGuides(getRandomGuides(4, monastery))
+  }, [monastery])
 
   const handleRefresh = () => {
-    setGuides(getRandomGuides(4))
+    setGuides(getRandomGuides(4, monastery))
   }
 
   const handleBooking = (guide: TourGuide) => {

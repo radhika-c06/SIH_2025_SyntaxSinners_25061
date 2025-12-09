@@ -5,7 +5,10 @@ import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
 
 export default function MeditatePage() {
-  const [selectedMonastery, setSelectedMonastery] = useState('dubdi');
+  const searchParams = new URLSearchParams(typeof window !== 'undefined' ? window.location.search : '')
+  const monasteryParam = searchParams.get('monastery') || 'dubdi'
+  
+  const [selectedMonastery, setSelectedMonastery] = useState(monasteryParam);
   const [isPlaying, setIsPlaying] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
 
