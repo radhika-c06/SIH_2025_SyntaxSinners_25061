@@ -19,13 +19,13 @@ export interface JWTPayload {
 /**
  * Sign a JWT token for an admin user
  */
-export function signToken(admin: IAdminUser): string {
-  const payload: JWTPayload = {
-    adminId: admin._id.toString(),
-    role: admin.role,
+export function signToken(payload: JWTPayload | { adminId: string; role: 'superadmin' | 'editor' }): string {
+  const tokenPayload: JWTPayload = {
+    adminId: (payload as any).adminId || (payload as any)._id?.toString() || '',
+    role: (payload as any).role || 'editor',
   };
 
-  return jwt.sign(payload, JWT_SECRET, {
+  return jwt.sign(tokenPayload, JWT_SECRET, {
     expiresIn: JWT_EXPIRY,
   });
 }

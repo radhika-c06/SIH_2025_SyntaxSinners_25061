@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import Tesseract from "tesseract.js";
+import TibetanOCRVerifier from "./TibetanOCRVerifier";
 
 interface OCRMetadata {
   title: string;
@@ -24,6 +25,7 @@ export default function OCR() {
   const [selectedLanguages, setSelectedLanguages] = useState<string[]>(['eng']);
   const [showMetadataForm, setShowMetadataForm] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+  const [showTibetanVerifier, setShowTibetanVerifier] = useState(false);
   
   // Metadata fields
   const [metadata, setMetadata] = useState<OCRMetadata>({
@@ -710,6 +712,50 @@ export default function OCR() {
               </span>
             </button>
           </div>
+        </div>
+      )}
+
+      {/* Tibetan OCR Verifier Section */}
+      {selectedLanguages.includes('bod') && (cleanedText || rawText) && (
+        <div className="bg-[rgba(41,24,10,0.8)] border border-amber-900/30 rounded-lg p-6">
+          <h3 className="text-xl font-semibold text-amber-200 mb-4">
+            Tibetan Text Verification
+          </h3>
+          <p className="text-gray-400 text-sm mb-4">
+            Use AI-powered verification to check the accuracy of Tibetan OCR results
+          </p>
+          
+          {!showTibetanVerifier ? (
+            <button
+              onClick={() => setShowTibetanVerifier(true)}
+              className="w-full px-6 py-3 bg-amber-600 hover:bg-amber-700 text-white rounded-lg font-semibold transition-colors flex items-center justify-center gap-2"
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+              </svg>
+              Verify Tibetan Text Accuracy
+            </button>
+          ) : (
+            <div className="space-y-4">
+              <button
+                onClick={() => setShowTibetanVerifier(false)}
+                className="text-amber-400 hover:text-amber-300 text-sm font-semibold mb-4"
+              >
+                ← Hide Verifier
+              </button>
+              <TibetanOCRVerifier
+                tesseractOutput={cleanedText || rawText}
+                imageData={image || ''}
+                onVerificationComplete={(results) => {
+                  console.log('Verification complete:', results);
+                  if (results.correct_ocr) {
+                    setCleanedText(results.correct_ocr);
+                    setMetadata(prev => ({ ...prev, cleanedText: results.correct_ocr }));
+                  }
+                }}
+              />
+            </div>
+          )}
         </div>
       )}
     </div>
