@@ -6,6 +6,7 @@ export default function Nav() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [contributionsOpen, setContributionsOpen] = useState(false);
+  const [monasteriesOpen, setMonasteriesOpen] = useState(false);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 4);
@@ -75,8 +76,56 @@ export default function Nav() {
                 </div>
               )}
             </li>
+            <li className="relative">
+              <button 
+                onClick={() => setMonasteriesOpen(!monasteriesOpen)}
+                className="hover:opacity-80 flex items-center gap-1"
+              >
+                MONASTERIES
+                <svg 
+                  width="12" 
+                  height="12" 
+                  viewBox="0 0 24 24" 
+                  className={`transition-transform ${monasteriesOpen ? 'rotate-180' : ''}`}
+                >
+                  <path fill="currentColor" d="M7 10l5 5 5-5z"/>
+                </svg>
+              </button>
+              {monasteriesOpen && (
+                <div className="absolute top-full left-0 mt-2 bg-[#0c3b44] border border-white/20 rounded-md shadow-lg py-2 min-w-[180px]">
+                  <Link 
+                    href="/dubdi" 
+                    className="block px-4 py-2 hover:bg-white/10"
+                    onClick={() => setMonasteriesOpen(false)}
+                  >
+                    Dubdi
+                  </Link>
+                  <Link 
+                    href="/rumtek" 
+                    className="block px-4 py-2 hover:bg-white/10"
+                    onClick={() => setMonasteriesOpen(false)}
+                  >
+                    Rumtek
+                  </Link>
+                  <Link 
+                    href="/tashiding" 
+                    className="block px-4 py-2 hover:bg-white/10"
+                    onClick={() => setMonasteriesOpen(false)}
+                  >
+                    Tashiding
+                  </Link>
+                  <Link 
+                    href="/tsuk" 
+                    className="block px-4 py-2 hover:bg-white/10"
+                    onClick={() => setMonasteriesOpen(false)}
+                  >
+                    Tsuk
+                  </Link>
+                </div>
+              )}
+            </li>
             <li><Link href="/experiences" className="hover:opacity-80">Bookings</Link></li>
-            <li><Link href="/meditate" className="hover:opacity-80">Sangha Retreat</Link></li>
+            
           </ul>
 
           {/* Right: search + burger */}
