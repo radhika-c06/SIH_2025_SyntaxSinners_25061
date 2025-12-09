@@ -8,108 +8,115 @@ import "react-datepicker/dist/react-datepicker.css"
 
 const BACKEND_URL = "http://localhost:5000"
 
-interface TourGuide {
+interface Transport {
   id: number
+  type: string
   name: string
-  image: string
   monastery: string
-  experience: string
+  capacity: number
   rating: number
   reviews: number
-  specialty: string
+  description: string
   availability: string
   price: number
+  priceType: string
 }
 
-// Sample tour guides data - you can replace with API call
-const allTourGuides: TourGuide[] = [
+const allTransport: Transport[] = [
   {
     id: 1,
-    name: "Tenzin Dorje",
-    image: "/Icons/ICONS/HEADPHONE.png",
+    type: "Taxi",
+    name: "Tashiding Express Taxi",
     monastery: "Tashiding",
-    experience: "15 years",
+    capacity: 4,
     rating: 4.9,
-    reviews: 128,
-    specialty: "Buddhist History & Architecture",
+    reviews: 156,
+    description: "Comfortable taxi service with experienced drivers",
     availability: "Available",
-    price: 500,
+    price: 800,
+    priceType: "per trip",
   },
   {
     id: 2,
-    name: "Pema Norbu",
-    image: "/Icons/ICONS/HEADPHONE.png",
+    type: "Bus",
+    name: "Rumtek Heritage Bus",
     monastery: "Rumtek",
-    experience: "12 years",
+    capacity: 45,
     rating: 4.8,
-    reviews: 95,
-    specialty: "Spiritual Traditions",
+    reviews: 203,
+    description: "Air-conditioned coach for group travel",
     availability: "Available",
-    price: 450,
+    price: 50,
+    priceType: "per person",
   },
   {
     id: 3,
-    name: "Sonam Wangmo",
-    image: "/Icons/ICONS/HEADPHONE.png",
+    type: "Taxi",
+    name: "Dubdi Local Taxi",
     monastery: "Dubdi",
-    experience: "8 years",
+    capacity: 5,
     rating: 4.7,
-    reviews: 72,
-    specialty: "Cultural Heritage",
+    reviews: 128,
+    description: "Reliable transport with friendly drivers",
     availability: "Available",
-    price: 400,
+    price: 650,
+    priceType: "per trip",
   },
   {
     id: 4,
-    name: "Yeshi Tamang",
-    image: "/Icons/ICONS/HEADPHONE.png",
+    type: "Bus",
+    name: "Tsuk La Khang Shuttle",
     monastery: "Tsuk La Khang",
-    experience: "10 years",
+    capacity: 35,
     rating: 4.9,
-    reviews: 110,
-    specialty: "Local History & Art",
+    reviews: 174,
+    description: "Modern shuttle service with comfortable seating",
     availability: "Available",
-    price: 480,
+    price: 45,
+    priceType: "per person",
   },
   {
     id: 5,
-    name: "Karma Dawa",
-    image: "/Icons/ICONS/HEADPHONE.png",
+    type: "Taxi",
+    name: "Premium Tashiding Cab",
     monastery: "Tashiding",
-    experience: "9 years",
-    rating: 4.6,
-    reviews: 85,
-    specialty: "Meditation Guidance",
+    capacity: 4,
+    rating: 4.8,
+    reviews: 142,
+    description: "Premium vehicle with air conditioning",
     availability: "Available",
-    price: 420,
+    price: 1200,
+    priceType: "per trip",
   },
   {
     id: 6,
-    name: "Nima Yangchen",
-    image: "/Icons/ICONS/HEADPHONE.png",
+    type: "Bus",
+    name: "Rumtek Group Bus",
     monastery: "Rumtek",
-    experience: "11 years",
-    rating: 4.8,
-    reviews: 102,
-    specialty: "Ancient Texts & Philosophy",
+    capacity: 50,
+    rating: 4.6,
+    reviews: 167,
+    description: "Spacious bus for large groups",
     availability: "Available",
-    price: 470,
+    price: 55,
+    priceType: "per person",
   },
 ]
 
-function getRandomGuides(count: number = 4): TourGuide[] {
-  const shuffled = [...allTourGuides].sort(() => Math.random() - 0.5)
+function getRandomTransport(count: number = 4): Transport[] {
+  const shuffled = [...allTransport].sort(() => Math.random() - 0.5)
   return shuffled.slice(0, count)
 }
 
-export default function TourGuideBookingPage() {
+export default function CabsBusesPage() {
   const router = useRouter()
-  const [guides, setGuides] = useState<TourGuide[]>([])
-  const [selectedGuide, setSelectedGuide] = useState<TourGuide | null>(null)
+  const [transport, setTransport] = useState<Transport[]>([])
+  const [selectedTransport, setSelectedTransport] = useState<Transport | null>(null)
   const [showModal, setShowModal] = useState(false)
   const [bookingDate, setBookingDate] = useState<Date | null>(null)
   const [bookingTime, setBookingTime] = useState("")
-  const [currentStep, setCurrentStep] = useState<'datetime' | 'payment' | 'confirm'>('datetime')
+  const [passengers, setPassengers] = useState("")
+  const [currentStep, setCurrentStep] = useState<'details' | 'payment' | 'confirm'>('details')
   const [isProcessing, setIsProcessing] = useState(false)
   const [bookingConfirmed, setBookingConfirmed] = useState(false)
   const [showQRCode, setShowQRCode] = useState(false)
@@ -118,48 +125,63 @@ export default function TourGuideBookingPage() {
   const PAYEE_NAME = "Ansh Jayara"
 
   // Date restrictions
-  const MIN_DATE = new Date(2025, 11, 8) // December 8, 2025 (month is 0-indexed)
+  const MIN_DATE = new Date(2025, 11, 8) // December 8, 2025
   const MAX_DATE = new Date(2026, 6, 31) // July 31, 2026
 
-  // Available time slots (7 AM to 3 PM)
+  // Available time slots
   const TIME_SLOTS = [
-    { value: "07:00", label: "7:00 AM" },
+    { value: "06:00", label: "6:00 AM" },
+    { value: "08:00", label: "8:00 AM" },
     { value: "10:00", label: "10:00 AM" },
     { value: "12:00", label: "12:00 PM" },
-    { value: "15:00", label: "3:00 PM" }
+    { value: "14:00", label: "2:00 PM" },
+    { value: "16:00", label: "4:00 PM" },
+    { value: "18:00", label: "6:00 PM" }
   ]
 
+  const calculatePrice = () => {
+    if (!selectedTransport || !passengers) return 0
+    const passengerCount = parseInt(passengers)
+    if (selectedTransport.priceType === "per person") {
+      return selectedTransport.price * passengerCount
+    }
+    return selectedTransport.price
+  }
+
   const buildUpiLink = () => {
-    if (!selectedGuide || !bookingDate || !bookingTime) return null
+    if (!selectedTransport || !bookingDate || !bookingTime || !passengers) return null
 
     const formattedDate = bookingDate.toLocaleDateString('en-GB')
+    const amount = calculatePrice()
     const intent = new URL("upi://pay")
     intent.searchParams.set("pa", UPI_ID)
     intent.searchParams.set("pn", PAYEE_NAME)
-    intent.searchParams.set("am", `${selectedGuide.price}`)
+    intent.searchParams.set("am", `${amount}`)
     intent.searchParams.set("cu", "INR")
-    intent.searchParams.set("tn", `Guide: ${selectedGuide.name} on ${formattedDate} ${bookingTime}`)
+    intent.searchParams.set("tn", `Transport: ${selectedTransport.name} on ${formattedDate} ${bookingTime}`)
     return intent.toString()
   }
 
   const handlePaymentDone = async () => {
-    if (!selectedGuide || !bookingDate || !bookingTime) {
-      alert("Please select date and time before proceeding.")
+    if (!selectedTransport || !bookingDate || !bookingTime || !passengers) {
+      alert("Please fill all details before proceeding.")
       return
     }
 
     setIsProcessing(true)
     try {
       const formattedDate = bookingDate.toISOString().split('T')[0]
-      const response = await fetch(`${BACKEND_URL}/api/create-order`, {
+      const response = await fetch(`${BACKEND_URL}/api/create-transport-booking`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          guideName: selectedGuide.name,
-          guideId: selectedGuide.id,
+          transportName: selectedTransport.name,
+          transportId: selectedTransport.id,
+          transportType: selectedTransport.type,
           date: formattedDate,
           time: bookingTime,
-          amount: selectedGuide.price,
+          passengers: parseInt(passengers),
+          amount: calculatePrice(),
           userName: "User",
           userEmail: "user@example.com",
         }),
@@ -174,36 +196,35 @@ export default function TourGuideBookingPage() {
       }
     } catch (error) {
       console.error("Booking error:", error)
-      // Fallback: create a local booking ID and proceed
-      const localBookingId = `TOUR-${Date.now()}`
-      router.push(`/booking-success?bookingId=${localBookingId}`)
+      alert("Error creating booking. Make sure backend is running on port 5000.")
     } finally {
       setIsProcessing(false)
     }
   }
 
   useEffect(() => {
-    setGuides(getRandomGuides(4))
+    setTransport(getRandomTransport(4))
   }, [])
 
   const handleRefresh = () => {
-    setGuides(getRandomGuides(4))
+    setTransport(getRandomTransport(4))
   }
 
-  const handleBooking = (guide: TourGuide) => {
-    setSelectedGuide(guide)
+  const handleBooking = (item: Transport) => {
+    setSelectedTransport(item)
     setBookingDate(null)
     setBookingTime("")
-    setCurrentStep('datetime')
+    setPassengers("")
+    setCurrentStep('details')
     setBookingConfirmed(false)
-      setShowQRCode(false)
+    setShowQRCode(false)
     setShowModal(true)
   }
 
   const openGPayLink = () => {
     const link = buildUpiLink()
     if (!link) {
-      alert("Please select date and time before starting payment.")
+      alert("Please fill all details before starting payment.")
       return
     }
 
@@ -213,7 +234,7 @@ export default function TourGuideBookingPage() {
   const copyUpiLink = async () => {
     const link = buildUpiLink()
     if (!link) {
-      alert("Please select date and time before copying the payment link.")
+      alert("Please fill all details before copying the payment link.")
       return
     }
 
@@ -230,6 +251,7 @@ export default function TourGuideBookingPage() {
   }
 
   const upiLink = buildUpiLink()
+  const totalPrice = calculatePrice()
 
   return (
     <div className="min-h-screen py-16 px-6 bg-gradient-to-b from-[#2b0d0d] via-[#5a1f1f] to-[#3b1212] text-white">
@@ -245,10 +267,10 @@ export default function TourGuideBookingPage() {
             </Link>
           </div>
           <h1 className="font-cinzel-decorative text-5xl md:text-6xl leading-tight text-amber-100 mb-2">
-            TOUR GUIDE BOOKING
+            CABS & BUSES
           </h1>
           <p className="text-white/80 text-lg font-merriweather">
-            Select from our certified monastery tour guides and book your experience
+            Arrange reliable transport to and from the monasteries
           </p>
         </div>
 
@@ -258,60 +280,60 @@ export default function TourGuideBookingPage() {
             onClick={handleRefresh}
             className="px-6 py-2 bg-amber-300/20 hover:bg-amber-300/30 border border-amber-300 text-amber-200 rounded-lg transition-all font-poppins"
           >
-            Refresh Guides
+            Refresh Options
           </button>
         </div>
 
-        {/* Tour Guides Grid */}
+        {/* Transport Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-          {guides.map((guide) => (
+          {transport.map((item) => (
             <div
-              key={guide.id}
+              key={item.id}
               className="bg-[#4a1414] rounded-2xl overflow-hidden pop-card hover:shadow-lg hover:shadow-amber-300/20 transition-all duration-300 flex flex-col"
             >
-              {/* Guide Image */}
+              {/* Transport Icon */}
               <div className="w-full h-48 bg-gradient-to-b from-amber-300/20 to-transparent flex items-center justify-center border-b border-amber-300/20">
-                <div className="w-24 h-24 bg-amber-300/30 rounded-full flex items-center justify-center">
-                  <span className="text-3xl">🧘</span>
+                <div className="text-6xl">
+                  {item.type === "Taxi" ? "🚕" : "🚌"}
                 </div>
               </div>
 
-              {/* Guide Info */}
+              {/* Transport Info */}
               <div className="p-4 flex flex-col flex-grow">
                 <h3 className="text-xl font-cinzel-decorative text-amber-50 mb-1">
-                  {guide.name}
+                  {item.name}
                 </h3>
 
                 <div className="flex items-center gap-2 mb-3">
                   <div className="flex text-amber-300">
                     {[...Array(5)].map((_, i) => (
                       <span key={i}>
-                        {i < Math.floor(guide.rating) ? "★" : "☆"}
+                        {i < Math.floor(item.rating) ? "★" : "☆"}
                       </span>
                     ))}
                   </div>
                   <span className="text-xs text-white/70 font-poppins">
-                    ({guide.reviews})
+                    ({item.reviews})
                   </span>
                 </div>
 
                 <div className="space-y-2 mb-4 flex-grow">
                   <p className="text-sm text-white/80 font-merriweather">
-                    <span className="font-semibold">Monastery:</span> {guide.monastery}
+                    <span className="font-semibold">Monastery:</span> {item.monastery}
                   </p>
                   <p className="text-sm text-white/80 font-merriweather">
-                    <span className="font-semibold">Experience:</span> {guide.experience}
+                    <span className="font-semibold">Capacity:</span> {item.capacity} {item.type === "Taxi" ? "passengers" : "people"}
                   </p>
                   <p className="text-sm text-white/80 font-merriweather">
-                    <span className="font-semibold">Specialty:</span> {guide.specialty}
+                    {item.description}
                   </p>
-                  <p className="text-sm text-amber-200 font-merriweather">
-                    <span className="font-semibold">₹{guide.price}/tour</span>
+                  <p className="text-amber-200 font-merriweather">
+                    <span className="font-semibold">₹{item.price}/{item.priceType}</span>
                   </p>
                 </div>
 
                 <button
-                  onClick={() => handleBooking(guide)}
+                  onClick={() => handleBooking(item)}
                   className="w-full py-2 bg-gradient-to-r from-amber-400 to-amber-300 text-black rounded-lg font-cinzel-decorative font-semibold hover:from-amber-300 hover:to-amber-200 transition-all duration-200"
                 >
                   Book Now
@@ -323,14 +345,14 @@ export default function TourGuideBookingPage() {
       </div>
 
       {/* Booking Modal */}
-      {showModal && selectedGuide && (
+      {showModal && selectedTransport && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
           <div className="bg-[#3b1212] border border-amber-300/30 rounded-2xl p-6 md:p-8 max-w-lg w-full max-h-[90vh] overflow-y-auto">
             <h2 className="text-2xl font-cinzel-decorative text-amber-100 mb-2">
               Confirm Booking
             </h2>
             <p className="text-white/80 mb-6 font-merriweather">
-              with <span className="text-amber-200 font-semibold">{selectedGuide.name}</span>
+              for <span className="text-amber-200 font-semibold">{selectedTransport.name}</span>
             </p>
 
             <div className="space-y-4 mb-6">
@@ -374,18 +396,38 @@ export default function TourGuideBookingPage() {
                 </select>
               </div>
 
+              <div>
+                <label className="block text-amber-200 text-sm font-poppins mb-2">
+                  Number of Passengers
+                </label>
+                <input
+                  type="number"
+                  min="1"
+                  max={selectedTransport.capacity}
+                  value={passengers}
+                  onChange={(e) => setPassengers(e.target.value)}
+                  placeholder="Enter number"
+                  className="w-full px-4 py-2 bg-white/10 border border-amber-300/30 rounded-lg text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-amber-300/50 font-poppins"
+                />
+              </div>
+
               <div className="pt-2 border-t border-amber-300/20">
                 <p className="text-sm text-white/80 font-merriweather mb-1">
-                  <span className="font-semibold">Price:</span> ₹{selectedGuide.price}
+                  <span className="font-semibold">Price:</span> ₹{selectedTransport.price}/{selectedTransport.priceType}
                 </p>
-                <p className="text-xs text-white/60 font-merriweather">
-                  Duration: 2-3 hours
+                {passengers && (
+                  <p className="text-sm text-amber-200 font-merriweather font-semibold">
+                    <span>Total: ₹{totalPrice}</span>
+                  </p>
+                )}
+                <p className="text-xs text-white/60 font-merriweather mt-1">
+                  Maximum capacity: {selectedTransport.capacity} people
                 </p>
               </div>
             </div>
 
-            {/* Step 1: Date & Time Selection */}
-            {currentStep === 'datetime' && (
+            {/* Step 1: Details Selection */}
+            {currentStep === 'details' && (
               <div className="flex gap-3 mt-2">
                 <button
                   onClick={() => setShowModal(false)}
@@ -395,8 +437,13 @@ export default function TourGuideBookingPage() {
                 </button>
                 <button
                   onClick={() => {
-                    if (!bookingDate || !bookingTime) {
-                      alert("Please select both date and time")
+                    if (!bookingDate || !bookingTime || !passengers) {
+                      alert("Please fill all fields")
+                      return
+                    }
+                    const passengerCount = parseInt(passengers)
+                    if (passengerCount < 1 || passengerCount > selectedTransport.capacity) {
+                      alert(`Passengers must be between 1 and ${selectedTransport.capacity}`)
                       return
                     }
                     setCurrentStep('payment')
@@ -442,7 +489,7 @@ export default function TourGuideBookingPage() {
 
                     <div className="flex gap-3 pt-4 border-t border-amber-300/20">
                       <button
-                        onClick={() => setCurrentStep('datetime')}
+                        onClick={() => setCurrentStep('details')}
                         className="flex-1 py-2 border border-amber-300/50 text-amber-200 rounded-lg font-poppins hover:bg-white/5 transition-all"
                       >
                         Back
@@ -505,11 +552,11 @@ export default function TourGuideBookingPage() {
                     </svg>
                   </div>
                   <h3 className="text-2xl font-cinzel-decorative text-amber-100">Booking Confirmed!</h3>
-                  <p className="text-white/80 font-merriweather">Your tour has been successfully booked.</p>
+                  <p className="text-white/80 font-merriweather">Your transport has been successfully booked.</p>
                   
                   <div className="bg-white/5 border border-amber-300/30 rounded-lg p-4 space-y-2 text-left">
                     <p className="text-sm text-white/80 font-poppins">
-                      <span className="text-amber-200 font-semibold">Guide:</span> {selectedGuide?.name}
+                      <span className="text-amber-200 font-semibold">Transport:</span> {selectedTransport?.name}
                     </p>
                     <p className="text-sm text-white/80 font-poppins">
                       <span className="text-amber-200 font-semibold">Date:</span> {bookingDate?.toLocaleDateString('en-GB')}
@@ -518,7 +565,10 @@ export default function TourGuideBookingPage() {
                       <span className="text-amber-200 font-semibold">Time:</span> {TIME_SLOTS.find(slot => slot.value === bookingTime)?.label}
                     </p>
                     <p className="text-sm text-white/80 font-poppins">
-                      <span className="text-amber-200 font-semibold">Price:</span> ₹{selectedGuide?.price}
+                      <span className="text-amber-200 font-semibold">Passengers:</span> {passengers}
+                    </p>
+                    <p className="text-sm text-white/80 font-poppins">
+                      <span className="text-amber-200 font-semibold">Total Price:</span> ₹{totalPrice}
                     </p>
                   </div>
                   

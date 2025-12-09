@@ -10,12 +10,21 @@ interface TopBarProps {
 export default function TopBar({ onMenuClick }: TopBarProps) {
   const router = useRouter();
 
-  const handleLogout = () => {
-    // Clear authentication
-    if (typeof window !== 'undefined') {
-      localStorage.removeItem('isAuthenticated');
+  const handleLogout = async () => {
+    try {
+      // Call logout API to clear JWT cookie
+      await fetch('/api/auth/logout', {
+        method: 'POST',
+      });
+      
+      // Redirect to login page
+      router.push('/admin');
+      router.refresh(); // Force refresh to clear any cached data
+    } catch (error) {
+      console.error('Logout error:', error);
+      // Still redirect even if API call fails
+      router.push('/admin');
     }
-    router.push('/admin');
   };
 
   return (
