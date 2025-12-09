@@ -20,14 +20,42 @@ export default function SubmissionsPage() {
       setLoading(true);
       setError(null);
 
-      // Fetch media submissions (from OCR and media uploads)
-      const response = await fetch('/api/submissions/media');
-      if (!response.ok) {
+      // Fetch both media submissions and data contributions
+      const [mediaResponse, dataResponse] = await Promise.all([
+        fetch('/api/submissions/media'),
+        fetch('/api/data-contribution'),
+      ]);
+
+      if (!mediaResponse.ok && !dataResponse.ok) {
         throw new Error('Failed to fetch submissions');
       }
 
-      const data = await response.json();
-      setSubmissions(data);
+      let allSubmissions: any[] = [];
+
+      // Get media submissions
+      if (mediaResponse.ok) {
+        const mediaData = await mediaResponse.json();
+        allSubmissions = [...allSubmissions, ...mediaData];
+      }
+
+      // Get data contributions
+      if (dataResponse.ok) {
+        const dataData = await dataResponse.json();
+        const formattedData = dataData.map((item: any) => ({
+          id: item.id,
+          title: item.monastery,
+          monasteryName: item.monastery,
+          contributorName: item.fullName,
+          contributorEmail: item.email,
+          type: `${item.dataType} (Data)`,
+          status: item.status,
+          submittedOn: item.timestamp,
+          ...item,
+        }));
+        allSubmissions = [...allSubmissions, ...formattedData];
+      }
+
+      setSubmissions(allSubmissions);
     } catch (err) {
       console.error('Error fetching submissions:', err);
       setError(err instanceof Error ? err.message : 'Failed to load submissions');
