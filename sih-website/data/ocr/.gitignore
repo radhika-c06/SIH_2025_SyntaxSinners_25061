@@ -1,0 +1,7 @@
+# Ignore all OCR data files and images
+*.json
+images/*
+
+# Keep the README and directory structure
+!README.md
+!.gitignore
