@@ -30,5 +30,13 @@
     "password": "ef797c8118f02dfb649607dd5d3f8c7623048c9c063d532cc95c5ed7a898a64f",
     "phone": "7027053520",
     "registeredAt": "2025-12-09T05:33:41.084Z"
+  },
+  {
+    "id": "6cf6ad5532fb3a2a99c403c14539055b",
+    "fullName": "radhika",
+    "email": "rad@gmail.com",
+    "password": "7b5ece24062ef7304c8ec923ad3daaa013f1313f1cd966c5dfe13f4c80892bfd",
+    "phone": "7778109395",
+    "registeredAt": "2025-12-09T05:58:49.467Z"
   }
 ]

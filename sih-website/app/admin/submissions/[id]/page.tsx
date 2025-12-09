@@ -25,20 +25,56 @@ export default function SubmissionDetailPage() {
       setLoading(true);
       setError(null);
 
-      const response = await fetch(`/api/submissions/media/${params.id}`);
-      if (!response.ok) {
-        if (response.status === 404) {
-          throw new Error('Submission not found');
-        }
-        throw new Error('Failed to fetch submission');
+      console.log('Fetching submission with ID:', params.id);
+
+      // First try direct fetch from data-contribution API
+      let response = await fetch(`/api/data-contribution/${params.id}`);
+      
+      if (response.ok) {
+        const data = await response.json();
+        console.log('Submission fetched successfully:', data);
+        setSubmission({ ...data, isDataContribution: true });
+        setLoading(false);
+        return;
       }
 
-      const data = await response.json();
-      setSubmission(data);
+      // If direct fetch fails, try to get all submissions and find by ID
+      console.log('Direct fetch failed, trying to fetch all submissions...');
+      response = await fetch('/api/data-contribution');
+      
+      if (response.ok) {
+        const allSubmissions = await response.json();
+        const submission = allSubmissions.find((s: any) => 
+          s._id === params.id || s.id === params.id
+        );
+
+        if (submission) {
+          console.log('Submission found in list:', submission);
+          setSubmission({ ...submission, isDataContribution: true });
+          setLoading(false);
+          return;
+        }
+      }
+
+      // Try media submissions as fallback
+      console.log('Data contribution not found, trying media...');
+      response = await fetch(`/api/submissions/media/${params.id}`);
+      
+      if (response.ok) {
+        const data = await response.json();
+        console.log('Media submission found:', data);
+        setSubmission({ ...data, isDataContribution: false });
+        setLoading(false);
+        return;
+      }
+
+      // Nothing found
+      console.error('Submission not found in any source');
+      throw new Error('Submission not found');
+      
     } catch (err) {
       console.error('Error fetching submission:', err);
       setError(err instanceof Error ? err.message : 'Failed to load submission');
-    } finally {
       setLoading(false);
     }
   };
@@ -47,7 +83,8 @@ export default function SubmissionDetailPage() {
     if (!submission) return;
     setIsProcessing(true);
     try {
-      const response = await fetch(`/api/submissions/media/${params.id}`, {
+      const endpoint = submission.isDataContribution ? '/api/data-contribution' : '/api/submissions/media';
+      const response = await fetch(`${endpoint}/${params.id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -78,7 +115,8 @@ export default function SubmissionDetailPage() {
     }
     setIsProcessing(true);
     try {
-      const response = await fetch(`/api/submissions/media/${params.id}`, {
+      const endpoint = submission.isDataContribution ? '/api/data-contribution' : '/api/submissions/media';
+      const response = await fetch(`${endpoint}/${params.id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

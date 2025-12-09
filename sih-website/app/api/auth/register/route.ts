@@ -4,9 +4,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { connectDB } from '@/lib/db';
-import { AdminUser } from '@/lib/models/AdminUser';
-import { hashPassword } from '@/lib/auth/password';
+import { registerUser } from '@/lib/auth/fileAuth';
 
 export async function POST(request: NextRequest) {
   try {
@@ -37,41 +35,27 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Connect to DB
-    await connectDB();
+    // Register user
+    const result = await registerUser(name, email, password);
 
-    // Check if email already exists
-    const existingAdmin = await AdminUser.findOne({ email: email.toLowerCase() });
-    if (existingAdmin) {
+    if (!result.success) {
       return NextResponse.json(
         {
           success: false,
-          error: 'Email already registered',
+          error: result.error,
         },
         { status: 400 }
       );
     }
 
-    // Hash password
-    const passwordHash = await hashPassword(password);
-
-    // Create admin
-    const admin = new AdminUser({
-      name,
-      email: email.toLowerCase(),
-      passwordHash,
-    });
-
-    await admin.save();
-
     return NextResponse.json(
       {
         success: true,
         data: {
-          id: admin._id,
-          name: admin.name,
-          email: admin.email,
-          role: admin.role,
+          id: result.data?.id,
+          name: result.data?.name,
+          email: result.data?.email,
+          role: result.data?.role,
         },
       },
       { status: 201 }

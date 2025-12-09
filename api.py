@@ -1,7 +1,7 @@
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-from chatbot import SikkimMonasteryChatbot
+from bodhi import SikkimMonasteryChatbot
 from dotenv import load_dotenv
 import os
 
