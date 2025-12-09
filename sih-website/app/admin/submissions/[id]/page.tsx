@@ -4,9 +4,8 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import StatusBadge from '@/components/admin/StatusBadge';
-import { ProtectedRoute } from '@/components/ProtectedRoute';
 
-function SubmissionDetailPage() {
+export default function SubmissionDetailPage() {
   const params = useParams();
   const router = useRouter();
   const [submission, setSubmission] = useState<any>(null);
@@ -404,13 +403,5 @@ function SubmissionDetailPage() {
         </>
       )}
     </div>
-  );
-}
-
-export default function SubmissionDetailPageWrapper() {
-  return (
-    <ProtectedRoute>
-      <SubmissionDetailPage />
-    </ProtectedRoute>
   );
 }

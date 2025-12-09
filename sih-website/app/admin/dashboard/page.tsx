@@ -6,7 +6,6 @@ import StatsCard from '@/components/admin/StatsCard';
 import StatusBadge from '@/components/admin/StatusBadge';
 import Link from 'next/link';
 import { ActivityItem } from '@/types/admin';
-import { ProtectedRoute } from '@/components/ProtectedRoute';
 
 interface StatsData {
   totalMonasteries: number;
@@ -25,7 +24,7 @@ interface Activity {
   type: 'submission' | 'monastery' | 'approval';
 }
 
-function DashboardPage() {
+export default function DashboardPage() {
   const router = useRouter();
   const [stats, setStats] = useState<StatsData | null>(null);
   const [recentActivity, setRecentActivity] = useState<Activity[]>([]);
@@ -340,13 +339,5 @@ function DashboardPage() {
         </div>
       </div>
     </div>
-  );
-}
-
-export default function DashboardPage() {
-  return (
-    <ProtectedRoute>
-      <DashboardPage />
-    </ProtectedRoute>
   );
 }
