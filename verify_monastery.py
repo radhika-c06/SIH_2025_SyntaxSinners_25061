@@ -6,7 +6,7 @@ Usage: python verify_monastery.py "claim to verify"
 
 import sys
 import json
-from chatbot import verify_information
+from bodhi import verify_information
 
 def main():
     if len(sys.argv) < 2:

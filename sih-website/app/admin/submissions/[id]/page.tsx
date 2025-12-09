@@ -25,29 +25,56 @@ export default function SubmissionDetailPage() {
       setLoading(true);
       setError(null);
 
-      // Try to fetch from data-contribution first, then fall back to media
+      console.log('Fetching submission with ID:', params.id);
+
+      // First try direct fetch from data-contribution API
       let response = await fetch(`/api/data-contribution/${params.id}`);
-      let isDataContribution = true;
-
-      if (!response.ok) {
-        // Try media submissions
-        response = await fetch(`/api/submissions/media/${params.id}`);
-        isDataContribution = false;
+      
+      if (response.ok) {
+        const data = await response.json();
+        console.log('Submission fetched successfully:', data);
+        setSubmission({ ...data, isDataContribution: true });
+        setLoading(false);
+        return;
       }
 
-      if (!response.ok) {
-        if (response.status === 404) {
-          throw new Error('Submission not found');
+      // If direct fetch fails, try to get all submissions and find by ID
+      console.log('Direct fetch failed, trying to fetch all submissions...');
+      response = await fetch('/api/data-contribution');
+      
+      if (response.ok) {
+        const allSubmissions = await response.json();
+        const submission = allSubmissions.find((s: any) => 
+          s._id === params.id || s.id === params.id
+        );
+
+        if (submission) {
+          console.log('Submission found in list:', submission);
+          setSubmission({ ...submission, isDataContribution: true });
+          setLoading(false);
+          return;
         }
-        throw new Error('Failed to fetch submission');
       }
 
-      const data = await response.json();
-      setSubmission({ ...data, isDataContribution });
+      // Try media submissions as fallback
+      console.log('Data contribution not found, trying media...');
+      response = await fetch(`/api/submissions/media/${params.id}`);
+      
+      if (response.ok) {
+        const data = await response.json();
+        console.log('Media submission found:', data);
+        setSubmission({ ...data, isDataContribution: false });
+        setLoading(false);
+        return;
+      }
+
+      // Nothing found
+      console.error('Submission not found in any source');
+      throw new Error('Submission not found');
+      
     } catch (err) {
       console.error('Error fetching submission:', err);
       setError(err instanceof Error ? err.message : 'Failed to load submission');
-    } finally {
       setLoading(false);
     }
   };

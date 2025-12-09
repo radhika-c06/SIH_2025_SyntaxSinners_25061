@@ -42,14 +42,14 @@ export default function SubmissionsPage() {
       if (dataResponse.ok) {
         const dataData = await dataResponse.json();
         const formattedData = dataData.map((item: any) => ({
-          id: item.id,
+          id: item._id || item.id,
           title: item.monastery,
           monasteryName: item.monastery,
-          contributorName: item.fullName,
-          contributorEmail: item.email,
+          contributorName: item.contributorName,
+          contributorEmail: item.contributorEmail,
           type: `${item.dataType} (Data)`,
-          status: item.status,
-          submittedOn: item.timestamp,
+          status: item.status || 'pending',
+          submittedOn: item.timestamp || item.createdAt,
           ...item,
         }));
         allSubmissions = [...allSubmissions, ...formattedData];
@@ -68,7 +68,8 @@ export default function SubmissionsPage() {
     return statusFilter === 'All' || submission.status === statusFilter;
   });
 
-  const getStatusCapitalized = (status: string): 'Pending' | 'Approved' | 'Rejected' => {
+  const getStatusCapitalized = (status: string | undefined): 'Pending' | 'Approved' | 'Rejected' => {
+    if (!status) return 'Pending';
     return (status.charAt(0).toUpperCase() + status.slice(1)) as any;
   };
 

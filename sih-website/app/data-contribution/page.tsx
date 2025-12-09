@@ -161,12 +161,71 @@ export default function DataContributionPage() {
 
       {/* Main Content */}
       <main className="max-w-4xl mx-auto px-4 py-12 mt-20">
-        {/* Success Message */}
+        {/* Success Modal Popup */}
         {submitted && (
-          <div className="mb-8 p-4 bg-green-600/20 border border-green-500 rounded-lg">
-            <p className="text-green-300 font-semibold">
-              ✓ Thank you! Your data contribution has been submitted successfully. We will review it shortly.
-            </p>
+          <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+            <div className="bg-gradient-to-br from-amber-900 to-amber-950 border-2 border-amber-500/60 rounded-2xl p-8 max-w-md w-full shadow-2xl animate-in fade-in zoom-in">
+              {/* Success Icon */}
+              <div className="flex justify-center mb-6">
+                <div className="w-24 h-24 bg-green-500/20 rounded-full flex items-center justify-center border-3 border-green-400 animate-pulse">
+                  <svg className="w-12 h-12 text-green-400" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                  </svg>
+                </div>
+              </div>
+
+              {/* Success Title */}
+              <h2 className="text-3xl font-bold text-white text-center mb-2">
+                ✨ Success!
+              </h2>
+              
+              {/* Success Message */}
+              <p className="text-amber-100 text-center mb-6 leading-relaxed text-lg">
+                Your data contribution has been submitted successfully!
+              </p>
+
+              {/* Submission Details */}
+              <div className="bg-amber-900/50 rounded-lg p-4 mb-6 border border-amber-600/40 space-y-2">
+                <div className="flex justify-between items-center">
+                  <span className="text-amber-200 font-semibold">Monastery:</span>
+                  <span className="text-amber-100">{formData.monastery}</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-amber-200 font-semibold">Data Type:</span>
+                  <span className="text-amber-100">{formData.dataType}</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-amber-200 font-semibold">Status:</span>
+                  <span className="text-yellow-300 font-bold">⏳ Pending Review</span>
+                </div>
+              </div>
+
+              {/* Notification Info */}
+              <div className="bg-blue-900/30 rounded-lg p-4 mb-6 border border-blue-500/40">
+                <p className="text-blue-200 text-sm text-center">
+                  📧 A confirmation has been sent to<br />
+                  <span className="font-semibold">{formData.email}</span>
+                </p>
+              </div>
+
+              {/* Additional Info */}
+              <div className="bg-amber-900/30 rounded-lg p-3 mb-6 border border-amber-700/30">
+                <p className="text-amber-200 text-xs text-center leading-relaxed">
+                  Our team will review your submission shortly. Thank you for contributing to the preservation of our monastery heritage! 🙏
+                </p>
+              </div>
+
+              {/* Close Button */}
+              <button
+                onClick={() => {
+                  setSubmitted(false);
+                  setErrors({});
+                }}
+                className="w-full px-6 py-3 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-amber-950 font-bold rounded-lg transition-all shadow-lg transform hover:scale-105 active:scale-95"
+              >
+                Done
+              </button>
+            </div>
           </div>
         )}
 
