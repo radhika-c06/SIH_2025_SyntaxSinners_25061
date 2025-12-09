@@ -1,95 +1,187 @@
 /**
- * Authentication Routes - Simplified Working Version
- * Handles user registration with OTP verification and eKYC
+ * Media Contributor Authentication Routes
+ * Handles user registration and login for media contributors
  */
 
 const express = require('express');
 const router = express.Router();
+const fs = require('fs').promises;
+const path = require('path');
 const crypto = require('crypto');
 
-// In-memory storage for OTP sessions (use Redis in production)
-const otpSessions = new Map();
+const USERS_FILE = path.join(__dirname, '../users.json');
 
-/**
- * Helper: Generate a random 6-digit OTP
- */
-function generateOTP() {
-  return String(Math.floor(100000 + Math.random() * 900000));
+// Helper function to hash password
+function hashPassword(password) {
+  return crypto.createHash('sha256').update(password).digest('hex');
 }
 
-/**
- * Helper: Create a session ID for OTP tracking
- */
-function generateSessionId() {
-  return crypto.randomBytes(16).toString('hex');
-}
-
-/**
- * Helper: Mask Aadhaar number (show last 4 digits only)
- */
-function maskAadhaar(aadhaar) {
-  return 'XXXX-XXXX-' + aadhaar.slice(-4);
-}
-
-/**
- * Helper: Mask phone number (show last 4 digits only)
- */
-function maskPhone(phone) {
-  return 'XXXXXX' + phone.slice(-4);
-}
-
-// ============================================================================
-// POST /send-phone-otp
-// ============================================================================
-
-router.post('/send-phone-otp', async (req, res) => {
+// Helper function to read users
+async function readUsers() {
   try {
-    const { phone } = req.body;
+    const data = await fs.readFile(USERS_FILE, 'utf8');
+    return JSON.parse(data);
+  } catch (error) {
+    return [];
+  }
+}
 
-    if (!phone || !/^\d{10,15}$/.test(phone)) {
-      return res.status(400).json({
-        success: false,
-        error: 'Invalid phone number. Use 10-15 digits.',
+// Helper function to write users
+async function writeUsers(users) {
+  await fs.writeFile(USERS_FILE, JSON.stringify(users, null, 2));
+}
+
+// Register new user
+router.post('/register', async (req, res) => {
+  try {
+    const { fullName, email, password, phone } = req.body;
+
+    // Validation
+    if (!fullName || !email || !password || !phone) {
+      return res.status(400).json({ 
+        success: false, 
+        message: 'All fields are required' 
       });
     }
 
-    const otp = generateOTP();
-    const sessionId = generateSessionId();
+    if (password.length < 6) {
+      return res.status(400).json({ 
+        success: false, 
+        message: 'Password must be at least 6 characters' 
+      });
+    }
 
-    otpSessions.set(sessionId, {
-      type: 'phone',
+    // Check if user already exists
+    const users = await readUsers();
+    const existingUser = users.find(u => u.email === email);
+
+    if (existingUser) {
+      return res.status(400).json({ 
+        success: false, 
+        message: 'User with this email already exists' 
+      });
+    }
+
+    // Create new user
+    const newUser = {
+      id: crypto.randomBytes(16).toString('hex'),
+      fullName,
+      email,
+      password: hashPassword(password),
       phone,
-      otp,
-      attempts: 0,
-      createdAt: Date.now(),
-      expiresAt: Date.now() + 10 * 60 * 1000,
-    });
+      registeredAt: new Date().toISOString()
+    };
 
-    console.log(
-      `[PHONE OTP] Masked: ${maskPhone(phone)} | OTP: ${otp} | Session: ${sessionId.slice(0, 8)}...`
-    );
+    users.push(newUser);
+    await writeUsers(users);
 
-    res.json({
-      success: true,
-      sessionId,
-      maskedPhone: maskPhone(phone),
-      message: 'OTP sent successfully to your phone.',
-      expiresIn: 600,
+    // Return user data without password
+    const { password: _, ...userWithoutPassword } = newUser;
+
+    res.status(201).json({ 
+      success: true, 
+      message: 'Registration successful',
+      user: userWithoutPassword
     });
   } catch (error) {
-    console.error('[PHONE OTP ERROR]', error);
-    res.status(500).json({
-      success: false,
-      error: 'Failed to send OTP. Please try again.',
+    console.error('Registration error:', error);
+    res.status(500).json({ 
+      success: false, 
+      message: 'Registration failed. Please try again.' 
     });
   }
 });
 
-// ============================================================================
-// POST /verify-phone-otp
-// ============================================================================
+// Login user
+router.post('/login', async (req, res) => {
+  try {
+    const { email, password } = req.body;
 
-router.post('/verify-phone-otp', async (req, res) => {
+    if (!email || !password) {
+      return res.status(400).json({ 
+        success: false, 
+        message: 'Email and password are required' 
+      });
+    }
+
+    // Find user
+    const users = await readUsers();
+    const user = users.find(u => u.email === email);
+
+    if (!user) {
+      return res.status(401).json({ 
+        success: false, 
+        message: 'Invalid email or password' 
+      });
+    }
+
+    // Verify password
+    const hashedPassword = hashPassword(password);
+    if (user.password !== hashedPassword) {
+      return res.status(401).json({ 
+        success: false, 
+        message: 'Invalid email or password' 
+      });
+    }
+
+    // Return user data without password
+    const { password: _, ...userWithoutPassword } = user;
+
+    res.json({ 
+      success: true, 
+      message: 'Login successful',
+      user: userWithoutPassword
+    });
+  } catch (error) {
+    console.error('Login error:', error);
+    res.status(500).json({ 
+      success: false, 
+      message: 'Login failed. Please try again.' 
+    });
+  }
+});
+
+// Verify user session (optional endpoint)
+router.post('/verify', async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    if (!email) {
+      return res.status(400).json({ 
+        success: false, 
+        message: 'Email is required' 
+      });
+    }
+
+    const users = await readUsers();
+    const user = users.find(u => u.email === email);
+
+    if (!user) {
+      return res.status(404).json({ 
+        success: false, 
+        message: 'User not found' 
+      });
+    }
+
+    const { password: _, ...userWithoutPassword } = user;
+
+    res.json({ 
+      success: true, 
+      user: userWithoutPassword
+    });
+  } catch (error) {
+    console.error('Verification error:', error);
+    res.status(500).json({ 
+      success: false, 
+      message: 'Verification failed' 
+    });
+  }
+});
+
+module.exports = router;
+
+// OLD CODE REMOVED BELOW THIS LINE
+router.post('/verify-phone-otp-OLD', async (req, res) => {
   try {
     const { sessionId, otp } = req.body;
 

@@ -13,6 +13,8 @@ export default function MediaContributionRegister() {
     confirmPassword: "",
     phone: "",
   });
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [agreeTerms, setAgreeTerms] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
@@ -54,25 +56,34 @@ export default function MediaContributionRegister() {
 
     setLoading(true);
 
-    // Simulate registration
+    // Register user via API
     try {
-      setTimeout(() => {
-        // Store registration data
-        const contributors = JSON.parse(localStorage.getItem("mediaContributors") || "[]");
-        contributors.push({
-          ...formData,
-          registeredAt: new Date().toISOString(),
-        });
-        localStorage.setItem("mediaContributors", JSON.stringify(contributors));
+      const response = await fetch("http://localhost:5000/api/auth/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          fullName: formData.fullName,
+          email: formData.email,
+          password: formData.password,
+          phone: formData.phone,
+        }),
+      });
 
+      const data = await response.json();
+
+      if (data.success) {
         setSuccess("Registration successful! Redirecting to login...");
         setTimeout(() => {
           router.push("/media-contribution/login");
         }, 1500);
-        setLoading(false);
-      }, 1000);
+      } else {
+        setError(data.message || "Registration failed. Please try again.");
+      }
     } catch (err) {
-      setError("Registration failed. Please try again.");
+      setError("Registration failed. Please check your connection and try again.");
+    } finally {
       setLoading(false);
     }
   };
@@ -170,43 +181,63 @@ export default function MediaContributionRegister() {
           {/* Password */}
           <div className="relative">
             <input
-              type="password"
+              type={showPassword ? "text" : "password"}
               name="password"
               placeholder="Password"
               value={formData.password}
               onChange={handleChange}
-              className="w-full rounded-full px-6 py-4 bg-[#f2f6ff] text-[#1f130a] placeholder-[#a97c59] shadow-inner outline-none text-sm"
+              className="w-full rounded-full px-6 py-4 pr-12 bg-[#f2f6ff] text-[#1f130a] placeholder-[#a97c59] shadow-inner outline-none text-sm"
               style={{
                 border: "3px solid transparent",
                 boxShadow: "inset 0 2px 6px rgba(0,0,0,0.15)",
               }}
             />
-            <span className="absolute right-6 top-1/2 -translate-y-1/2 text-[#c28851]">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M17 8V7a5 5 0 00-10 0v1H5v12h14V8h-2zm-8 0V7a3 3 0 016 0v1H9zm0 4h6v2H9v-2zm0 4h6v2H9v-2z" />
-              </svg>
-            </span>
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-6 top-1/2 -translate-y-1/2 text-[#c28851] hover:text-[#a86841] transition cursor-pointer"
+            >
+              {showPassword ? (
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 7c2.76 0 5 2.24 5 5 0 .65-.13 1.26-.36 1.83l2.92 2.92c1.51-1.26 2.7-2.89 3.43-4.75-1.73-4.39-6-7.5-11-7.5-1.4 0-2.74.25-3.98.7l2.16 2.16C10.74 7.13 11.35 7 12 7zM2 4.27l2.28 2.28.46.46A11.804 11.804 0 001 12c1.73 4.39 6 7.5 11 7.5 1.55 0 3.03-.3 4.38-.84l.42.42L19.73 22 21 20.73 3.27 3 2 4.27zM7.53 9.8l1.55 1.55c-.05.21-.08.43-.08.65 0 1.66 1.34 3 3 3 .22 0 .44-.03.65-.08l1.55 1.55c-.67.33-1.41.53-2.2.53-2.76 0-5-2.24-5-5 0-.79.2-1.53.53-2.2zm4.31-.78l3.15 3.15.02-.16c0-1.66-1.34-3-3-3l-.17.01z" />
+                </svg>
+              ) : (
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z" />
+                </svg>
+              )}
+            </button>
           </div>
 
           {/* Confirm Password */}
           <div className="relative">
             <input
-              type="password"
+              type={showConfirmPassword ? "text" : "password"}
               name="confirmPassword"
               placeholder="Confirm Password"
               value={formData.confirmPassword}
               onChange={handleChange}
-              className="w-full rounded-full px-6 py-4 bg-[#f2f6ff] text-[#1f130a] placeholder-[#a97c59] shadow-inner outline-none text-sm"
+              className="w-full rounded-full px-6 py-4 pr-12 bg-[#f2f6ff] text-[#1f130a] placeholder-[#a97c59] shadow-inner outline-none text-sm"
               style={{
                 border: "3px solid transparent",
                 boxShadow: "inset 0 2px 6px rgba(0,0,0,0.15)",
               }}
             />
-            <span className="absolute right-6 top-1/2 -translate-y-1/2 text-[#c28851]">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M17 8V7a5 5 0 00-10 0v1H5v12h14V8h-2zm-8 0V7a3 3 0 016 0v1H9zm0 4h6v2H9v-2zm0 4h6v2H9v-2z" />
-              </svg>
-            </span>
+            <button
+              type="button"
+              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+              className="absolute right-6 top-1/2 -translate-y-1/2 text-[#c28851] hover:text-[#a86841] transition cursor-pointer"
+            >
+              {showConfirmPassword ? (
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 7c2.76 0 5 2.24 5 5 0 .65-.13 1.26-.36 1.83l2.92 2.92c1.51-1.26 2.7-2.89 3.43-4.75-1.73-4.39-6-7.5-11-7.5-1.4 0-2.74.25-3.98.7l2.16 2.16C10.74 7.13 11.35 7 12 7zM2 4.27l2.28 2.28.46.46A11.804 11.804 0 001 12c1.73 4.39 6 7.5 11 7.5 1.55 0 3.03-.3 4.38-.84l.42.42L19.73 22 21 20.73 3.27 3 2 4.27zM7.53 9.8l1.55 1.55c-.05.21-.08.43-.08.65 0 1.66 1.34 3 3 3 .22 0 .44-.03.65-.08l1.55 1.55c-.67.33-1.41.53-2.2.53-2.76 0-5-2.24-5-5 0-.79.2-1.53.53-2.2zm4.31-.78l3.15 3.15.02-.16c0-1.66-1.34-3-3-3l-.17.01z" />
+                </svg>
+              ) : (
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z" />
+                </svg>
+              )}
+            </button>
           </div>
 
           {/* Terms and Conditions */}
