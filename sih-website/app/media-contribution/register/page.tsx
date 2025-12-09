@@ -54,25 +54,34 @@ export default function MediaContributionRegister() {
 
     setLoading(true);
 
-    // Simulate registration
+    // Register user via API
     try {
-      setTimeout(() => {
-        // Store registration data
-        const contributors = JSON.parse(localStorage.getItem("mediaContributors") || "[]");
-        contributors.push({
-          ...formData,
-          registeredAt: new Date().toISOString(),
-        });
-        localStorage.setItem("mediaContributors", JSON.stringify(contributors));
+      const response = await fetch("http://localhost:5000/api/auth/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          fullName: formData.fullName,
+          email: formData.email,
+          password: formData.password,
+          phone: formData.phone,
+        }),
+      });
 
+      const data = await response.json();
+
+      if (data.success) {
         setSuccess("Registration successful! Redirecting to login...");
         setTimeout(() => {
           router.push("/media-contribution/login");
         }, 1500);
-        setLoading(false);
-      }, 1000);
+      } else {
+        setError(data.message || "Registration failed. Please try again.");
+      }
     } catch (err) {
-      setError("Registration failed. Please try again.");
+      setError("Registration failed. Please check your connection and try again.");
+    } finally {
       setLoading(false);
     }
   };

@@ -23,20 +23,34 @@ export default function MediaContributionLogin() {
     setLoading(true);
     setError("");
 
-    // Check credentials (test user: aryan@1234 / 741852)
-    if (email === "aryan@1234" && password === "741852") {
-      setTimeout(() => {
+    try {
+      const response = await fetch("http://localhost:5000/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        // Store authentication data
         if (typeof window !== "undefined") {
           localStorage.setItem("mediaContributorAuth", "true");
-          const expiresAt = Date.now() + 5 * 60 * 1000; // 5 minutes
+          localStorage.setItem("mediaContributorEmail", email);
+          localStorage.setItem("mediaContributorUser", JSON.stringify(data.user));
+          const expiresAt = Date.now() + 60 * 60 * 1000; // 1 hour
           localStorage.setItem("mediaContributorExpiry", String(expiresAt));
         }
         router.push("/media-contribution");
-        setLoading(false);
-      }, 900);
-    } else {
+      } else {
+        setError(data.message || "Invalid email or password");
+      }
+    } catch (err) {
+      setError("Login failed. Please check your connection and try again.");
+    } finally {
       setLoading(false);
-      setError("Invalid email or password. Try: aryan@1234 / 741852");
     }
   };
 
