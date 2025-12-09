@@ -38,11 +38,9 @@ export async function POST(request: NextRequest) {
 
     // Create JWT token - pass user data to signToken
     const token = signToken({
-      _id: result.data?.id || '',
-      name: result.data?.name || '',
-      email: result.data?.email || '',
+      adminId: result.data?.id || '',
       role: (result.data?.role as 'superadmin' | 'editor') || 'editor',
-    } as any);
+    });
 
     // Create response
     const response = NextResponse.json(

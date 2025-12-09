@@ -29,8 +29,10 @@ const resources = {
         home: "Home",
         overview: "Overview",
         map: "Map",
+        monasteries: "Monasteries",
         archive: "Digital Archive",
         language: "Language",
+        adminLogin: "Login as Admin",
       },
       hero: {
         headingTop: "DIGITALIZING",
@@ -95,8 +97,10 @@ const resources = {
         home: "होम",
         overview: "सारांश",
         map: "मानचित्र",
+        monasteries: "मठ",
         archive: "डिजिटल अभिलेखागार",
         language: "भाषा",
+        adminLogin: "प्रशासक के रूप में लॉगिन करें",
       },
       hero: {
         headingTop: "डिजिटलाइजिंग",
@@ -161,8 +165,10 @@ const resources = {
         home: "गृहपृष्ठ",
         overview: "अवलोकन",
         map: "नक्सा",
+        monasteries: "गुम्बा",
         archive: "डिजिटल अभिलेख",
         language: "भाषा",
+        adminLogin: "प्रशासकको रूपमा लगइन गर्नुहोस्",
       },
       hero: {
         headingTop: "डिजिटलाइज गर्दै",

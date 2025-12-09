@@ -141,6 +141,9 @@ export default function Nav() {
           {/* Right: search + burger */}
           <div className="ml-auto flex items-center gap-3">
             <LanguageSwitcher />
+            <Link href="/admin" className="hidden sm:block px-4 py-2 rounded-md bg-white/20 hover:bg-white/30 transition-colors text-sm font-medium">
+              {t("nav.adminLogin")}
+            </Link>
             <form className="hidden sm:flex items-center gap-2 rounded-full bg-white/10 px-3 py-1.5" onSubmit={handleSearch}>
               {/* search icon */}
               <svg width="16" height="16" viewBox="0 0 24 24" className="opacity-80">
