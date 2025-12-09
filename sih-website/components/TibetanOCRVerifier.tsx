@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import { mockVerifyOCR } from '@/lib/mockOCRVerifier';
 
 interface VerificationResult {
   actual_characters: string;
@@ -88,17 +89,25 @@ const TibetanOCRVerifier: React.FC<TibetanOCRVerifierProps> = ({
       return;
     }
 
-    const apiKey = process.env.NEXT_PUBLIC_ANTHROPIC_API_KEY;
-    if (!apiKey || apiKey === 'your-anthropic-api-key-here') {
-      setError('⚙️ Anthropic API key not configured. Please add NEXT_PUBLIC_ANTHROPIC_API_KEY to .env.local file. Get your free key from https://console.anthropic.com/');
-      return;
-    }
-
     setVerifying(true);
     setResults(null);
     setError(null);
 
     try {
+      const apiKey = process.env.NEXT_PUBLIC_ANTHROPIC_API_KEY;
+      const hasValidApiKey = apiKey && apiKey !== 'your-anthropic-api-key-here';
+
+      if (!hasValidApiKey) {
+        console.log('Using mock verification (no API key configured)');
+        const mockResults = await mockVerifyOCR(tesseractOCR);
+        setResults(mockResults);
+        if (onVerificationComplete) {
+          onVerificationComplete(mockResults);
+        }
+        return;
+      }
+
+      // Use real API if key is available
       const imageData = image.split(',')[1];
       const mimeType = image.split(',')[0].split(':')[1].split(';')[0];
 
@@ -200,7 +209,7 @@ You MUST respond with ONLY a valid JSON object (no markdown formatting, no backt
     } catch (err) {
       console.error('Verification error:', err);
       const errorMessage = err instanceof Error ? err.message : 'Unknown error';
-      
+
       if (errorMessage.includes('API')) {
         setError(`API Error: ${errorMessage}. Please check your API key configuration.`);
       } else if (errorMessage.includes('Failed to fetch')) {
@@ -222,15 +231,16 @@ You MUST respond with ONLY a valid JSON object (no markdown formatting, no backt
 
           {/* Setup Guide */}
           {(!process.env.NEXT_PUBLIC_ANTHROPIC_API_KEY || process.env.NEXT_PUBLIC_ANTHROPIC_API_KEY === 'your-anthropic-api-key-here') && (
-            <div className="mb-6 bg-blue-50 border-2 border-blue-300 rounded-lg p-4">
-              <p className="text-blue-800 font-semibold mb-2">⚙️ Setup Required</p>
-              <p className="text-blue-700 text-sm mb-3">To use the AI verification feature, you need to:</p>
-              <ol className="text-blue-700 text-sm space-y-2 ml-4 list-decimal">
-                <li>Get a free API key from <a href="https://console.anthropic.com/" target="_blank" rel="noopener noreferrer" className="underline font-semibold hover:text-blue-900">Anthropic Console</a></li>
+            <div className="mb-6 bg-amber-50 border-2 border-amber-300 rounded-lg p-4">
+              <p className="text-amber-800 font-semibold mb-2">🧪 Running in Demo Mode</p>
+              <p className="text-amber-700 text-sm mb-3">The verifier is using mock data for testing. To use real AI verification with Claude:</p>
+              <ol className="text-amber-700 text-sm space-y-2 ml-4 list-decimal">
+                <li>Get a free API key from <a href="https://console.anthropic.com/" target="_blank" rel="noopener noreferrer" className="underline font-semibold hover:text-amber-900">Anthropic Console</a></li>
                 <li>Add it to your <code className="bg-white px-2 py-1 rounded">.env.local</code> file:</li>
-                <li className="font-mono bg-white px-3 py-2 rounded text-gray-800">NEXT_PUBLIC_ANTHROPIC_API_KEY=your_key_here</li>
+                <li className="font-mono bg-white px-3 py-2 rounded text-gray-800">NEXT_PUBLIC_ANTHROPIC_API_KEY=sk-ant-your_key_here</li>
                 <li>Restart the development server</li>
               </ol>
+              <p className="text-amber-600 text-xs mt-3 font-semibold">📌 Demo mode shows simulated results - real API will provide accurate Tibetan verification</p>
             </div>
           )}
 
