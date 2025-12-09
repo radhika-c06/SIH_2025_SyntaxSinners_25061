@@ -88,6 +88,12 @@ const TibetanOCRVerifier: React.FC<TibetanOCRVerifierProps> = ({
       return;
     }
 
+    const apiKey = process.env.NEXT_PUBLIC_ANTHROPIC_API_KEY;
+    if (!apiKey || apiKey === 'your-anthropic-api-key-here') {
+      setError('⚙️ Anthropic API key not configured. Please add NEXT_PUBLIC_ANTHROPIC_API_KEY to .env.local file. Get your free key from https://console.anthropic.com/');
+      return;
+    }
+
     setVerifying(true);
     setResults(null);
     setError(null);
@@ -95,11 +101,6 @@ const TibetanOCRVerifier: React.FC<TibetanOCRVerifierProps> = ({
     try {
       const imageData = image.split(',')[1];
       const mimeType = image.split(',')[0].split(':')[1].split(';')[0];
-      const apiKey = process.env.NEXT_PUBLIC_ANTHROPIC_API_KEY;
-
-      if (!apiKey) {
-        throw new Error('Anthropic API key not configured');
-      }
 
       const response = await fetch('https://api.anthropic.com/v1/messages', {
         method: 'POST',
@@ -158,7 +159,8 @@ You MUST respond with ONLY a valid JSON object (no markdown formatting, no backt
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(`API request failed: ${errorData.error?.message || response.status}`);
+        const errorMsg = errorData.error?.message || response.statusText;
+        throw new Error(`API Error (${response.status}): ${errorMsg}`);
       }
 
       const data = await response.json();
@@ -197,7 +199,15 @@ You MUST respond with ONLY a valid JSON object (no markdown formatting, no backt
       }
     } catch (err) {
       console.error('Verification error:', err);
-      setError(`Error: ${err instanceof Error ? err.message : 'Unknown error'}. Please check console for details.`);
+      const errorMessage = err instanceof Error ? err.message : 'Unknown error';
+      
+      if (errorMessage.includes('API')) {
+        setError(`API Error: ${errorMessage}. Please check your API key configuration.`);
+      } else if (errorMessage.includes('Failed to fetch')) {
+        setError('Network error: Unable to reach Anthropic API. Please check your internet connection and API key.');
+      } else {
+        setError(`Error: ${errorMessage}. Please check the browser console for details.`);
+      }
     } finally {
       setVerifying(false);
     }
@@ -209,6 +219,20 @@ You MUST respond with ONLY a valid JSON object (no markdown formatting, no backt
         <div className="bg-white rounded-2xl shadow-xl p-8">
           <h1 className="text-4xl font-bold text-gray-800 mb-2">Tibetan OCR Verifier</h1>
           <p className="text-gray-600 mb-8">Upload an image and verify Tesseract OCR accuracy using AI</p>
+
+          {/* Setup Guide */}
+          {(!process.env.NEXT_PUBLIC_ANTHROPIC_API_KEY || process.env.NEXT_PUBLIC_ANTHROPIC_API_KEY === 'your-anthropic-api-key-here') && (
+            <div className="mb-6 bg-blue-50 border-2 border-blue-300 rounded-lg p-4">
+              <p className="text-blue-800 font-semibold mb-2">⚙️ Setup Required</p>
+              <p className="text-blue-700 text-sm mb-3">To use the AI verification feature, you need to:</p>
+              <ol className="text-blue-700 text-sm space-y-2 ml-4 list-decimal">
+                <li>Get a free API key from <a href="https://console.anthropic.com/" target="_blank" rel="noopener noreferrer" className="underline font-semibold hover:text-blue-900">Anthropic Console</a></li>
+                <li>Add it to your <code className="bg-white px-2 py-1 rounded">.env.local</code> file:</li>
+                <li className="font-mono bg-white px-3 py-2 rounded text-gray-800">NEXT_PUBLIC_ANTHROPIC_API_KEY=your_key_here</li>
+                <li>Restart the development server</li>
+              </ol>
+            </div>
+          )}
 
           {error && (
             <div className="mb-6 bg-red-50 border-2 border-red-300 rounded-lg p-4 flex items-start gap-3">
