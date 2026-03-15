@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { writeFile, mkdir } from 'fs/promises';
-import { join } from 'path';
-import { existsSync } from 'fs';
+import { connectDB } from '@/lib/db';
+import { MediaSubmission } from '@/lib/models/MediaSubmission';
 
 export async function POST(request: NextRequest) {
   try {
@@ -15,43 +14,28 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Create submissions data directory if it doesn't exist
-    const submissionsDir = join(process.cwd(), 'data', 'submissions');
-    if (!existsSync(submissionsDir)) {
-      await mkdir(submissionsDir, { recursive: true });
-    }
+    await connectDB();
 
-    // Create filename from title and timestamp
-    const timestamp = new Date().getTime();
-    const filename = `${data.title.replace(/[^a-z0-9]/gi, '_').toLowerCase()}_${timestamp}.json`;
-    const filepath = join(submissionsDir, filename);
-
-    // Prepare submission record
-    const submission = {
-      id: timestamp.toString(),
+    const doc = await MediaSubmission.create({
       title: data.title,
       monasteryName: data.monasteryName,
       contributorName: data.contributorName || 'Anonymous',
       contributorEmail: data.contributorEmail || '',
-      type: data.type || 'media', // 'photo', 'video', or combined
+      type: data.type || 'media',
       description: data.description || '',
       location: data.location || '',
       tags: data.tags || [],
       mediaFiles: data.mediaFiles || [],
       ocrData: data.ocrData || null,
       status: 'pending',
-      createdAt: new Date().toISOString(),
       submittedOn: new Date().toISOString().split('T')[0],
-    };
-
-    // Save to JSON file
-    await writeFile(filepath, JSON.stringify(submission, null, 2), 'utf-8');
+    });
 
     return NextResponse.json(
       {
         success: true,
         message: 'Media submission saved successfully',
-        id: submission.id,
+        id: doc._id.toString(),
       },
       { status: 200 }
     );
@@ -66,27 +50,9 @@ export async function POST(request: NextRequest) {
 
 export async function GET(request: NextRequest) {
   try {
-    const submissionsDir = join(process.cwd(), 'data', 'submissions');
+    await connectDB();
 
-    if (!existsSync(submissionsDir)) {
-      return NextResponse.json([], { status: 200 });
-    }
-
-    const fs = require('fs').promises;
-    const files = await fs.readdir(submissionsDir);
-
-    const submissions = [];
-    for (const file of files) {
-      if (file.endsWith('.json')) {
-        const filepath = join(submissionsDir, file);
-        const content = await fs.readFile(filepath, 'utf-8');
-        submissions.push(JSON.parse(content));
-      }
-    }
-
-    // Sort by creation date (newest first)
-    submissions.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
-
+    const submissions = await MediaSubmission.find({}).sort({ createdAt: -1 }).lean();
     return NextResponse.json(submissions, { status: 200 });
   } catch (error) {
     console.error('Error retrieving submissions:', error);
@@ -96,3 +62,4 @@ export async function GET(request: NextRequest) {
     );
   }
 }
+

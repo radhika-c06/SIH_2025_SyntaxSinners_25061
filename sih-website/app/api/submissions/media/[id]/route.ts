@@ -1,39 +1,22 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { join } from 'path';
-import { existsSync } from 'fs';
+import { connectDB } from '@/lib/db';
+import { MediaSubmission } from '@/lib/models/MediaSubmission';
+import mongoose from 'mongoose';
 
-export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(request: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {
-    const { id } = params;
+    const { id } = await context.params;
+    await connectDB();
 
-    const submissionsDir = join(process.cwd(), 'data', 'submissions');
+    const submission = mongoose.Types.ObjectId.isValid(id)
+      ? await MediaSubmission.findById(id).lean()
+      : null;
 
-    if (!existsSync(submissionsDir)) {
-      return NextResponse.json(
-        { error: 'Submission not found' },
-        { status: 404 }
-      );
+    if (!submission) {
+      return NextResponse.json({ error: 'Submission not found' }, { status: 404 });
     }
 
-    const fs = require('fs').promises;
-    const files = await fs.readdir(submissionsDir);
-
-    for (const file of files) {
-      if (file.endsWith('.json')) {
-        const filepath = join(submissionsDir, file);
-        const content = await fs.readFile(filepath, 'utf-8');
-        const submission = JSON.parse(content);
-
-        if (submission.id === id) {
-          return NextResponse.json(submission, { status: 200 });
-        }
-      }
-    }
-
-    return NextResponse.json(
-      { error: 'Submission not found' },
-      { status: 404 }
-    );
+    return NextResponse.json(submission, { status: 200 });
   } catch (error) {
     console.error('Error retrieving submission:', error);
     return NextResponse.json(
@@ -43,46 +26,28 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
   }
 }
 
-export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {
+export async function PUT(request: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {
-    const { id } = params;
+    const { id } = await context.params;
     const updateData = await request.json();
 
-    const submissionsDir = join(process.cwd(), 'data', 'submissions');
+    await connectDB();
 
-    if (!existsSync(submissionsDir)) {
-      return NextResponse.json(
-        { error: 'Submission not found' },
-        { status: 404 }
-      );
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return NextResponse.json({ error: 'Invalid submission ID' }, { status: 400 });
     }
 
-    const fs = require('fs').promises;
-    const files = await fs.readdir(submissionsDir);
+    const updated = await MediaSubmission.findByIdAndUpdate(
+      id,
+      { ...updateData },
+      { new: true }
+    ).lean();
 
-    for (const file of files) {
-      if (file.endsWith('.json')) {
-        const filepath = join(submissionsDir, file);
-        const content = await fs.readFile(filepath, 'utf-8');
-        const submission = JSON.parse(content);
-
-        if (submission.id === id) {
-          const updated = {
-            ...submission,
-            ...updateData,
-            updatedAt: new Date().toISOString(),
-          };
-
-          await fs.writeFile(filepath, JSON.stringify(updated, null, 2), 'utf-8');
-          return NextResponse.json(updated, { status: 200 });
-        }
-      }
+    if (!updated) {
+      return NextResponse.json({ error: 'Submission not found' }, { status: 404 });
     }
 
-    return NextResponse.json(
-      { error: 'Submission not found' },
-      { status: 404 }
-    );
+    return NextResponse.json(updated, { status: 200 });
   } catch (error) {
     console.error('Error updating submission:', error);
     return NextResponse.json(
@@ -91,3 +56,4 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
     );
   }
 }
+

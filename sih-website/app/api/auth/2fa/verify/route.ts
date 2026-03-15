@@ -66,7 +66,7 @@ export async function POST(request: NextRequest) {
       }
 
       // Issue main JWT
-      const token = signToken(admin);
+      const token = signToken({ adminId: admin._id.toString(), role: admin.role as 'superadmin' | 'editor' });
 
       const response = NextResponse.json({ success: true });
       response.cookies.set({ name: 'admin_token', value: token, httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'lax', path: '/', maxAge: 7 * 24 * 60 * 60 });
