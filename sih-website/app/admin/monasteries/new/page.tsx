@@ -178,11 +178,11 @@ export default function NewMonasteryPage() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 bg-amber-950 min-h-screen p-8">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-white mb-2" style={{ fontFamily: 'Poppins' }}>
+          <h1 className="text-3xl font-bold text-amber-50 mb-2" style={{ fontFamily: 'Poppins' }}>
             Add New Monastery
           </h1>
           <p className="text-amber-200" style={{ fontFamily: 'Poppins' }}>
@@ -191,7 +191,7 @@ export default function NewMonasteryPage() {
         </div>
         <button
           onClick={() => router.back()}
-          className="px-4 py-2 rounded-lg bg-amber-900/30 hover:bg-amber-900/50 text-amber-100 font-medium transition"
+          className="px-4 py-2 rounded-lg bg-amber-800/50 hover:bg-amber-800/70 text-amber-100 font-medium transition"
           style={{ fontFamily: 'Poppins' }}
         >
           ← Back
@@ -203,13 +203,9 @@ export default function NewMonasteryPage() {
         <div className="lg:col-span-2 space-y-6">
           {/* Basic Information */}
           <div
-            className="rounded-2xl p-6 backdrop-blur-sm"
-            style={{
-              background: 'rgba(217, 119, 6, 0.1)',
-              border: '1px solid rgba(217, 119, 6, 0.2)',
-            }}
+            className="rounded-2xl p-6 backdrop-blur-sm bg-amber-900/40 border border-amber-800/50"
           >
-            <h2 className="text-xl font-bold text-white mb-6" style={{ fontFamily: 'Poppins' }}>
+            <h2 className="text-xl font-bold text-amber-50 mb-6" style={{ fontFamily: 'Poppins' }}>
               Basic Information
             </h2>
             <div className="space-y-4">
@@ -221,7 +217,7 @@ export default function NewMonasteryPage() {
                   type="text"
                   value={formData.name}
                   onChange={(e) => handleNameChange(e.target.value)}
-                  className="w-full px-4 py-3 rounded-lg bg-amber-900/30 border border-amber-500/30 text-amber-100 placeholder-amber-300/50 focus:outline-none focus:border-amber-500/50 transition"
+                  className="w-full px-4 py-3 rounded-lg bg-amber-800/40 border border-amber-700/50 text-amber-50 placeholder-amber-300/50 focus:outline-none focus:border-amber-600/50 transition"
                   placeholder="Enter monastery name"
                   style={{ fontFamily: 'Poppins' }}
                 />
@@ -235,11 +231,11 @@ export default function NewMonasteryPage() {
                   type="text"
                   value={formData.slug}
                   onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
-                  className="w-full px-4 py-3 rounded-lg bg-amber-900/30 border border-amber-500/30 text-amber-100 placeholder-amber-300/50 focus:outline-none focus:border-amber-500/50 transition"
+                  className="w-full px-4 py-3 rounded-lg bg-amber-800/40 border border-amber-700/50 text-amber-50 placeholder-amber-300/50 focus:outline-none focus:border-amber-600/50 transition"
                   placeholder="auto-generated-from-name"
                   style={{ fontFamily: 'Poppins' }}
                 />
-                <p className="text-sm text-amber-300/60 mt-1" style={{ fontFamily: 'Poppins' }}>
+                <p className="text-sm text-amber-300 mt-1" style={{ fontFamily: 'Poppins' }}>
                   Auto-generated from name. Edit if needed.
                 </p>
               </div>
@@ -253,7 +249,7 @@ export default function NewMonasteryPage() {
                     type="text"
                     value={formData.location}
                     onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-                    className="w-full px-4 py-3 rounded-lg bg-amber-900/30 border border-amber-500/30 text-amber-100 placeholder-amber-300/50 focus:outline-none focus:border-amber-500/50 transition"
+                    className="w-full px-4 py-3 rounded-lg bg-amber-800/40 border border-amber-700/50 text-amber-50 placeholder-amber-300/50 focus:outline-none focus:border-amber-600/50 transition"
                     placeholder="e.g., Rumtek, Sikkim"
                     style={{ fontFamily: 'Poppins' }}
                   />
@@ -267,7 +263,7 @@ export default function NewMonasteryPage() {
                     type="text"
                     value={formData.altitude}
                     onChange={(e) => setFormData({ ...formData, altitude: e.target.value })}
-                    className="w-full px-4 py-3 rounded-lg bg-amber-900/30 border border-amber-500/30 text-amber-100 placeholder-amber-300/50 focus:outline-none focus:border-amber-500/50 transition"
+                    className="w-full px-4 py-3 rounded-lg bg-amber-800/40 border border-amber-700/50 text-amber-50 placeholder-amber-300/50 focus:outline-none focus:border-amber-600/50 transition"
                     placeholder="e.g., 1,550 m"
                     style={{ fontFamily: 'Poppins' }}
                   />
@@ -282,7 +278,7 @@ export default function NewMonasteryPage() {
                   type="text"
                   value={formData.founded}
                   onChange={(e) => setFormData({ ...formData, founded: e.target.value })}
-                  className="w-full px-4 py-3 rounded-lg bg-amber-900/30 border border-amber-500/30 text-amber-100 placeholder-amber-300/50 focus:outline-none focus:border-amber-500/50 transition"
+                  className="w-full px-4 py-3 rounded-lg bg-amber-800/40 border border-amber-700/50 text-amber-50 placeholder-amber-300/50 focus:outline-none focus:border-amber-600/50 transition"
                   placeholder="e.g., 1960"
                   style={{ fontFamily: 'Poppins' }}
                 />
@@ -296,7 +292,7 @@ export default function NewMonasteryPage() {
                   value={formData.shortDescription}
                   onChange={(e) => setFormData({ ...formData, shortDescription: e.target.value })}
                   rows={3}
-                  className="w-full px-4 py-3 rounded-lg bg-amber-900/30 border border-amber-500/30 text-amber-100 placeholder-amber-300/50 focus:outline-none focus:border-amber-500/50 transition resize-none"
+                  className="w-full px-4 py-3 rounded-lg bg-amber-800/40 border border-amber-700/50 text-amber-50 placeholder-amber-300/50 focus:outline-none focus:border-amber-600/50 transition resize-none"
                   placeholder="Brief description for listings and previews"
                   style={{ fontFamily: 'Poppins' }}
                 />
@@ -406,7 +402,7 @@ export default function NewMonasteryPage() {
               border: '1px solid rgba(217, 119, 6, 0.2)',
             }}
           >
-            <h2 className="text-xl font-bold text-white mb-6" style={{ fontFamily: 'Poppins' }}>
+            <h2 className="text-xl font-bold text-amber-50 mb-6" style={{ fontFamily: 'Poppins' }}>
               Preview
             </h2>
             <div className="space-y-4">
@@ -417,7 +413,7 @@ export default function NewMonasteryPage() {
                 />
               )}
               <div>
-                <h3 className="text-lg font-bold text-white mb-1" style={{ fontFamily: 'Poppins' }}>
+                <h3 className="text-lg font-bold text-amber-50 mb-1" style={{ fontFamily: 'Poppins' }}>
                   {formData.name || 'Monastery Name'}
                 </h3>
                 <p className="text-sm text-amber-200 mb-2" style={{ fontFamily: 'Poppins' }}>
@@ -435,17 +431,13 @@ export default function NewMonasteryPage() {
 
           {/* Actions */}
           <div
-            className="rounded-2xl p-6 backdrop-blur-sm"
-            style={{
-              background: 'rgba(217, 119, 6, 0.1)',
-              border: '1px solid rgba(217, 119, 6, 0.2)',
-            }}
+            className="rounded-2xl p-6 backdrop-blur-sm bg-amber-900/40 border border-amber-800/50"
           >
-            <h2 className="text-xl font-bold text-white mb-6" style={{ fontFamily: 'Poppins' }}>
+            <h2 className="text-xl font-bold text-amber-50 mb-6" style={{ fontFamily: 'Poppins' }}>
               Status
             </h2>
             {error && (
-              <div className="mb-4 p-4 rounded-lg bg-red-500/20 border border-red-500/30 text-red-200">
+              <div className="mb-4 p-4 rounded-lg bg-red-950/60 border border-red-900/50 text-red-200">
                 {error}
               </div>
             )}
@@ -465,7 +457,7 @@ export default function NewMonasteryPage() {
                 <button
                   onClick={() => handleSave(formData.status)}
                   disabled={loading || isVerifying}
-                  className="w-full px-4 py-3 rounded-lg bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-amber-900 font-bold transition shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full px-4 py-3 rounded-lg bg-amber-600 hover:bg-amber-700 text-amber-50 font-bold transition shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
                   style={{ fontFamily: 'Poppins' }}
                 >
                   {isVerifying ? 'Verifying with AI...' : loading ? 'Saving...' : formData.status === 'Published' ? 'Save and Publish' : 'Save Monastery'}
@@ -473,7 +465,7 @@ export default function NewMonasteryPage() {
                 <button
                   onClick={() => router.back()}
                   disabled={loading}
-                  className="w-full px-4 py-3 rounded-lg bg-amber-900/30 hover:bg-amber-900/50 text-amber-100 font-semibold transition disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full px-4 py-3 rounded-lg bg-amber-800/50 hover:bg-amber-800/70 text-amber-100 font-semibold transition disabled:opacity-50 disabled:cursor-not-allowed"
                   style={{ fontFamily: 'Poppins' }}
                 >
                   Cancel
@@ -488,17 +480,13 @@ export default function NewMonasteryPage() {
       {showConfirmation && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div
-            className="rounded-2xl p-8 max-w-md w-full backdrop-blur-sm"
-            style={{
-              background: 'rgba(217, 119, 6, 0.15)',
-              border: '2px solid rgba(217, 119, 6, 0.3)',
-            }}
+            className="rounded-2xl p-8 max-w-md w-full backdrop-blur-sm bg-amber-900/40 border border-amber-800/50"
           >
-            <h3 className="text-2xl font-bold text-white mb-4" style={{ fontFamily: 'Poppins' }}>
+            <h3 className="text-2xl font-bold text-amber-50 mb-4" style={{ fontFamily: 'Poppins' }}>
               Confirm {confirmationStatus === 'Published' ? 'Publishing' : 'Saving as Draft'}
             </h3>
             
-            <div className="mb-6 p-4 rounded-lg bg-amber-900/20 border border-amber-500/30">
+            <div className="mb-6 p-4 rounded-lg bg-amber-800/30 border border-amber-700/50">
               <p className="text-amber-100 mb-3" style={{ fontFamily: 'Poppins' }}>
                 <strong>Monastery:</strong> {formData.name}
               </p>
@@ -511,16 +499,16 @@ export default function NewMonasteryPage() {
             </div>
 
             {confirmationStatus === 'Published' && (
-              <div className="mb-6 p-4 rounded-lg bg-green-500/10 border border-green-500/30">
-                <p className="text-green-100 text-sm" style={{ fontFamily: 'Poppins' }}>
+              <div className="mb-6 p-4 rounded-lg bg-green-900/40 border border-green-800/50">
+                <p className="text-green-200 text-sm" style={{ fontFamily: 'Poppins' }}>
                   ✓ This monastery will be visible on the main website and public pages immediately after confirmation.
                 </p>
               </div>
             )}
 
             {confirmationStatus === 'Draft' && (
-              <div className="mb-6 p-4 rounded-lg bg-blue-500/10 border border-blue-500/30">
-                <p className="text-blue-100 text-sm" style={{ fontFamily: 'Poppins' }}>
+              <div className="mb-6 p-4 rounded-lg bg-blue-900/40 border border-blue-800/50">
+                <p className="text-blue-200 text-sm" style={{ fontFamily: 'Poppins' }}>
                   ℹ This monastery will be saved as a draft and only visible in the admin dashboard. You can publish it later.
                 </p>
               </div>
@@ -530,8 +518,8 @@ export default function NewMonasteryPage() {
             {verificationResult && (
               <div className={`mb-6 p-4 rounded-lg border ${
                 verificationResult.approved 
-                  ? 'bg-green-500/10 border-green-500/30' 
-                  : 'bg-red-500/10 border-red-500/30'
+                  ? 'bg-green-900/40 border-green-800/50' 
+                  : 'bg-red-950/60 border-red-900/50'
               }`}>
                 <div className="flex items-start gap-3">
                   <span className="text-2xl">
@@ -539,12 +527,12 @@ export default function NewMonasteryPage() {
                   </span>
                   <div className="flex-1">
                     <p className={`font-bold mb-2 ${
-                      verificationResult.approved ? 'text-green-100' : 'text-red-100'
+                      verificationResult.approved ? 'text-green-200' : 'text-red-200'
                     }`} style={{ fontFamily: 'Poppins' }}>
                       AI Verification: {verificationResult.verdict}
                     </p>
                     <p className={`text-sm ${
-                      verificationResult.approved ? 'text-green-100/90' : 'text-red-100/90'
+                      verificationResult.approved ? 'text-green-200/90' : 'text-red-200/90'
                     }`} style={{ fontFamily: 'Poppins' }}>
                       {verificationResult.reason}
                     </p>
@@ -562,7 +550,7 @@ export default function NewMonasteryPage() {
               <button
                 onClick={confirmSave}
                 disabled={loading || (verificationResult !== null && !verificationResult.approved)}
-                className="w-full px-4 py-3 rounded-lg bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-amber-900 font-bold transition shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full px-4 py-3 rounded-lg bg-amber-600 hover:bg-amber-700 text-amber-50 font-bold transition shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
                 style={{ fontFamily: 'Poppins' }}
               >
                 {loading ? 'Saving...' : `Yes, ${confirmationStatus === 'Published' ? 'Publish' : 'Save as Draft'}`}
@@ -570,7 +558,7 @@ export default function NewMonasteryPage() {
               <button
                 onClick={() => setShowConfirmation(false)}
                 disabled={loading}
-                className="w-full px-4 py-3 rounded-lg bg-amber-900/30 hover:bg-amber-900/50 text-amber-100 font-semibold transition border border-amber-500/30 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full px-4 py-3 rounded-lg bg-amber-800/50 hover:bg-amber-800/70 text-amber-100 font-semibold transition border border-amber-700/50 disabled:opacity-50 disabled:cursor-not-allowed"
                 style={{ fontFamily: 'Poppins' }}
               >
                 Cancel

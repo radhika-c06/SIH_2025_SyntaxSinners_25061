@@ -46,5 +46,21 @@
     "password": "9cf259f59c49dd36bb1e2dbbfd0a2fd2a59e9bb9f7b19b96f07579ed250f7268",
     "phone": "9910427513",
     "registeredAt": "2025-12-09T09:13:16.380Z"
+  },
+  {
+    "id": "d35815e80766781676828e134c4413b3",
+    "fullName": "devi",
+    "email": "vk@gmail.com",
+    "password": "9cf259f59c49dd36bb1e2dbbfd0a2fd2a59e9bb9f7b19b96f07579ed250f7268",
+    "phone": "9910427513",
+    "registeredAt": "2025-12-09T12:09:27.570Z"
+  },
+  {
+    "id": "f192727d02e19727dd34cdabdce6df2b",
+    "fullName": "Ansh Jayara",
+    "email": "admin@example.com",
+    "password": "e86f78a8a3caf0b60d8e74e5942aa6d86dc150cd3c03338aef25b7d2d7e3acc7",
+    "phone": "admin@example.com",
+    "registeredAt": "2026-03-15T05:14:21.497Z"
   }
 ]

@@ -141,20 +141,20 @@ export default function SubmissionDetailPage() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 bg-amber-950 min-h-screen p-8">
       {/* Error State */}
       {error && (
-        <div className="rounded-2xl p-4 bg-red-900/30 border border-red-700/50 text-red-200">
+        <div className="rounded-2xl p-4 bg-red-950/60 border border-red-900/50 text-red-200">
           Error: {error}
         </div>
       )}
 
       {/* Loading State */}
       {loading && (
-        <div className="rounded-2xl p-6 backdrop-blur-sm" style={{ background: 'rgba(217, 119, 6, 0.1)', border: '1px solid rgba(217, 119, 6, 0.2)' }}>
+        <div className="rounded-2xl p-6 backdrop-blur-sm bg-amber-900/40 border border-amber-800/50">
           <div className="flex items-center justify-center gap-3">
             <div className="animate-spin rounded-full h-6 w-6 border-2 border-amber-500 border-t-transparent"></div>
-            <p className="text-amber-200" style={{ fontFamily: 'Poppins' }}>Loading submission...</p>
+            <p className="text-amber-100" style={{ fontFamily: 'Poppins' }}>Loading submission...</p>
           </div>
         </div>
       )}

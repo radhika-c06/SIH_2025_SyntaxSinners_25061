@@ -6,24 +6,25 @@ import mongoose from 'mongoose';
 // GET: Retrieve a specific data contribution
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await context.params;
     await connectDB();
 
-    console.log('API: Fetching submission with ID:', params.id);
+    console.log('API: Fetching submission with ID:', id);
 
     // Try to find by _id (MongoDB ObjectId)
     let submission = null;
     
     // If it looks like an ObjectId, try to find it
-    if (mongoose.Types.ObjectId.isValid(params.id)) {
-      submission = await ContributorSubmission.findById(params.id).lean();
+    if (mongoose.Types.ObjectId.isValid(id)) {
+      submission = await ContributorSubmission.findById(id).lean();
       console.log('Found by ObjectId:', !!submission);
     }
 
     if (!submission) {
-      console.log('Submission not found for ID:', params.id);
+      console.log('Submission not found for ID:', id);
       return NextResponse.json(
         { error: 'Submission not found' },
         { status: 404 }
@@ -60,13 +61,14 @@ export async function GET(
 // PUT: Update a specific data contribution status
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await context.params;
     await connectDB();
 
     // Validate MongoDB ObjectId
-    if (!mongoose.Types.ObjectId.isValid(params.id)) {
+    if (!mongoose.Types.ObjectId.isValid(id)) {
       return NextResponse.json(
         { error: 'Invalid submission ID' },
         { status: 400 }
@@ -86,7 +88,7 @@ export async function PUT(
 
     // Update submission
     const submission = await ContributorSubmission.findByIdAndUpdate(
-      params.id,
+      id,
       {
         status,
         reviewNotes: reviewNotes || '',

@@ -204,11 +204,11 @@ export default function MonasteriesPage() {
   const paginatedMonasteries = filteredMonasteries.slice(startIndex, startIndex + itemsPerPage);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 bg-amber-950 min-h-screen p-8">
       {/* Page Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div className="text-center flex-1">
-          <h1 className="text-5xl font-extrabold text-white mb-2" style={{ fontFamily: 'Poppins' }}>
+          <h1 className="text-5xl font-extrabold text-amber-50 mb-2" style={{ fontFamily: 'Poppins' }}>
             Monasteries
           </h1>
           <p className="text-xl font-bold text-amber-200" style={{ fontFamily: 'Poppins' }}>
@@ -217,7 +217,7 @@ export default function MonasteriesPage() {
         </div>
         <Link
           href="/admin/monasteries/new"
-          className="px-6 py-3 rounded-lg bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-amber-900 font-semibold transition shadow-lg hover:shadow-xl inline-flex items-center gap-2"
+          className="px-6 py-3 rounded-lg bg-amber-600 hover:bg-amber-700 text-amber-50 font-semibold transition shadow-lg hover:shadow-xl inline-flex items-center gap-2"
           style={{ fontFamily: 'Poppins' }}
         >
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -229,11 +229,7 @@ export default function MonasteriesPage() {
 
       {/* Filters Card */}
       <div
-        className="rounded-2xl p-6 backdrop-blur-sm"
-        style={{
-          background: 'rgba(41, 24, 10, 0.8)',
-          border: '1px solid rgba(217, 119, 6, 0.3)',
-        }}
+        className="rounded-2xl p-6 backdrop-blur-sm bg-amber-900/40 border border-amber-800/50"
       >
         <div className="flex flex-col lg:flex-row gap-4">
           {/* Search */}

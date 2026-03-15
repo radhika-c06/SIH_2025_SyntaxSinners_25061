@@ -1,72 +1,79 @@
 /**
  * POST /api/verify-monastery
- * Verify monastery information using AI chatbot
+ * Verify monastery information using Groq AI (direct API call, no subprocess)
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { spawn } from 'child_process';
-import path from 'path';
+
+const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
 
 export async function POST(request: NextRequest) {
   try {
     const data = await request.json();
     const { name, location, altitude, founded, description } = data;
 
-    // Construct verification claim
+    if (!name || !location) {
+      return NextResponse.json(
+        { success: false, error: 'name and location are required' },
+        { status: 400 }
+      );
+    }
+
+    const groqApiKey = process.env.GROQ_API_KEY;
+    if (!groqApiKey) {
+      return NextResponse.json(
+        { success: false, error: 'Groq API key not configured' },
+        { status: 500 }
+      );
+    }
+
+    // Construct verification claim (mirrors verify_monastery.py logic)
     const claim = `${name} is a monastery located in ${location}${altitude ? ` at ${altitude} altitude` : ''}${founded ? `, founded in ${founded}` : ''}. ${description || ''}`;
 
-    // Paths for Python and script
-    const parentDir = path.join(process.cwd(), '..');
-    const pythonScript = path.join(parentDir, 'verify_monastery.py');
-    const pythonPath = path.join(parentDir, '.venv', 'Scripts', 'python.exe');
-    
-    const verificationResult = await new Promise<{verdict: string, reason: string}>((resolve, reject) => {
-      const python = spawn(pythonPath, [pythonScript, claim], {
-        env: { ...process.env, GROQ_API_KEY: process.env.GROQ_API_KEY }
-      });
-      let output = '';
-      let errorOutput = '';
+    const systemPrompt = `You are a fact-checker specializing in Buddhist monasteries and religious sites in the Himalayan region (Sikkim, Darjeeling, Nepal, Bhutan, Tibet). Your task is to verify claims about monasteries.
 
-      python.stdout.on('data', (data) => {
-        output += data.toString();
-      });
+Respond ONLY in this exact format:
+VERDICT: [TRUE / FALSE / PARTIALLY TRUE / UNVERIFIABLE]
+REASON: [One sentence explanation]`;
 
-      python.stderr.on('data', (data) => {
-        errorOutput += data.toString();
-      });
-
-      python.on('close', (code) => {
-        if (code !== 0) {
-          reject(new Error(`Python script failed: ${errorOutput}`));
-          return;
-        }
-
-        try {
-          const result = JSON.parse(output);
-          
-          // Parse verdict from the response
-          const verdictMatch = result.verdict.match(/VERDICT:\s*(TRUE|FALSE|PARTIALLY TRUE|UNVERIFIABLE)/i);
-          const reasonMatch = result.verdict.match(/REASON:\s*(.+)/i);
-          
-          const verdict = verdictMatch ? verdictMatch[1].toUpperCase() : 'UNVERIFIABLE';
-          const reason = reasonMatch ? reasonMatch[1].trim() : result.verdict;
-          
-          resolve({ verdict, reason });
-        } catch (parseError) {
-          reject(new Error(`Failed to parse verification result: ${output}`));
-        }
-      });
+    const groqResponse = await fetch(GROQ_API_URL, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${groqApiKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: 'llama3-8b-8192',
+        messages: [
+          { role: 'system', content: systemPrompt },
+          { role: 'user', content: `Verify this claim: ${claim}` },
+        ],
+        max_tokens: 150,
+        temperature: 0.1,
+      }),
     });
 
-    // Determine if approved
-    const isApproved = verificationResult.verdict === 'TRUE' || verificationResult.verdict === 'PARTIALLY TRUE';
+    if (!groqResponse.ok) {
+      const errText = await groqResponse.text();
+      throw new Error(`Groq API error ${groqResponse.status}: ${errText}`);
+    }
+
+    const groqData = await groqResponse.json();
+    const rawText: string = groqData.choices?.[0]?.message?.content ?? '';
+
+    const verdictMatch = rawText.match(/VERDICT:\s*(TRUE|FALSE|PARTIALLY TRUE|UNVERIFIABLE)/i);
+    const reasonMatch = rawText.match(/REASON:\s*(.+)/i);
+
+    const verdict = verdictMatch ? verdictMatch[1].toUpperCase() : 'UNVERIFIABLE';
+    const reason = reasonMatch ? reasonMatch[1].trim() : rawText;
+    const isApproved = verdict === 'TRUE' || verdict === 'PARTIALLY TRUE';
 
     return NextResponse.json({
       success: true,
       data: {
         approved: isApproved,
-        verdict: verificationResult.verdict,
-        reason: verificationResult.reason,
+        verdict,
+        reason,
         claim,
       },
     });

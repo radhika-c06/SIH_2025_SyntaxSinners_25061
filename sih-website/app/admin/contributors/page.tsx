@@ -74,10 +74,10 @@ export default function ContributorsPage() {
   });
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 bg-amber-950 min-h-screen p-8">
       {/* Page Header */}
       <div>
-        <h1 className="text-3xl font-bold text-white mb-2" style={{ fontFamily: 'Poppins' }}>
+        <h1 className="text-3xl font-bold text-amber-50 mb-2" style={{ fontFamily: 'Poppins' }}>
           Contributors
         </h1>
         <p className="text-amber-200" style={{ fontFamily: 'Poppins' }}>
@@ -87,11 +87,7 @@ export default function ContributorsPage() {
 
       {/* Search */}
       <div
-        className="rounded-2xl p-6 backdrop-blur-sm"
-        style={{
-          background: 'rgba(217, 119, 6, 0.1)',
-          border: '1px solid rgba(217, 119, 6, 0.2)',
-        }}
+        className="rounded-2xl p-6 backdrop-blur-sm bg-amber-900/40 border border-amber-800/50"
       >
         <div className="relative">
           <input
@@ -99,7 +95,7 @@ export default function ContributorsPage() {
             placeholder="Search by name or email..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full px-4 py-3 pl-12 rounded-lg bg-amber-900/30 border border-amber-500/30 text-amber-100 placeholder-amber-300/50 focus:outline-none focus:border-amber-500/50 transition"
+            className="w-full px-4 py-3 pl-12 rounded-lg bg-amber-800/40 border border-amber-700/50 text-amber-50 placeholder-amber-300/50 focus:outline-none focus:border-amber-600/50 transition"
             style={{ fontFamily: 'Poppins' }}
           />
           <svg
@@ -115,29 +111,25 @@ export default function ContributorsPage() {
 
       {/* Contributors Table */}
       <div
-        className="rounded-2xl overflow-hidden backdrop-blur-sm"
-        style={{
-          background: 'rgba(217, 119, 6, 0.1)',
-          border: '1px solid rgba(217, 119, 6, 0.2)',
-        }}
+        className="rounded-2xl overflow-hidden backdrop-blur-sm bg-amber-900/40 border border-amber-800/50"
       >
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
-              <tr className="border-b border-amber-800/30">
-                <th className="text-left px-6 py-4 text-white font-semibold" style={{ fontFamily: 'Poppins' }}>
+              <tr className="border-b border-amber-800/50 bg-amber-900/60">
+                <th className="text-left px-6 py-4 text-amber-50 font-semibold" style={{ fontFamily: 'Poppins' }}>
                   Name
                 </th>
-                <th className="text-left px-6 py-4 text-white font-semibold" style={{ fontFamily: 'Poppins' }}>
+                <th className="text-left px-6 py-4 text-amber-50 font-semibold" style={{ fontFamily: 'Poppins' }}>
                   Email
                 </th>
-                <th className="text-center px-6 py-4 text-white font-semibold" style={{ fontFamily: 'Poppins' }}>
+                <th className="text-center px-6 py-4 text-amber-50 font-semibold" style={{ fontFamily: 'Poppins' }}>
                   Total Submissions
                 </th>
-                <th className="text-center px-6 py-4 text-white font-semibold" style={{ fontFamily: 'Poppins' }}>
+                <th className="text-center px-6 py-4 text-amber-50 font-semibold" style={{ fontFamily: 'Poppins' }}>
                   Approved
                 </th>
-                <th className="text-left px-6 py-4 text-white font-semibold" style={{ fontFamily: 'Poppins' }}>
+                <th className="text-left px-6 py-4 text-amber-50 font-semibold" style={{ fontFamily: 'Poppins' }}>
                   Last Submission
                 </th>
               </tr>
@@ -146,14 +138,14 @@ export default function ContributorsPage() {
               {filteredContributors.map((contributor) => (
                 <tr
                   key={contributor.id}
-                  className="border-b border-amber-800/20 hover:bg-amber-900/20 transition"
+                  className="border-b border-amber-800/30 hover:bg-amber-800/30 transition"
                 >
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 rounded-full bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center text-amber-900 font-bold text-sm">
                         {contributor.name.split(' ').map(n => n[0]).join('')}
                       </div>
-                      <p className="text-white font-medium" style={{ fontFamily: 'Poppins' }}>
+                      <p className="text-amber-50 font-medium" style={{ fontFamily: 'Poppins' }}>
                         {contributor.name}
                       </p>
                     </div>
@@ -162,12 +154,12 @@ export default function ContributorsPage() {
                     {contributor.email}
                   </td>
                   <td className="px-6 py-4 text-center">
-                    <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-amber-500/20 text-white font-semibold">
+                    <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-amber-800/60 text-amber-100 font-semibold">
                       {contributor.totalSubmissions}
                     </span>
                   </td>
                   <td className="px-6 py-4 text-center">
-                    <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-green-500/20 text-green-300 font-semibold">
+                    <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-green-900/60 text-green-300 font-semibold">
                       {contributor.approved}
                     </span>
                   </td>
@@ -184,41 +176,29 @@ export default function ContributorsPage() {
       {/* Stats */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div
-          className="rounded-2xl p-6 backdrop-blur-sm"
-          style={{
-            background: 'rgba(217, 119, 6, 0.1)',
-            border: '1px solid rgba(217, 119, 6, 0.2)',
-          }}
+          className="rounded-2xl p-6 backdrop-blur-sm bg-amber-900/40 border border-amber-800/50"
         >
           <p className="text-sm text-amber-200 mb-2" style={{ fontFamily: 'Poppins' }}>
             Total Contributors
           </p>
-          <p className="text-4xl font-bold text-white" style={{ fontFamily: 'Poppins' }}>
+          <p className="text-4xl font-bold text-amber-50" style={{ fontFamily: 'Poppins' }}>
             {mockContributors.length}
           </p>
         </div>
 
         <div
-          className="rounded-2xl p-6 backdrop-blur-sm"
-          style={{
-            background: 'rgba(217, 119, 6, 0.1)',
-            border: '1px solid rgba(217, 119, 6, 0.2)',
-          }}
+          className="rounded-2xl p-6 backdrop-blur-sm bg-amber-900/40 border border-amber-800/50"
         >
           <p className="text-sm text-amber-200 mb-2" style={{ fontFamily: 'Poppins' }}>
             Total Submissions
           </p>
-          <p className="text-4xl font-bold text-white" style={{ fontFamily: 'Poppins' }}>
+          <p className="text-4xl font-bold text-amber-50" style={{ fontFamily: 'Poppins' }}>
             {mockContributors.reduce((sum, c) => sum + c.totalSubmissions, 0)}
           </p>
         </div>
 
         <div
-          className="rounded-2xl p-6 backdrop-blur-sm"
-          style={{
-            background: 'rgba(217, 119, 6, 0.1)',
-            border: '1px solid rgba(217, 119, 6, 0.2)',
-          }}
+          className="rounded-2xl p-6 backdrop-blur-sm bg-amber-900/40 border border-amber-800/50"
         >
           <p className="text-sm text-amber-200 mb-2" style={{ fontFamily: 'Poppins' }}>
             Approval Rate

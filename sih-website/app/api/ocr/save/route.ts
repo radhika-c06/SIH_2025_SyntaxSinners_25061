@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { writeFile, mkdir } from 'fs/promises';
-import { join } from 'path';
-import { existsSync } from 'fs';
+import { connectDB } from '@/lib/db';
+import { OcrRecord } from '@/lib/models/OcrRecord';
+import { MediaSubmission } from '@/lib/models/MediaSubmission';
 
 export async function POST(request: NextRequest) {
   try {
@@ -15,20 +15,10 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Create OCR data directory if it doesn't exist
-    const ocrDataDir = join(process.cwd(), 'data', 'ocr');
-    if (!existsSync(ocrDataDir)) {
-      await mkdir(ocrDataDir, { recursive: true });
-    }
+    await connectDB();
 
-    // Create filename from title and timestamp
-    const timestamp = new Date().getTime();
-    const filename = `${data.title.replace(/[^a-z0-9]/gi, '_').toLowerCase()}_${timestamp}.json`;
-    const filepath = join(ocrDataDir, filename);
-
-    // Prepare data to save
-    const ocrRecord = {
-      id: timestamp,
+    // Save OCR record to MongoDB
+    const ocrDoc = await OcrRecord.create({
       title: data.title,
       language: data.language,
       capturedOn: data.capturedOn,
@@ -39,21 +29,13 @@ export async function POST(request: NextRequest) {
       rawText: data.rawText,
       cleanedText: data.cleanedText,
       imageData: data.imageData,
-      createdAt: new Date().toISOString(),
-      status: 'pending', // For admin review
-    };
+      contributorName: data.contributorName || 'Anonymous',
+      contributorEmail: data.contributorEmail || '',
+      status: 'pending',
+    });
 
-    // Save to JSON file
-    await writeFile(filepath, JSON.stringify(ocrRecord, null, 2), 'utf-8');
-
-    // Also save to media submissions for the admin submissions page
-    const submissionsDir = join(process.cwd(), 'data', 'submissions');
-    if (!existsSync(submissionsDir)) {
-      await mkdir(submissionsDir, { recursive: true });
-    }
-
-    const submissionRecord = {
-      id: timestamp.toString(),
+    // Also save to MediaSubmission so it appears in admin submissions page
+    await MediaSubmission.create({
       title: data.title,
       monasteryName: data.monasteryName,
       contributorName: data.contributorName || 'Anonymous',
@@ -70,34 +52,14 @@ export async function POST(request: NextRequest) {
         cleanedText: data.cleanedText,
       },
       status: 'pending',
-      createdAt: new Date().toISOString(),
       submittedOn: new Date().toISOString().split('T')[0],
-    };
-
-    const submissionFilename = `${data.title.replace(/[^a-z0-9]/gi, '_').toLowerCase()}_ocr_${timestamp}.json`;
-    const submissionFilepath = join(submissionsDir, submissionFilename);
-    await writeFile(submissionFilepath, JSON.stringify(submissionRecord, null, 2), 'utf-8');
-
-    // Save image separately if provided
-    if (data.imageData) {
-      const imagesDir = join(process.cwd(), 'data', 'ocr', 'images');
-      if (!existsSync(imagesDir)) {
-        await mkdir(imagesDir, { recursive: true });
-      }
-
-      const imageFilename = `${timestamp}.png`;
-      const imagePath = join(imagesDir, imageFilename);
-      
-      // Extract base64 data and save
-      const base64Data = data.imageData.replace(/^data:image\/\w+;base64,/, '');
-      await writeFile(imagePath, base64Data, 'base64');
-    }
+    });
 
     return NextResponse.json(
-      { 
+      {
         success: true,
         message: 'OCR data saved successfully',
-        id: timestamp
+        id: ocrDoc._id.toString()
       },
       { status: 200 }
     );
@@ -116,43 +78,16 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
     const id = searchParams.get('id');
 
-    const ocrDataDir = join(process.cwd(), 'data', 'ocr');
+    await connectDB();
 
     if (id) {
-      // Get specific record
-      const files = await require('fs').promises.readdir(ocrDataDir);
-      const matchingFile = files.find((f: string) => f.includes(`_${id}.json`));
-      
-      if (!matchingFile) {
-        return NextResponse.json(
-          { error: 'Record not found' },
-          { status: 404 }
-        );
+      const record = await OcrRecord.findById(id).lean();
+      if (!record) {
+        return NextResponse.json({ error: 'Record not found' }, { status: 404 });
       }
-
-      const filepath = join(ocrDataDir, matchingFile);
-      const content = await require('fs').promises.readFile(filepath, 'utf-8');
-      return NextResponse.json(JSON.parse(content));
+      return NextResponse.json(record);
     } else {
-      // Get all records
-      if (!existsSync(ocrDataDir)) {
-        return NextResponse.json({ records: [] });
-      }
-
-      const files = await require('fs').promises.readdir(ocrDataDir);
-      const jsonFiles = files.filter((f: string) => f.endsWith('.json'));
-      
-      const records = await Promise.all(
-        jsonFiles.map(async (file: string) => {
-          const filepath = join(ocrDataDir, file);
-          const content = await require('fs').promises.readFile(filepath, 'utf-8');
-          return JSON.parse(content);
-        })
-      );
-
-      // Sort by creation date (newest first)
-      records.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
-
+      const records = await OcrRecord.find({}).sort({ createdAt: -1 }).lean();
       return NextResponse.json({ records });
     }
   } catch (error) {
